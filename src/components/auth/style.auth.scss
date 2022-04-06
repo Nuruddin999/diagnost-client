@@ -1,0 +1,36 @@
+.auth-wrapper {
+    display: flex;
+    height: 100%;
+    .auth-container {
+        margin: auto;
+        width: calc(100%/12 * 3);
+        display: flex;
+        flex-direction: column;
+        padding: .5em;
+        .login-button {
+            margin-top: .5em;
+        }
+        .success-reg {
+            padding: .5em;
+            width: 100%;
+            color: #1976d2;
+        }
+        .error-reg {
+            padding: .5em;
+            width: 100%;
+            color: red;
+            font-size: 14px;
+        }
+    }
+}
+.btn-loader-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    .btn-title, .btn-ldr {
+        margin-left: auto;
+    }
+}
+.select {
+    width: 100%;
+}

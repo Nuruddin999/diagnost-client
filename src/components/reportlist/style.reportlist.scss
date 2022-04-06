@@ -1,0 +1,50 @@
+.button-end {
+    display: flex;
+    justify-content: flex-end;
+    .add-button {
+        background-color: #1f75cb;
+        box-shadow: inset 0 0 0 1px #1068bf;
+        margin: 14px 20px 0 0;
+        text-transform: none;
+    }
+}
+.form-add {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .add-button {
+        background-color: #1f75cb;
+        box-shadow: inset 0 0 0 1px #1068bf;
+        margin: 14px 20px 0 0;
+        text-transform: none;
+    }
+}
+.close-ic {
+    display: flex;
+    justify-content: flex-end;
+    cursor: pointer;
+}
+.add-appl-container {
+    width: 100%;
+}
+.form {
+    display: flex;
+    align-items: center;
+}
+.appl-table {
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f0f0f0;;
+      }
+}
