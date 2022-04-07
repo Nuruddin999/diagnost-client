@@ -52,10 +52,10 @@ export function* fetchApplication(getApplication: { type: 'application/get', pay
         const { page, limit } = getApplication.payload
         const response: getAllApplicationsResponse = yield call(getApplicationApi, page, limit)
         if (response) {
-            const { rows } = response
+            const { rows, count } = response
             // localStorage.setItem('dtokenn', accessToken)
             // localStorage.setItem('refreshToken', refreshToken)
-           yield put(saveApplicationsList({ applications: rows }))
+           yield put(saveApplicationsList({ applications: rows, count }))
         }
     } catch (e: any) {
         if (e.response) {

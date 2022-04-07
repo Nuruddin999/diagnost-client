@@ -3,12 +3,13 @@ import { applicationForAdd } from '../actions/application';
 
 
 export interface ApplicationState {
-    applications: Array<applicationForAdd>;
+    applications: Array<applicationForAdd>,
+    count:number
 }
 
 const initialState: ApplicationState = {
     applications: [],
-
+    count: 0
 };
 
 
@@ -19,6 +20,7 @@ export const applicationSlice = createSlice({
     reducers: {
         saveApplicationsList: (state, action: PayloadAction<ApplicationState>) => {
             state.applications = action.payload.applications
+            state.count = action.payload.count
         },
         // changeLoadStatus: (state, action: PayloadAction<boolean>) => {
         //     state.isLoading = action.payload
