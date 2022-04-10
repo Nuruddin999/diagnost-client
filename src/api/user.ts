@@ -13,7 +13,6 @@ export const registerApi = async (body: registeredUser) => {
     return response.data
 }
 export const checkAuth = async () => {
-        console.log('refreshtoken', localStorage.getItem('refreshToken'))
         const response = await diagnostApi.post('/refresh', { refreshToken: localStorage.getItem('refreshToken') })
         return response.data
 }

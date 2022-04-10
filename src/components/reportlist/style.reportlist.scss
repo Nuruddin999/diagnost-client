@@ -14,7 +14,7 @@
     }
     .appl-table {
         margin: 14px 10px 0px 10px;
-        height: calc(100% - 142px);
+        max-height: calc(100% - 142px);
         overflow: auto;
         border-top: 1px solid #eaeaea;
         border-bottom: 1px solid #eaeaea;
@@ -32,9 +32,22 @@
             text-align: left;
             padding: 2px 8px;
         }
-
+        tr {
+            cursor: pointer;
+            &:hover {
+                background-color: #747474;
+                color: white;
+            }
+        }
         tr:nth-child(even) {
             background-color: #f0f0f0;
+            &:hover {
+                background-color: #747474;
+                color: white;
+            }
+        }
+        .delete-button {
+            color: crimson;
         }
     }
     .pagination {
@@ -45,39 +58,3 @@
         align-items: center;
     }
 }
-
-// .button-end {
-//     display: flex;
-//     justify-content: flex-end;
-//     align-items: center;
-//     height: 40px;
-//     .add-button {
-//         background-color: #1f75cb;
-//         box-shadow: inset 0 0 0 1px #1068bf;
-//         margin: 14px 20px 0 0;
-//         text-transform: none;
-//         height: 40px;
-//     }
-// }
-// .form-add {
-//     width: 100%;
-//     display: flex;
-//     height: 10%;
-//     justify-content: center;
-//     align-items: center;
-
-// }
-// .close-ic {
-//     display: flex;
-//     justify-content: flex-end;
-//     cursor: pointer;
-// }
-// .add-appl-container {
-//     width: 100%;
-//     height: 100%;
-// }
-
-// .form {
-//     display: flex;
-//     align-items: center;
-// }

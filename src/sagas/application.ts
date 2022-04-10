@@ -1,9 +1,10 @@
-import { getApplicationApi } from './../api/application';
-import { applicationForAdd } from './../actions/application';
+import { getApplicationApi, getOneApplicationApi, updateOneApplicationApi } from './../api/application';
+import { applicationForAdd, updateApplication } from './../actions/application';
 import { call, put } from "redux-saga/effects"
 import { changeReqStatus } from "../reducers/userSlice"
 import { addApplicationApi } from '../api/application';
 import { saveApplicationsList } from '../reducers/applicationSlice';
+import { applicationInitialState, saveApplicationItem } from '../reducers/applicationItemSlice';
 type applicationAddResponse = {
     id: number,
     name: string,
@@ -17,17 +18,31 @@ type applicationAddResponse = {
 }
 type getAllApplicationsResponse = {
     count: number,
-    rows: Array<applicationAddResponse>
+    rows: Array<applicationAddResponse>,
 }
+export type consiliumDoctor = {
+    id?: number,
+    name: string,
+    speciality: string,
+}
+
+type applicationItemFields = {
+    ConsiliumDoctors: Array<consiliumDoctor>,
+    Diagnostics: Array<{
+        id?: number,
+        diagnosis: string,
+    }>
+}
+export type applicationItemResponse = applicationAddResponse & applicationItemFields;
 /**
  * Вход в систему.
  * @param login .
  */
 // 8sYY7pn6X9lI
-export function* addApplication(addApplication: { type: 'application/add', payload: { application: applicationForAdd } }) {
+export function* addApplication(addApplication: { type: 'application/add', payload: applicationForAdd }) {
     try {
         //  yield put(changeLoadStatus(true))
-        const response: getAllApplicationsResponse = yield call(addApplicationApi, addApplication.payload.application)
+        const response: getAllApplicationsResponse = yield call(addApplicationApi, addApplication.payload)
         if (response) {
             // localStorage.setItem('dtokenn', accessToken)
             // localStorage.setItem('refreshToken', refreshToken)
@@ -55,7 +70,7 @@ export function* fetchApplication(getApplication: { type: 'application/get', pay
             const { rows, count } = response
             // localStorage.setItem('dtokenn', accessToken)
             // localStorage.setItem('refreshToken', refreshToken)
-           yield put(saveApplicationsList({ applications: rows, count }))
+            yield put(saveApplicationsList({ applications: rows, count }))
         }
     } catch (e: any) {
         if (e.response) {
@@ -66,3 +81,54 @@ export function* fetchApplication(getApplication: { type: 'application/get', pay
         }
     }
 }
+/**
+ * Получение заключения по Id.
+ * @param {Object} getApplication .
+ */
+export function* fetchOneApplication(getApplication: { type: 'application/getone', payload: { id: string } }) {
+    try {
+        //  yield put(changeLoadStatus(true))
+        const { id } = getApplication.payload
+        const response: applicationItemResponse = yield call(getOneApplicationApi, id,)
+        if (response) {
+            //  const { rows, count } = response
+            // localStorage.setItem('dtokenn', accessToken)
+            // localStorage.setItem('refreshToken', refreshToken)
+            yield put(saveApplicationItem({ ...response }))
+        }
+    } catch (e: any) {
+        if (e.response) {
+            yield put(changeReqStatus(e.response?.data?.message))
+        }
+        else {
+            yield put(changeReqStatus('Неизвестаня ошибка'))
+        }
+    }
+}
+/**
+ * Обновление  заключения.
+ * @param {Object} getApplication .
+ */
+export function* updateOneApplication(updateApplication: { type: 'application/update', payload: applicationInitialState }) {
+    debugger
+    try {
+        //  yield put(changeLoadStatus(true))
+        const consiliumDoctorsFiltered = updateApplication.payload.consiliumDoctors.map(doctor => ({ name: doctor.name, speciality: doctor.speciality }))
+        updateApplication.payload.consiliumDoctors = consiliumDoctorsFiltered
+        const response: applicationItemResponse = yield call(updateOneApplicationApi, updateApplication.payload)
+        if (response) {
+            //  const { rows, count } = response
+            // localStorage.setItem('dtokenn', accessToken)
+            // localStorage.setItem('refreshToken', refreshToken)
+            // yield put(saveApplicationItem({ ...response }))
+        }
+    } catch (e: any) {
+        if (e.response) {
+            yield put(changeReqStatus(e.response?.data?.message))
+        }
+        else {
+            yield put(changeReqStatus('Неизвестаня ошибка'))
+        }
+    }
+}
+

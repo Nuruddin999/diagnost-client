@@ -15,18 +15,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { checkUser, logOutUser } from "../../actions/user";
 import SummarizeIcon from '@mui/icons-material/Summarize';
+import ApplicationItem from "../applicationItem";
 
 const Dashboard = (): React.ReactElement => {
    const { name, isLoading } = useSelector((state: RootState) => state.user)
    let match = useRouteMatch();
-   console.log(name)
    const dispatch = useDispatch()
    const logOut = () => dispatch(logOutUser())
    useEffect(() => {
-      console.log('use effect')
+       ('use effect')
       dispatch(checkUser())
    }, [])
-   console.log(match.path)
    return name === '' ? <CircularProgress /> : <div className="dashboard">
       <div className="dasheader">
          <div className='user-block'>
@@ -68,8 +67,8 @@ const Dashboard = (): React.ReactElement => {
                <Route exact path='/main/table'>
                   <ReportList />
                </Route>
-               <Route path='/main/words'>
-                 <span>words</span>
+               <Route path='/main/application/:id'>
+                  <ApplicationItem />
                </Route>
             </Switch>
          </div>

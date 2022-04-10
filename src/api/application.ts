@@ -1,4 +1,5 @@
 import { applicationForAdd } from '../actions/application';
+import { applicationInitialState } from '../reducers/applicationItemSlice';
 import { diagnostApi } from './index';
 export const addApplicationApi = async (application: applicationForAdd) => {
     const response = await diagnostApi.post('/application', {
@@ -18,4 +19,24 @@ export const getApplicationApi = async (page: number, limit: number) => {
     })
     return response.data
 }
+/**
+ * Получение одного заключения по id.
+ * @param {number} id Id заключения.
+ */
+export const getOneApplicationApi = async (id: string) => {
+    const response = await diagnostApi.get(`/applications/${id}`)
+    return response.data
+}
+/**
+ * Запрос обновления одного заключения.
+ * @param {Object} application обновленное заключение.
+ */
+export const updateOneApplicationApi = async (application: applicationInitialState) => {
+    debugger
+    const response = await diagnostApi.post('/updappl', {
+        ...application
+    })
+    return response.data
+}
+
 
