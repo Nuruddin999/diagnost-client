@@ -31,7 +31,9 @@ type applicationItemFields = {
     Diagnostics: Array<{
         id?: number,
         diagnosis: string,
-    }>
+    }>,
+    mostProblDiagnosis:string,
+    secondaryDiagnosis: string
 }
 export type applicationItemResponse = applicationAddResponse & applicationItemFields;
 /**
@@ -110,7 +112,7 @@ export function* fetchOneApplication(getApplication: { type: 'application/getone
  * @param {Object} getApplication .
  */
 export function* updateOneApplication(updateApplication: { type: 'application/update', payload: applicationInitialState }) {
-    debugger
+
     try {
         //  yield put(changeLoadStatus(true))
         const consiliumDoctorsFiltered = updateApplication.payload.consiliumDoctors.map(doctor => ({ name: doctor.name, speciality: doctor.speciality }))

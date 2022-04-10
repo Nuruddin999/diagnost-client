@@ -1,3 +1,13 @@
 .only-for-inner-warning {
-    color: red
+    color: red;
+}
+
+.most-probbl-diagnosis {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    h4 {
+        text-align: start;
+        margin-left: 10px;
+    }
 }

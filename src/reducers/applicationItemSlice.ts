@@ -16,7 +16,9 @@ export type applicationInitialState = {
     diagnostic: Array<{
         id?: number,
         diagnosis: string,
-    }>
+    }>,
+    mostProblDiagnosis: string,
+    secondaryDiagnosis: string
 }
 
 const initialState: applicationInitialState = {
@@ -28,7 +30,9 @@ const initialState: applicationInitialState = {
     creationDate: '',
     execDate: '',
     consiliumDoctors: [],
-    diagnostic: []
+    diagnostic: [],
+    mostProblDiagnosis: '',
+    secondaryDiagnosis: ''
 };
 
 
@@ -41,6 +45,8 @@ export const applicationItemSlice = createSlice({
             state.id = action.payload.id
             state.consiliumDoctors = action.payload.ConsiliumDoctors
             state.diagnostic = action.payload.Diagnostics
+            state.mostProblDiagnosis = action.payload.mostProblDiagnosis
+            state.secondaryDiagnosis = action.payload.secondaryDiagnosis
         },
         saveConsiliumDoctors: (state, action: PayloadAction<consiliumDoctor>) => {
             state.consiliumDoctors = [...state.consiliumDoctors, { name: action.payload.name, speciality: action.payload.speciality }]
@@ -59,6 +65,12 @@ export const applicationItemSlice = createSlice({
         },
         deleteDiagnostic: (state, action: PayloadAction<number>) => {
             state.diagnostic = state.diagnostic.filter((doctor, index) => index !== action.payload)
+        },
+        changeMostProblDiagnosis: (state, action: PayloadAction<string>) => {
+            state.mostProblDiagnosis = action.payload
+        },
+        changeSecondaryDiagnosis: (state, action: PayloadAction<string>) => {
+            state.secondaryDiagnosis = action.payload
         }
         // changeLoadStatus: (state, action: PayloadAction<boolean>) => {
         //     state.isLoading = action.payload
@@ -70,7 +82,7 @@ export const applicationItemSlice = createSlice({
     },
 });
 
-export const { saveApplicationItem, saveConsiliumDoctors, changeConsiliumDoctors, deleteConsiliumDoctors, saveDiagnostic, changeDiagnostic, deleteDiagnostic } = applicationItemSlice.actions;
+export const { saveApplicationItem, saveConsiliumDoctors, changeConsiliumDoctors, deleteConsiliumDoctors, saveDiagnostic, changeDiagnostic, deleteDiagnostic, changeMostProblDiagnosis, changeSecondaryDiagnosis } = applicationItemSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
