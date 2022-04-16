@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 //import './style.dash.scss'
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
-import { IconButton, TextField } from "@mui/material";
+import { IconButton, TextField, Typography } from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { changeDiagnostic, saveDiagnostic, deleteDiagnostic } from "../../../reducers/applicationItemSlice";
@@ -16,7 +16,7 @@ const DiagnosticForm = (): React.ReactElement => {
    const addDiagnosis = () => {
       dispatch(saveDiagnostic(diagnosis))
    }
-   const removeDiagnostic = (index:number) => {
+   const removeDiagnostic = (index: number) => {
       dispatch(deleteDiagnostic(index))
    }
    return <div>
@@ -34,6 +34,8 @@ const DiagnosticForm = (): React.ReactElement => {
                   Диагноз
                </span>
             </th>
+            <th>
+            </th>
          </tr>
          <tbody>
             {diagnosticProp.length > 0 && diagnosticProp.map((diagnos, index) => <tr>
@@ -44,28 +46,28 @@ const DiagnosticForm = (): React.ReactElement => {
                   size='small'
                   fullWidth
                   placeholder='диагноз'
-                  onChange={(e) => dispatch(changeDiagnostic({ index, diagnosis: e.target.value}))}
+                  onChange={(e) => dispatch(changeDiagnostic({ index, diagnosis: e.target.value }))}
                /></td>
                <td><IconButton className='delete-button' onClick={() => removeDiagnostic(index)}>
                   <DeleteOutlineIcon />
                </IconButton></td>
             </tr>)}
-            <tr>
-               <td></td>
-               <td>    <TextField
-                  value={diagnosis}
-                  variant='outlined'
-                  size='small'
-                  fullWidth
-                  placeholder='Диагноз'
-                  onChange={(e) => setDiagnosis(e.target.value)}
-               /></td>
-               <td>    <IconButton onClick={addDiagnosis}>
-                  <AddCircleIcon />
-               </IconButton></td>
-            </tr>
          </tbody>
       </table>
+      <Typography>Добавить диагноз в табилцу</Typography>
+      <div className='add-in-table-section'>
+      <TextField
+         value={diagnosis}
+         variant='outlined'
+         size='small'
+         fullWidth
+         placeholder='Диагноз'
+         onChange={(e) => setDiagnosis(e.target.value)}
+      />
+      <IconButton onClick={addDiagnosis} color='info'>
+         <AddCircleIcon />
+      </IconButton>
+      </div>
    </div>
 }
 export default DiagnosticForm

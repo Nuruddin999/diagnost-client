@@ -40,11 +40,5 @@ export const getOneApplication = createAction(Types.applicationGetOne, function 
 /**
  * экш обновления заключения
  */
-export const updateApplication = createAction(Types.applicationUpdate, function prepare(application: applicationInitialState) {
-    return {
-        payload: {
-            ...application
-        },
-    }
-})
+export const updateApplication = createAction(Types.applicationUpdate)
 

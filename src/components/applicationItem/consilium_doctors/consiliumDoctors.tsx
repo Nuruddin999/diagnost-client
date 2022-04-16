@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 //import './style.dash.scss'
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
-import { IconButton, TextField } from "@mui/material";
+import { IconButton, TextField, Typography } from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { changeConsiliumDoctors, saveConsiliumDoctors, deleteConsiliumDoctors } from "../../../reducers/applicationItemSlice";
@@ -17,7 +17,7 @@ const ConsiliumDoctorsForm = (): React.ReactElement => {
    const addConsliliumDoctor = () => {
       dispatch(saveConsiliumDoctors({ name: fio, speciality }))
    }
-   const deleteDoctor = (index:number) => {
+   const deleteDoctor = (index: number) => {
       dispatch(deleteConsiliumDoctors(index))
    }
    return <div>
@@ -39,6 +39,8 @@ const ConsiliumDoctorsForm = (): React.ReactElement => {
                <span>
                   Специализация
                </span>
+            </th>
+            <th>
             </th>
          </tr>
          <tbody>
@@ -64,30 +66,30 @@ const ConsiliumDoctorsForm = (): React.ReactElement => {
                   <DeleteOutlineIcon />
                </IconButton></td>
             </tr>)}
-            <tr>
-               <td></td>
-               <td>    <TextField
-                  value={fio}
-                  variant='outlined'
-                  size='small'
-                  fullWidth
-                  placeholder='ФИО'
-                  onChange={(e) => setFio(e.target.value)}
-               /></td>
-               <td>   <TextField
-                  value={speciality}
-                  variant='outlined'
-                  size='small'
-                  fullWidth
-                  placeholder='специальность'
-                  onChange={(e) => setSpeciality(e.target.value)}
-               /></td>
-               <td>    <IconButton onClick={addConsliliumDoctor}>
-                  <AddCircleIcon />
-               </IconButton></td>
-            </tr>
          </tbody>
       </table>
+      <Typography>Добавить доктора в табилцу</Typography>
+      <div className="add-in-table-section">
+         <TextField
+            value={fio}
+            variant='outlined'
+            size='small'
+            fullWidth
+            placeholder='ФИО'
+            onChange={(e) => setFio(e.target.value)}
+         />
+         <TextField
+            value={speciality}
+            variant='outlined'
+            size='small'
+            fullWidth
+            placeholder='специальность'
+            onChange={(e) => setSpeciality(e.target.value)}
+         />
+         <IconButton onClick={addConsliliumDoctor} color='info'>
+            <AddCircleIcon />
+         </IconButton>
+      </div>
    </div>
 }
 export default ConsiliumDoctorsForm

@@ -4,4 +4,11 @@ h5 {
 }
 table {
     width: 100%;
+    border-collapse: collapse;
+    td,
+    th {
+        border: 1px solid black;
+        text-align: left;
+        padding: 2px 8px;
+    }
 }
