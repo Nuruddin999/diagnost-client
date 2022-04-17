@@ -106,6 +106,7 @@ const ApplicationItem = (): React.ReactElement => {
     <Button onClick={handleClick}>
       Обновить
     </Button>
+    <a href={`http://localhost:3000/flpdf/${id}`} target='_blank' rel="noreferrer">topad</a>
   </div>
 }
 export default ApplicationItem

@@ -16,6 +16,8 @@ import { RootState } from "../../app/store";
 import { checkUser, logOutUser } from "../../actions/user";
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import ApplicationItem from "../applicationItem";
+import { Document, Page, PDFViewer, PDFDownloadLink } from '@react-pdf/renderer'
+
 
 const Dashboard = (): React.ReactElement => {
    const { name, isLoading } = useSelector((state: RootState) => state.user)
