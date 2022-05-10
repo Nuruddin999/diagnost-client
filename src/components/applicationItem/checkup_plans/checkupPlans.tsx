@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-//import './style.dash.scss'
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import { IconButton, TextField, Typography } from "@mui/material";
@@ -21,6 +19,7 @@ const CheckupPlanForm = (): React.ReactElement => {
   const deletePlan = (index: number) => {
     dispatch(deleteCheckupPlan(index))
   }
+  console.log('render checkup plan form')
   return <div>
     <table>
       <tr>
@@ -44,7 +43,7 @@ const CheckupPlanForm = (): React.ReactElement => {
         </th>
       </tr>
       <tbody>
-        {checkupPlansProp.length > 0 && checkupPlansProp.map((checkupPlan, index) => <tr>
+        {checkupPlansProp.length > 0 && checkupPlansProp.map((checkupPlan, index) => <tr key={checkupPlan.kind}>
           <td>{index + 1}</td>
           <td>    <TextField
             value={checkupPlan.kind}
@@ -99,8 +98,8 @@ const CheckupPlanForm = (): React.ReactElement => {
       fullWidth
       placeholder='Цель проведения обследования'
       onChange={(e) => setTarget(e.target.value)}
-    /> <IconButton onClick={addConsliliumDoctor} color='info'>
-      <AddCircleIcon />
+    /> <IconButton onClick={addConsliliumDoctor} >
+      <AddCircleIcon  className='add-in-table-svg '/>
     </IconButton>
     </div>
 

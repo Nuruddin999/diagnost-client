@@ -35,13 +35,21 @@ type applicationItemFields = {
   }>,
   mostProblDiagnosis: string,
   secondaryDiagnosis: string,
+  anamnesis: string,
+  complaint: string,
+  patientName: string,
+  diagnosticData: string,
+  patientBirthDate: string,
   CheckupPlans: Array<{
     id?: number,
     kind?: string,
     place?: string,
     target?: string
   }>
-  Comments: Array<string>
+  Comments:  Array<{
+    id?: number,
+    comment: string,
+  }>,
 }
 export type applicationItemResponse = applicationAddResponse & applicationItemFields;
 /**

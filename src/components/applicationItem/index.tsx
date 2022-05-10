@@ -11,6 +11,11 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DiagnosticForm from "./diagnostic/consiliumDoctors";
 import { changeComment, changeMostProblDiagnosis, changeSecondaryDiagnosis, saveComment } from "../../reducers/applicationItemSlice";
 import CheckupPlanForm from "./checkup_plans/checkupPlans";
+import Anamnesis from "./anamnesis";
+import { DatePicker, LocalizationProvider } from "@mui/lab";
+import PatientInfo from "./patientinfo";
+import MostProbDiagnosis from "./probable_diagnosis";
+import Comments from "./comments";
 
 const ApplicationItem = (): React.ReactElement => {
   const { id } = useParams<{ id: string }>()
@@ -18,6 +23,7 @@ const ApplicationItem = (): React.ReactElement => {
   const secondaryDiagnosis = useSelector((state: RootState) => state.applicationItem.secondaryDiagnosis)
   const comments = useSelector((state: RootState) => state.applicationItem.comments)
   const [oneComment, setComment] = useState('')
+  const [fio, setFIO] = useState('')
   const dispatch = useDispatch()
   /**
    * Сохраняем пояснение в стэйт
@@ -40,69 +46,16 @@ const ApplicationItem = (): React.ReactElement => {
     <h2>РЕКОМЕНДАЦИИ ВРАЧА</h2>
     <h4 className='only-for-inner-warning'>(ВНИМАНИЕ! ДОКУМЕНТ ИСКЛЮЧИТЕЛЬНО ДЛЯ ВНУТРЕННЕГО ПОЛЬЗОВАНИЯ ОРГАНИЗАЦИИ)
     </h4>
+    <PatientInfo />
+    <h3>На основании: </h3>
+    <h5> (указать основания: жалобы, симптомы, синдромы подозрения врача и пр.) </h5>
+    <Anamnesis />
     <ConsiliumDoctorsForm />
     <DiagnosticForm />
-    <div className="most-probbl-diagnosis">
-      <h4>Выявлен наиболее вероятный
-        основной диагноз:  </h4>
-      <TextField
-        fullWidth
-        placeholder='Выявлен наиболее вероятный
-            основной диагноз:'
-        className="text"
-        size='small'
-        value={mostProblDiagnosis}
-        onChange={(e) => dispatch(changeMostProblDiagnosis(e.target.value))}
-      />
-    </div>
-    <div className="most-probbl-diagnosis">
-      <h4>Выявлены сопутствующие
-        диагнозы: </h4>
-      <TextField
-        fullWidth
-        placeholder='Выявлены сопутствующие диагнозы:'
-        className="text"
-        size='small'
-        multiline
-        maxRows={2}
-        value={secondaryDiagnosis}
-        onChange={(e) => dispatch(changeSecondaryDiagnosis(e.target.value))}
-      />
-    </div>
+    <MostProbDiagnosis />
     <h4>На основании проведенного консилиума рекомендован план обследования (ПО):</h4>
     <CheckupPlanForm />
-    <h4>Пояснения:</h4>
-    <div className="comments-section">
-      {comments.length > 0 && comments.map((commentEl, index) => <div className='comments-section-wrapper'>
-        <Typography>{index + 1}</Typography>
-        <TextField
-          fullWidth
-          className="text"
-          size='small'
-          multiline
-          maxRows={2}
-          value={commentEl}
-          onChange={(e) => dispatch(changeComment({ index, comment: e.target.value }))}
-        />
-      </div>)}
-      <Typography>Добавить пояснение</Typography>
-      <div className='add-in-table-comments'>
-        <TextField
-          fullWidth
-          placeholder='Введите пояснение'
-          className="text"
-          size='small'
-          multiline
-          maxRows={2}
-          value={oneComment}
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <IconButton onClick={addComment} color='info'>
-          <AddCircleIcon />
-        </IconButton>
-      </div>
-    </div>
-
+    <Comments />
     <Button onClick={handleClick}>
       Обновить
     </Button>

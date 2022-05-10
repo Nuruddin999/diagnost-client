@@ -17,6 +17,11 @@ export type applicationInitialState = {
     id?: number,
     diagnosis: string,
   }>,
+  anamnesis: string,
+  complaint: string,
+  patientName: string,
+  diagnosticData: string,
+  patientBirthDate: string,
   mostProblDiagnosis: string,
   secondaryDiagnosis: string,
   checkupPlans: Array<{
@@ -25,7 +30,10 @@ export type applicationInitialState = {
     place?: string,
     target?: string
   }>,
-  comments: Array<string>
+  comments: Array<{
+    id?: number,
+    comment: string,
+  }>,
 }
 
 const initialState: applicationInitialState = {
@@ -36,6 +44,11 @@ const initialState: applicationInitialState = {
   manager: '',
   creationDate: '',
   execDate: '',
+  anamnesis: '',
+  complaint: '',
+  patientBirthDate: '',
+  patientName: '',
+  diagnosticData: '',
   consiliumDoctors: [],
   diagnostic: [],
   mostProblDiagnosis: '',
@@ -57,6 +70,11 @@ export const applicationItemSlice = createSlice({
       state.mostProblDiagnosis = action.payload.mostProblDiagnosis
       state.secondaryDiagnosis = action.payload.secondaryDiagnosis
       state.checkupPlans = action.payload.CheckupPlans
+      state.anamnesis = action.payload.anamnesis
+      state.complaint = action.payload.complaint
+      state.patientName = action.payload.patientName
+      state.patientBirthDate = action.payload.patientBirthDate
+      state.comments = action.payload.Comments
     },
     saveConsiliumDoctors: (state, action: PayloadAction<consiliumDoctor>) => {
       state.consiliumDoctors = [...state.consiliumDoctors, { name: action.payload.name, speciality: action.payload.speciality }]
@@ -102,18 +120,33 @@ export const applicationItemSlice = createSlice({
       state.checkupPlans = state.checkupPlans.filter((checkupPlan, index) => index !== action.payload)
     },
     saveComment: (state, action: PayloadAction<string>) => {
-      state.comments = [...state.comments, action.payload]
+      state.comments = [...state.comments, { comment: action.payload }]
     },
     changeComment: (state, action: PayloadAction<{ index: number, comment: string }>) => {
-      state.comments = state.comments.map((commentEl, commentIndex) => commentIndex === action.payload.index ? action.payload.comment : commentEl)
+      state.comments = state.comments.map((commentEl, commentIndex) => commentIndex === action.payload.index ? {comment: action.payload.comment} : commentEl)
     },
     deleteComment: (state, action: PayloadAction<number>) => {
       state.comments = state.comments.filter((commentElm, index) => index !== action.payload)
     },
+    changeAnamnesis: (state, action: PayloadAction<string>) => {
+      state.anamnesis = action.payload
+    },
+    changeComplaints: (state, action: PayloadAction<string>) => {
+      state.complaint = action.payload
+    },
+    changeDiagnosticData: (state, action: PayloadAction<string>) => {
+      state.diagnosticData = action.payload
+    },
+    changePatientName: (state, action: PayloadAction<string>) => {
+      state.patientName = action.payload
+    },
+    changePatientBirthDate: (state, action: PayloadAction<string>) => {
+      state.patientBirthDate = action.payload
+    },
   },
 });
 
-export const { saveApplicationItem, saveConsiliumDoctors, changeConsiliumDoctors, deleteConsiliumDoctors, saveDiagnostic, changeDiagnostic, deleteDiagnostic, changeMostProblDiagnosis, changeSecondaryDiagnosis, saveCheckupPlan, changeCheckupPlan, deleteCheckupPlan, saveComment, changeComment, deleteComment } = applicationItemSlice.actions;
+export const { saveApplicationItem, saveConsiliumDoctors, changeConsiliumDoctors, deleteConsiliumDoctors, saveDiagnostic, changeDiagnostic, deleteDiagnostic, changeMostProblDiagnosis, changeSecondaryDiagnosis, saveCheckupPlan, changeCheckupPlan, deleteCheckupPlan, saveComment, changeComment, deleteComment, changeAnamnesis, changeComplaints, changeDiagnosticData, changePatientBirthDate, changePatientName } = applicationItemSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

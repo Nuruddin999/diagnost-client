@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-//import './style.dash.scss'
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import { IconButton, TextField, Typography } from "@mui/material";
@@ -10,6 +8,7 @@ import { changeDiagnostic, saveDiagnostic, deleteDiagnostic } from "../../../red
 import './style.diagnostic.scss'
 
 const DiagnosticForm = (): React.ReactElement => {
+   console.log('render DiagnosticForm')
    const dispatch = useDispatch()
    const diagnosticProp = useSelector((state: RootState) => state.applicationItem.diagnostic)
    const [diagnosis, setDiagnosis] = useState('')
@@ -23,6 +22,7 @@ const DiagnosticForm = (): React.ReactElement => {
       <h3>С целью проведения дифференциальной диагностики между</h3>
       <h5>(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)</h5>
       <table>
+         <thead>
          <tr>
             <th>
                <span>
@@ -37,8 +37,9 @@ const DiagnosticForm = (): React.ReactElement => {
             <th>
             </th>
          </tr>
+         </thead>
          <tbody>
-            {diagnosticProp.length > 0 && diagnosticProp.map((diagnos, index) => <tr>
+            {diagnosticProp.length > 0 && diagnosticProp.map((diagnos, index) => <tr key={diagnos.diagnosis}>
                <td>{index + 1}</td>
                <td>    <TextField
                   value={diagnos.diagnosis}
@@ -64,8 +65,8 @@ const DiagnosticForm = (): React.ReactElement => {
          placeholder='Диагноз'
          onChange={(e) => setDiagnosis(e.target.value)}
       />
-      <IconButton onClick={addDiagnosis} color='info'>
-         <AddCircleIcon />
+      <IconButton onClick={addDiagnosis} >
+         <AddCircleIcon  className='add-in-table-svg ' />
       </IconButton>
       </div>
    </div>

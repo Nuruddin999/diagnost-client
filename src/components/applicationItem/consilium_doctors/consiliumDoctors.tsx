@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-//import './style.dash.scss'
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import { IconButton, TextField, Typography } from "@mui/material";
@@ -10,6 +8,7 @@ import { changeConsiliumDoctors, saveConsiliumDoctors, deleteConsiliumDoctors } 
 import './style.consiliumdoctors.scss'
 
 const ConsiliumDoctorsForm = (): React.ReactElement => {
+   console.log('render ConsiliumDoctorsForm')
    const dispatch = useDispatch()
    const consiliumDoctorsProp = useSelector((state: RootState) => state.applicationItem.consiliumDoctors)
    const [fio, setFio] = useState('')
@@ -24,6 +23,7 @@ const ConsiliumDoctorsForm = (): React.ReactElement => {
       <h3>Проведен дистанционный врачебный консилиум в составе:</h3>
       <h5>(указать ФИО и специальности врачей, которые участвовали в формировании заключения)</h5>
       <table>
+         <thead>
          <tr>
             <th>
                <span>
@@ -43,8 +43,9 @@ const ConsiliumDoctorsForm = (): React.ReactElement => {
             <th>
             </th>
          </tr>
+         </thead>
          <tbody>
-            {consiliumDoctorsProp.length > 0 && consiliumDoctorsProp.map((consDoctor, index) => <tr>
+            {consiliumDoctorsProp.length > 0 && consiliumDoctorsProp.map((consDoctor, index) => <tr  key={consDoctor.name}>
                <td>{index + 1}</td>
                <td>    <TextField
                   value={consDoctor.name}
@@ -86,8 +87,8 @@ const ConsiliumDoctorsForm = (): React.ReactElement => {
             placeholder='специальность'
             onChange={(e) => setSpeciality(e.target.value)}
          />
-         <IconButton onClick={addConsliliumDoctor} color='info'>
-            <AddCircleIcon />
+         <IconButton onClick={addConsliliumDoctor} >
+            <AddCircleIcon  className='add-in-table-svg'/>
          </IconButton>
       </div>
    </div>

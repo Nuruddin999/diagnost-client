@@ -64,7 +64,6 @@ function MyDoc() {
   const { id } = useParams<{ id: string }>()
   const applItem = useSelector((state: RootState) => state.applicationItem)
   const dispatch = useDispatch()
-  console.log('applItem',applItem)
   useEffect(() => {
     dispatch(getOneApplication(id))
   }, [])

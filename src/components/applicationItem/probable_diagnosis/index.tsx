@@ -1,0 +1,45 @@
+import React  from "react";
+import {  useDispatch, useSelector } from "react-redux";
+import { TextField } from "@mui/material";
+import { RootState } from "../../../app/store";
+import './style.probdiagnosis.scss'
+import { changeMostProblDiagnosis, changeSecondaryDiagnosis } from "../../../reducers/applicationItemSlice";
+
+const MostProbDiagnosis = (): React.ReactElement => {
+  const mostProblDiagnosis = useSelector((state: RootState) => state.applicationItem.mostProblDiagnosis)
+  const secondaryDiagnosis = useSelector((state: RootState) => state.applicationItem.secondaryDiagnosis)
+  const dispatch = useDispatch()
+  console.log('render probable diagnosis')
+  return <>
+    <div className="most-probbl-diagnosis">
+      <h4>Выявлен наиболее вероятный
+        основной диагноз:  </h4>
+      <TextField
+        fullWidth
+        placeholder='Выявлен наиболее вероятный
+            основной диагноз:'
+        className="text"
+        size='small'
+        multiline
+        maxRows={6}
+        value={mostProblDiagnosis}
+        onChange={(e) => dispatch(changeMostProblDiagnosis(e.target.value))}
+      />
+    </div>
+    <div className="most-probbl-diagnosis">
+      <h4>Выявлены сопутствующие
+        диагнозы: </h4>
+      <TextField
+        fullWidth
+        placeholder='Выявлены сопутствующие диагнозы:'
+        className="text"
+        size='small'
+        multiline
+        maxRows={4}
+        value={secondaryDiagnosis}
+        onChange={(e) => dispatch(changeSecondaryDiagnosis(e.target.value))}
+      />
+    </div>
+  </>
+}
+export default MostProbDiagnosis
