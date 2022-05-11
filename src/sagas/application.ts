@@ -4,7 +4,7 @@ import { call, put, select } from "redux-saga/effects"
 import { changeReqStatus } from "../reducers/userSlice"
 import { addApplicationApi } from '../api/application';
 import { saveApplicationsList } from '../reducers/applicationSlice';
-import { applicationInitialState, saveApplicationItem } from '../reducers/applicationItemSlice';
+import { applicationInitialState, saveApplicationItem, successUpdate } from '../reducers/applicationItemSlice';
 import { RootState } from '../app/store';
 type applicationAddResponse = {
   id: number,
@@ -138,7 +138,7 @@ export function* updateOneApplication(updateApplication: { type: 'application/up
       //  const { rows, count } = response
       // localStorage.setItem('dtokenn', accessToken)
       // localStorage.setItem('refreshToken', refreshToken)
-      // yield put(saveApplicationItem({ ...response }))
+      yield put(successUpdate('success'))
     }
   } catch (e: any) {
     if (e.response) {

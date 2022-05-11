@@ -34,6 +34,7 @@ export type applicationInitialState = {
     id?: number,
     comment: string,
   }>,
+  status?: string
 }
 
 const initialState: applicationInitialState = {
@@ -54,7 +55,8 @@ const initialState: applicationInitialState = {
   mostProblDiagnosis: '',
   secondaryDiagnosis: '',
   checkupPlans: [],
-  comments: []
+  comments: [],
+  status: 'no'
 };
 
 
@@ -143,10 +145,13 @@ export const applicationItemSlice = createSlice({
     changePatientBirthDate: (state, action: PayloadAction<string>) => {
       state.patientBirthDate = action.payload
     },
+    successUpdate:(state, action: PayloadAction<string>) =>{
+      state.status = action.payload
+    }
   },
 });
 
-export const { saveApplicationItem, saveConsiliumDoctors, changeConsiliumDoctors, deleteConsiliumDoctors, saveDiagnostic, changeDiagnostic, deleteDiagnostic, changeMostProblDiagnosis, changeSecondaryDiagnosis, saveCheckupPlan, changeCheckupPlan, deleteCheckupPlan, saveComment, changeComment, deleteComment, changeAnamnesis, changeComplaints, changeDiagnosticData, changePatientBirthDate, changePatientName } = applicationItemSlice.actions;
+export const { saveApplicationItem, saveConsiliumDoctors, changeConsiliumDoctors, deleteConsiliumDoctors, saveDiagnostic, changeDiagnostic, deleteDiagnostic, changeMostProblDiagnosis, changeSecondaryDiagnosis, saveCheckupPlan, changeCheckupPlan, deleteCheckupPlan, saveComment, changeComment, deleteComment, changeAnamnesis, changeComplaints, changeDiagnosticData, changePatientBirthDate, changePatientName, successUpdate } = applicationItemSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
