@@ -8,7 +8,7 @@ import { changeDiagnostic, saveDiagnostic, deleteDiagnostic } from "../../../red
 import './style.diagnostic.scss'
 
 const DiagnosticForm = (): React.ReactElement => {
-   ('render DiagnosticForm')
+   console.log('render DiagnosticForm')
    const dispatch = useDispatch()
    const diagnosticProp = useSelector((state: RootState) => state.applicationItem.diagnostic)
    const [diagnosis, setDiagnosis] = useState('')

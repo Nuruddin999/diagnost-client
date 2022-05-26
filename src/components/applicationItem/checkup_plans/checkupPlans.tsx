@@ -19,7 +19,7 @@ const CheckupPlanForm = (): React.ReactElement => {
   const deletePlan = (index: number) => {
     dispatch(deleteCheckupPlan(index))
   }
-  ('render checkup plan form')
+  console.log('render checkup plan form')
   return <div>
     <table>
       <tr>

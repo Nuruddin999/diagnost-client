@@ -11,8 +11,8 @@ import { changePatientBirthDate, changePatientName } from "../../../reducers/app
 const PatientInfo = (): React.ReactElement => {
   const patientBirthDate = useSelector((state: RootState) => state.applicationItem.patientBirthDate)
   const patientName = useSelector((state: RootState) => state.applicationItem.patientName)
-  (patientName)
-  (patientBirthDate)
+  console.log(patientName)
+  console.log(patientBirthDate)
   const [fio, setFIO] = useState('')
   const dispatch = useDispatch()
   return <div className="patient-info">

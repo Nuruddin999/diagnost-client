@@ -41,7 +41,7 @@ const ApplicationItem = (): React.ReactElement => {
       setTimeout(() => dispatch(successUpdate('no')), 500)
     }
   }, [status])
-  ('render')
+  console.log('render')
   return <div className="application-item">
     {status === 'success' && <div className='upload-snakebar'>
       <Typography variant='h6' alignContent='center'>

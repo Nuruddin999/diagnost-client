@@ -8,7 +8,7 @@ import { changeConsiliumDoctors, saveConsiliumDoctors, deleteConsiliumDoctors } 
 import './style.consiliumdoctors.scss'
 
 const ConsiliumDoctorsForm = (): React.ReactElement => {
-   ('render ConsiliumDoctorsForm')
+   console.log('render ConsiliumDoctorsForm')
    const dispatch = useDispatch()
    const consiliumDoctorsProp = useSelector((state: RootState) => state.applicationItem.consiliumDoctors)
    const [fio, setFio] = useState('')

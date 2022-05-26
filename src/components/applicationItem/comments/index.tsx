@@ -20,7 +20,7 @@ const Comments = (): React.ReactElement => {
   const addComment = () => {
     dispatch(saveComment(oneComment))
   }
-  ('commnets sec render')
+  console.log('commnets sec render')
   return <>
     <h4>Пояснения:</h4>
     <div className="comments-section">
