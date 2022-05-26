@@ -47,7 +47,7 @@ type applicationItemFields = {
     target?: string
   }>
   Comments:  Array<{
-    id?: number,
+    title?: string,
     comment: string,
   }>,
 }
@@ -135,9 +135,6 @@ export function* updateOneApplication(updateApplication: { type: 'application/up
     const consiliumDoctorsFiltered = application.consiliumDoctors.map(doctor => ({ name: doctor.name, speciality: doctor.speciality }))
     const response: applicationItemResponse = yield call(updateOneApplicationApi, { ...application, consiliumDoctors: consiliumDoctorsFiltered })
     if (response) {
-      //  const { rows, count } = response
-      // localStorage.setItem('dtokenn', accessToken)
-      // localStorage.setItem('refreshToken', refreshToken)
       yield put(successUpdate('success'))
     }
   } catch (e: any) {

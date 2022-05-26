@@ -9,7 +9,7 @@ const MostProbDiagnosis = (): React.ReactElement => {
   const mostProblDiagnosis = useSelector((state: RootState) => state.applicationItem.mostProblDiagnosis)
   const secondaryDiagnosis = useSelector((state: RootState) => state.applicationItem.secondaryDiagnosis)
   const dispatch = useDispatch()
-  console.log('render probable diagnosis')
+  ('render probable diagnosis')
   return <>
     <div className="most-probbl-diagnosis">
       <h4>Выявлен наиболее вероятный

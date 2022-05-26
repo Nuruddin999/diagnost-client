@@ -6,6 +6,10 @@ import './style.comments.scss'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { changeComment,  saveComment } from "../../../reducers/applicationItemSlice";
 
+/**
+ * Компонент пояснений.
+ * @returns {React.ReactElement}
+ */
 const Comments = (): React.ReactElement => {
   const comments = useSelector((state: RootState) => state.applicationItem.comments)
   const [oneComment, setComment] = useState('')
@@ -16,38 +20,24 @@ const Comments = (): React.ReactElement => {
   const addComment = () => {
     dispatch(saveComment(oneComment))
   }
-  console.log('commnets sec render')
+  ('commnets sec render')
   return <>
     <h4>Пояснения:</h4>
     <div className="comments-section">
-      {comments.length > 0 && comments.map((commentEl, index) => <div className='comments-section-wrapper'>
+      {comments.map((commentEl, index) => <div className='comments-section-wrapper'>
         <Typography>{index + 1}</Typography>
         <TextField
           fullWidth
           className="text"
+          placeholder={commentEl.title}
           size='small'
           multiline
-          maxRows={2}
+          maxRows={4}
           value={commentEl.comment}
           onChange={(e) => dispatch(changeComment({ index, comment: e.target.value }))}
+          margin='normal'
         />
       </div>)}
-      <Typography>Добавить пояснение</Typography>
-      <div className='add-in-table-comments'>
-        <TextField
-          fullWidth
-          placeholder='Введите пояснение'
-          className="text"
-          size='small'
-          multiline
-          maxRows={2}
-          value={oneComment}
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <IconButton onClick={addComment} className='add-in-table-svg'>
-          <AddCircleIcon />
-        </IconButton>
-      </div>
     </div>
   </>
 }

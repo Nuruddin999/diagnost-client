@@ -3,15 +3,13 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getOneApplication, updateApplication } from "../../actions/application";
 import ConsiliumDoctorsForm from "./consilium_doctors/consiliumDoctors";
-import { Button, TextField, Typography, IconButton } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { RootState } from "../../app/store";
 import './style.applicationitem.scss'
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DiagnosticForm from "./diagnostic/consiliumDoctors";
 import { saveComment, successUpdate } from "../../reducers/applicationItemSlice";
 import CheckupPlanForm from "./checkup_plans/checkupPlans";
 import Anamnesis from "./anamnesis";
-import { DatePicker, LocalizationProvider } from "@mui/lab";
 import PatientInfo from "./patientinfo";
 import MostProbDiagnosis from "./probable_diagnosis";
 import Comments from "./comments";
@@ -43,7 +41,7 @@ const ApplicationItem = (): React.ReactElement => {
       setTimeout(() => dispatch(successUpdate('no')), 500)
     }
   }, [status])
-  console.log('render')
+  ('render')
   return <div className="application-item">
     {status === 'success' && <div className='upload-snakebar'>
       <Typography variant='h6' alignContent='center'>

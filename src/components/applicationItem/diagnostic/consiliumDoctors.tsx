@@ -8,7 +8,7 @@ import { changeDiagnostic, saveDiagnostic, deleteDiagnostic } from "../../../red
 import './style.diagnostic.scss'
 
 const DiagnosticForm = (): React.ReactElement => {
-   console.log('render DiagnosticForm')
+   ('render DiagnosticForm')
    const dispatch = useDispatch()
    const diagnosticProp = useSelector((state: RootState) => state.applicationItem.diagnostic)
    const [diagnosis, setDiagnosis] = useState('')
@@ -39,7 +39,7 @@ const DiagnosticForm = (): React.ReactElement => {
          </tr>
          </thead>
          <tbody>
-            {diagnosticProp.length > 0 && diagnosticProp.map((diagnos, index) => <tr key={diagnos.diagnosis}>
+            {diagnosticProp.length > 0 && diagnosticProp.map((diagnos, index) => <tr>
                <td>{index + 1}</td>
                <td>    <TextField
                   value={diagnos.diagnosis}

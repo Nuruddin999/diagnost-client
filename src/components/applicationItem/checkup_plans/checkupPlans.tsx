@@ -19,7 +19,7 @@ const CheckupPlanForm = (): React.ReactElement => {
   const deletePlan = (index: number) => {
     dispatch(deleteCheckupPlan(index))
   }
-  console.log('render checkup plan form')
+  ('render checkup plan form')
   return <div>
     <table>
       <tr>
@@ -43,7 +43,7 @@ const CheckupPlanForm = (): React.ReactElement => {
         </th>
       </tr>
       <tbody>
-        {checkupPlansProp.length > 0 && checkupPlansProp.map((checkupPlan, index) => <tr key={checkupPlan.kind}>
+        {checkupPlansProp.length > 0 && checkupPlansProp.map((checkupPlan, index) => <tr>
           <td>{index + 1}</td>
           <td>    <TextField
             value={checkupPlan.kind}

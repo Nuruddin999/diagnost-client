@@ -8,7 +8,7 @@ import { changeConsiliumDoctors, saveConsiliumDoctors, deleteConsiliumDoctors } 
 import './style.consiliumdoctors.scss'
 
 const ConsiliumDoctorsForm = (): React.ReactElement => {
-   console.log('render ConsiliumDoctorsForm')
+   ('render ConsiliumDoctorsForm')
    const dispatch = useDispatch()
    const consiliumDoctorsProp = useSelector((state: RootState) => state.applicationItem.consiliumDoctors)
    const [fio, setFio] = useState('')
@@ -45,7 +45,7 @@ const ConsiliumDoctorsForm = (): React.ReactElement => {
          </tr>
          </thead>
          <tbody>
-            {consiliumDoctorsProp.length > 0 && consiliumDoctorsProp.map((consDoctor, index) => <tr  key={consDoctor.name}>
+            {consiliumDoctorsProp.length > 0 && consiliumDoctorsProp.map((consDoctor, index) => <tr>
                <td>{index + 1}</td>
                <td>    <TextField
                   value={consDoctor.name}

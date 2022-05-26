@@ -16,7 +16,7 @@ const Anamnesis = (): React.ReactElement => {
   const diagnosticData = useSelector((state: RootState) => state.applicationItem.diagnosticData)
   const dispatch = useDispatch()
 
-  console.log('anamnesis render')
+  ('anamnesis render')
   return <div className="anamnesis">
     <div className='complaints'>
       <Typography fontWeight={700}>Жалоб:</Typography>

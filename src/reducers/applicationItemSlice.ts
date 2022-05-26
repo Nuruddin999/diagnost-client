@@ -31,7 +31,7 @@ export type applicationInitialState = {
     target?: string
   }>,
   comments: Array<{
-    id?: number,
+    title?: string,
     comment: string,
   }>,
   status?: string
@@ -55,7 +55,7 @@ const initialState: applicationInitialState = {
   mostProblDiagnosis: '',
   secondaryDiagnosis: '',
   checkupPlans: [],
-  comments: [],
+  comments: [{ title: 'Куда обратился пациент и с какой помощью', comment: '' }, { title: 'Что было им предоставлено, или наоборот, ничего не было предоставлено, только жалоюы и просьбы', comment: '' }, { title: 'Какая работа была проделана', comment: '' }, { title: 'Почему быоо рекомендовано то, или иное, на основании чего', comment: '' }, { title: 'Заключение: "По результатам проделанной работы считаю просьбу подопечного (ой) обоснованной (или нет) и возможной для одобрения (или нет)"', comment: '' }],
   status: 'no'
 };
 
@@ -76,7 +76,7 @@ export const applicationItemSlice = createSlice({
       state.complaint = action.payload.complaint
       state.patientName = action.payload.patientName
       state.patientBirthDate = action.payload.patientBirthDate
-      state.comments = action.payload.Comments
+      state.comments = action.payload.Comments.length > 0 ? action.payload.Comments : state.comments
     },
     saveConsiliumDoctors: (state, action: PayloadAction<consiliumDoctor>) => {
       state.consiliumDoctors = [...state.consiliumDoctors, { name: action.payload.name, speciality: action.payload.speciality }]
@@ -125,7 +125,7 @@ export const applicationItemSlice = createSlice({
       state.comments = [...state.comments, { comment: action.payload }]
     },
     changeComment: (state, action: PayloadAction<{ index: number, comment: string }>) => {
-      state.comments = state.comments.map((commentEl, commentIndex) => commentIndex === action.payload.index ? {comment: action.payload.comment} : commentEl)
+      state.comments = state.comments.map((commentEl, commentIndex) => commentIndex === action.payload.index ? { ...commentEl,comment: action.payload.comment } : commentEl)
     },
     deleteComment: (state, action: PayloadAction<number>) => {
       state.comments = state.comments.filter((commentElm, index) => index !== action.payload)
@@ -145,7 +145,7 @@ export const applicationItemSlice = createSlice({
     changePatientBirthDate: (state, action: PayloadAction<string>) => {
       state.patientBirthDate = action.payload
     },
-    successUpdate:(state, action: PayloadAction<string>) =>{
+    successUpdate: (state, action: PayloadAction<string>) => {
       state.status = action.payload
     }
   },

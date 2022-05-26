@@ -289,7 +289,7 @@ function MyDocContent({ applItem }) {
           <View>
             <Text style={{ ...styles.reasonTitle, marginTop: 12 }} wrap={false}>Проведен дистанционный врачебный консилиум в составе:</Text>
             <Text style={{ ...styles.reasonTitle, fontSize: 10, marginTop: 4 }}>(указать ФИО и специальности врачей, которые участвовали в формировании заключения): </Text>
-            {consiliumDoctors ? <View style={{ ...styles.tabl, marginTop: 10 }}>
+            {consiliumDoctors ? <View style={{ ...styles.tabl, marginTop: 10 }} wrap={false}>
               <View style={styles.tableRow}>
                 <Text style={{ ...styles.tablHeaderNum, fontFamily: 'Times New Roman Bold' }}>№</Text>
                 <Text style={{ ...styles.tablHeaderFIO, fontFamily: 'Times New Roman Bold' }}>ФИО врача</Text>
@@ -336,10 +336,10 @@ function MyDocContent({ applItem }) {
             </View>
           </View>
           <View>
+            {checkupPlans.length > 0 ? <View style={styles.tabl}>
             <Text style={{ fontFamily: 'Times New Roman Bold' }}>
               На основании проведенного консилиума рекомендован план лечения (ПЛ):
             </Text>
-            {checkupPlans ? <View style={styles.tabl}>
               <View style={{ ...styles.tableRow, alignItems: 'center' }}>
                 <Text style={{ ...styles.tablHeaderNum, fontFamily: 'Times New Roman Bold' }}>№</Text>
                 <Text style={styles.tablHeaderTypeExamine}>Вид обледования</Text>
@@ -353,7 +353,7 @@ function MyDocContent({ applItem }) {
                 <Text style={styles.tablHeaderTargetExamine}>{checkUpPlan.target}</Text>
               </View>)}
             </View> : null}
-            {comments ? <View style={styles.tabl}>
+            {comments ? <View style={styles.tabl}  wrap={false}>
               <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign:'left' }}>Пояснения:</Text>
               {comments.map((comment, index) => <View style={{...styles.commentsWrapper, marginTop: 14}} wrap={false}>
                 <Text style={styles.commentsNum}>{index + 1}</Text>
