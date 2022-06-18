@@ -5,7 +5,7 @@ import './style.pdfdoc.scss'
 import hopedoc from '../../../hopedoc.png'
 import TimesNewRomanFont from '../../../TimesNewRomanPSMT.ttf'
 import TimesNewRomanBoldFont from '../../../TimesNewRomanPS-BoldMT.ttf'
-
+import { RootState } from "../../../app/store";
 
 Font.register({
   family: "Roboto",
@@ -236,7 +236,9 @@ function MyDocContent({ applItem }) {
     }
     list.push(consdoc)
   }
-  const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments } = useSelector(state => state.applicationItem)
+  const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments } = useSelector((state) => state.applicationItem)
+  const { role } = useSelector(state => state.user)
+  console.log(role)
   const currentYear = new Date().getFullYear()
   const yearsOld = new Date(patientBirthDate).getFullYear()
   const month = new Date(patientBirthDate).getMonth()
@@ -337,25 +339,25 @@ function MyDocContent({ applItem }) {
           </View>
           <View>
             {checkupPlans.length > 0 ? <View style={styles.tabl}>
-            <Text style={{ fontFamily: 'Times New Roman Bold' }}>
-              На основании проведенного консилиума рекомендован план лечения (ПЛ):
-            </Text>
+              <Text style={{ fontFamily: 'Times New Roman Bold' }}>
+                На основании проведенного консилиума рекомендован план лечения (ПЛ):
+              </Text>
               <View style={{ ...styles.tableRow, alignItems: 'center' }}>
                 <Text style={{ ...styles.tablHeaderNum, fontFamily: 'Times New Roman Bold' }}>№</Text>
                 <Text style={styles.tablHeaderTypeExamine}>Вид обледования</Text>
-                <Text style={styles.tablHeaderPlaceExamine}>Место</Text>
+                {role === 'doctor' &&  <Text style={styles.tablHeaderPlaceExamine}>Место</Text> }
                 <Text style={styles.tablHeaderTargetExamine}>Цель проведения обследования</Text>
               </View>
               {checkupPlans.map((checkUpPlan, index) => <View style={styles.tableRow} wrap={false}>
                 <Text style={styles.tablHeaderNum}>{index + 1}</Text>
                 <Text style={styles.tablHeaderTypeExamine}>{checkUpPlan.kind}</Text>
-                <Text style={styles.tablHeaderPlaceExamine}>{checkUpPlan.place}</Text>
+                {role === 'doctor' &&  <Text style={styles.tablHeaderPlaceExamine}>{checkUpPlan.place}</Text> }
                 <Text style={styles.tablHeaderTargetExamine}>{checkUpPlan.target}</Text>
               </View>)}
             </View> : null}
-            {comments ? <View style={styles.tabl}  wrap={false}>
-              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign:'left' }}>Пояснения:</Text>
-              {comments.map((comment, index) => <View style={{...styles.commentsWrapper, marginTop: 14}} wrap={false}>
+            {comments ? <View style={styles.tabl} wrap={false}>
+              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }}>Пояснения:</Text>
+              {comments.map((comment, index) => <View style={{ ...styles.commentsWrapper, marginTop: 14 }} wrap={false}>
                 <Text style={styles.commentsNum}>{index + 1}</Text>
                 <Text style={styles.commentsSecText}>{comment.comment}</Text>
               </View>)}

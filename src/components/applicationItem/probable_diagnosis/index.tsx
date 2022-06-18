@@ -16,8 +16,11 @@ const MostProbDiagnosis = (): React.ReactElement => {
         основной диагноз:  </h4>
       <TextField
         fullWidth
-        placeholder='Выявлен наиболее вероятный
-            основной диагноз:'
+        placeholder='Последствия ОЧМТ (огнестрельное ранение) – ушиба ГМ
+        тяжелой степени, перелома костей свода черепа,
+        аксонального повреждения ГМ в виде травматической
+        болезни ГМ, спастической гемиплегии. Посттравматическая
+        энцефалопатия.'
         className="text"
         size='small'
         multiline
@@ -31,7 +34,7 @@ const MostProbDiagnosis = (): React.ReactElement => {
         диагнозы: </h4>
       <TextField
         fullWidth
-        placeholder='Выявлены сопутствующие диагнозы:'
+        placeholder='Хронический тонзиллит'
         className="text"
         size='small'
         multiline

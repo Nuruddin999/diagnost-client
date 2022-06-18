@@ -2,26 +2,34 @@ import { Button, Typography, Pagination, Stack } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import './style.reportlist.scss'
 import { useDispatch, useSelector } from "react-redux";
-import { getApplication } from "../../actions/application";
+import { deleteOneApplication, getApplication } from "../../actions/application";
 import { RootState } from "../../app/store";
 import AddModal from "./add_modal";
 import { IconButton } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useHistory } from "react-router-dom";
+import { openModal } from "../../reducers/ui";
+import { Loader } from "../loader/loader";
 
 const ReportList = (): React.ReactElement => {
    const dispatch = useDispatch()
    const history = useHistory()
    const applications = useSelector((state: RootState) => state.application.applications)
+   const status = useSelector((state: RootState) => state.ui.status)
+   const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
+   console.log(applications)
    const count = useSelector((state: RootState) => state.application.count)
-   const [isAddFormOpened, setAddFormOpened] = useState(false)
    const [page, setPage] = React.useState(1);
    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
       setPage(value);
    };
+   const deleteAppl = (value: number) => {
+      dispatch(deleteOneApplication(value.toString()));
+   };
    useEffect(() => {
       dispatch(getApplication(page, 10))
    }, [page])
+
 
    /**
     * Переход на отдельное заключение
@@ -31,66 +39,35 @@ const ReportList = (): React.ReactElement => {
       history.push(`application/${id}`)
    }
    return <div className='add-appl-container'>
-      {isAddFormOpened && <AddModal onClose={setAddFormOpened} />}
+      {isModalOpened && <AddModal  />}
       <div className='add-button-wrapper'>
-         <Button size='small' variant='contained' className='add-button' onClick={() => setAddFormOpened(true)}>
+         <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
             <Typography>Новое задание</Typography>
          </Button>
       </div>
       <div className="appl-table">
          <table>
             <tr>
-               <th>
+               {['№','ФИО пациента','Дата рождения','Запрос пациента','Название фонда','Запрос фонда','Ответственный','Дата создания','Дата исполнения','Удалить'].map(el => <th>
                   <span>
-                     №
+                     {el}
                   </span>
-               </th>
-               <th>
-                  <span>
-                     Имя
-                  </span>
-               </th>
-               <th>
-                  <span>
-                     Заключение
-                  </span>
-               </th>
-               <th>
-                  <span>
-                     Фонд
-                  </span>
-               </th>
-               <th>
-                  <span>
-                     Исполнитель
-                  </span>
-               </th>
-               <th>
-                  <span>
-                     Дата создания
-                  </span>
-               </th>
-               <th>
-                  <span>
-                     Дата исполнения
-                  </span>
-               </th>
-               <th>
-                  <span>
-                     Удалить
-                  </span>
-               </th>
+               </th>)}
             </tr>
             <tbody>
-               {applications.length > 0 && applications.map((appl, index) => <tr>
-                  <td onClick={() => goToApplItem(appl.id)}>{index + 1}</td>
-                  <td>{appl.name}</td>
+               {applications.length > 0 && applications.map((appl, index) => <tr onClick={() => goToApplItem(appl.id)}>
+                  <td>{index + 1}</td>
+                  <td>{appl.patientName}</td>
+                  <td>{new Date(appl.patientBirthDate).toLocaleString()}</td>
                   <td>{appl.patientRequest}</td>
                   <td>{appl.fundName}</td>
+                  <td>{appl.fundRequest}</td>
                   <td>{appl.manager}</td>
-                  <td>{appl.creationDate}</td>
+                  <td>{new Date(appl.creationDate).toLocaleString()}</td>
                   <td>{appl.execDate}</td>
-                  <td><IconButton className='delete-button'>
+                  <td><IconButton className='delete-button' onClick={(e:any) => {
+                     e.stopPropagation()
+                     appl.id && deleteAppl(appl.id)}}>
                      <DeleteOutlineIcon />
                   </IconButton></td>
                </tr>)}

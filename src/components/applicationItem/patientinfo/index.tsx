@@ -11,15 +11,16 @@ import { changePatientBirthDate, changePatientName } from "../../../reducers/app
 const PatientInfo = (): React.ReactElement => {
   const patientBirthDate = useSelector((state: RootState) => state.applicationItem.patientBirthDate)
   const patientName = useSelector((state: RootState) => state.applicationItem.patientName)
-  console.log(patientName)
-  console.log(patientBirthDate)
-  const [fio, setFIO] = useState('')
+  let pdate= new Date(patientBirthDate)
+  console.log('pdate',pdate)
+  console.log('patientBirthDate', new Date(patientBirthDate.split(',')[0]))
   const dispatch = useDispatch()
   return <div className="patient-info">
     <TextField
-      placeholder='ФИО'
+      placeholder='Исаев Гитинамагомед Магомедович'
       size='small'
       value={patientName}
+      fullWidth
       onChange={(e) => dispatch(changePatientName(e.target.value))}
     />
     <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
@@ -27,6 +28,7 @@ const PatientInfo = (): React.ReactElement => {
         <DatePicker
           mask='__.__.____'
           value={patientBirthDate}
+          toolbarPlaceholder='19.06.87'
           label='Дата рождения'
           onChange={(newValue: any) => dispatch(changePatientBirthDate(newValue))}
           renderInput={(params: any) => <TextField {...params} size='small' />}

@@ -16,6 +16,10 @@ export const checkAuth = async () => {
         const response = await diagnostApi.post('/refresh', { refreshToken: localStorage.getItem('refreshToken') })
         return response.data
 }
+export const checkHasSuperAdmin = async () => {
+    const response = await diagnostApi.get('/superadmn')
+    return response.data
+}
 export const logOut = async () => {
         const response = await diagnostApi.post('/logout', { refreshToken: localStorage.getItem('refreshToken') })
         return response.data

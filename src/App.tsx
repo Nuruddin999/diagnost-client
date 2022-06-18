@@ -5,15 +5,11 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   Redirect
 } from "react-router-dom";
 import Dashboard from './components/dashboard/dashboard';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './app/store';
-import { checkUser, TYPES } from './actions/user';
-import CircularProgress from '@mui/material/CircularProgress';
-import ReportList from './components/reportlist/reportlist';
 import { Document, Page, PDFViewer, Text, StyleSheet, View } from '@react-pdf/renderer'
 import MyDoc from './components/applicationItem/pdfdoc/pdfdoc';
 

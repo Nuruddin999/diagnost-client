@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getOneApplication, updateApplication } from "../../actions/application";
 import ConsiliumDoctorsForm from "./consilium_doctors/consiliumDoctors";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, IconButton } from "@mui/material";
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { RootState } from "../../app/store";
 import './style.applicationitem.scss'
 import DiagnosticForm from "./diagnostic/consiliumDoctors";
@@ -41,7 +42,7 @@ const ApplicationItem = (): React.ReactElement => {
       setTimeout(() => dispatch(successUpdate('no')), 500)
     }
   }, [status])
-  console.log('render')
+
   return <div className="application-item">
     {status === 'success' && <div className='upload-snakebar'>
       <Typography variant='h6' alignContent='center'>
@@ -64,7 +65,9 @@ const ApplicationItem = (): React.ReactElement => {
     <Button onClick={handleClick} size='medium' variant='contained' className='save-button'>
       Сохранить
     </Button>
-    <a href={`http://localhost:3000/flpdf/${id}`} target='_blank' rel="noreferrer">topad</a>
+    <a href={`http://localhost:3000/flpdf/${id}`} target='_blank' rel="noreferrer"><IconButton size='medium'>
+      <PictureAsPdfIcon  className='only-for-inner-warning' />
+      </IconButton></a>
   </div>
 }
 export default ApplicationItem

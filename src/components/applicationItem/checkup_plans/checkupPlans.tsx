@@ -6,6 +6,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { changeCheckupPlan, saveCheckupPlan, deleteCheckupPlan } from "../../../reducers/applicationItemSlice";
 import './style.checkupplans.scss'
+import NoResult from "../../no-result/no-result";
 
 const CheckupPlanForm = (): React.ReactElement => {
   const dispatch = useDispatch()
@@ -19,9 +20,9 @@ const CheckupPlanForm = (): React.ReactElement => {
   const deletePlan = (index: number) => {
     dispatch(deleteCheckupPlan(index))
   }
-  console.log('render checkup plan form')
+
   return <div>
-    <table>
+  { checkupPlansProp.length > 0 ? <table>
       <tr>
         <th>
           <span>
@@ -74,7 +75,7 @@ const CheckupPlanForm = (): React.ReactElement => {
           </IconButton></td>
         </tr>)}
       </tbody>
-    </table>
+    </table> : <NoResult />}
     <Typography>Добавить план обследования в таблицу</Typography>
     <div className="add-in-table-section">
           <TextField

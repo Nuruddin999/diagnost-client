@@ -6,6 +6,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { changeDiagnostic, saveDiagnostic, deleteDiagnostic } from "../../../reducers/applicationItemSlice";
 import './style.diagnostic.scss'
+import NoResult from "../../no-result/no-result";
 
 const DiagnosticForm = (): React.ReactElement => {
    console.log('render DiagnosticForm')
@@ -21,7 +22,7 @@ const DiagnosticForm = (): React.ReactElement => {
    return <div>
       <h3>С целью проведения дифференциальной диагностики между</h3>
       <h5>(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)</h5>
-      <table>
+   { diagnosticProp.length > 0 ? <table>
          <thead>
          <tr>
             <th>
@@ -54,7 +55,7 @@ const DiagnosticForm = (): React.ReactElement => {
                </IconButton></td>
             </tr>)}
          </tbody>
-      </table>
+      </table> : <NoResult />}
       <Typography>Добавить диагноз в табилцу</Typography>
       <div className='add-in-table-section'>
       <TextField

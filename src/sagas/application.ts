@@ -1,16 +1,19 @@
-import { getApplicationApi, getOneApplicationApi, updateOneApplicationApi } from './../api/application';
-import { applicationForAdd, updateApplication } from './../actions/application';
-import { call, put, select } from "redux-saga/effects"
+import { deleteOneApplicationApi, getApplicationApi, getOneApplicationApi, updateOneApplicationApi } from './../api/application';
+import { applicationForAdd, getApplication, getOneApplication } from './../actions/application';
+import { call, delay, put, select } from "redux-saga/effects"
 import { changeReqStatus } from "../reducers/userSlice"
 import { addApplicationApi } from '../api/application';
 import { saveApplicationsList } from '../reducers/applicationSlice';
 import { applicationInitialState, saveApplicationItem, successUpdate } from '../reducers/applicationItemSlice';
 import { RootState } from '../app/store';
+import { openModal, setStatus } from '../reducers/ui';
 type applicationAddResponse = {
   id: number,
-  name: string,
+  patientName: string,
+  patientBirthDate: string,
   patientRequest: string,
   fundName: string,
+  fundRequest: string,
   manager: string,
   creationDate: string,
   execDate: string,
@@ -46,7 +49,7 @@ type applicationItemFields = {
     place?: string,
     target?: string
   }>
-  Comments:  Array<{
+  Comments: Array<{
     title?: string,
     comment: string,
   }>,
@@ -59,12 +62,13 @@ export type applicationItemResponse = applicationAddResponse & applicationItemFi
 // 8sYY7pn6X9lI
 export function* addApplication(addApplication: { type: 'application/add', payload: applicationForAdd }) {
   try {
-    //  yield put(changeLoadStatus(true))
+    yield put(setStatus('pending'))
     const response: getAllApplicationsResponse = yield call(addApplicationApi, addApplication.payload)
     if (response) {
-      // localStorage.setItem('dtokenn', accessToken)
-      // localStorage.setItem('refreshToken', refreshToken)
-      // yield put(saveUser({ ...user, isLoading: false, reqStatus: 'ok' }))
+      yield put(getApplication(1, 10))
+      yield delay(2000)
+      yield put(setStatus('ok'))
+      yield put(openModal(false))
     }
   } catch (e: any) {
     if (e.response) {
@@ -147,3 +151,25 @@ export function* updateOneApplication(updateApplication: { type: 'application/up
   }
 }
 
+/**
+* Удаление  заключения.
+* @param {Object} getApplication .
+*/
+export function* removeOneApplication(delApplication: { type: 'application/deleteone', payload: { id: string } }) {
+
+  try {
+    const { id } = delApplication.payload
+    const response: {} = yield call(deleteOneApplicationApi, id)
+    if (response) {
+      yield put(successUpdate('success'))
+      yield put(getApplication(1, 10))
+    }
+  } catch (e: any) {
+    if (e.response) {
+      yield put(changeReqStatus(e.response?.data?.message))
+    }
+    else {
+      yield put(changeReqStatus('Неизвестаня ошибка'))
+    }
+  }
+}

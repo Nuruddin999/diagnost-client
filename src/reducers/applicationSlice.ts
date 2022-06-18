@@ -4,12 +4,12 @@ import { applicationForAdd } from '../actions/application';
 
 export interface ApplicationState {
     applications: Array<applicationForAdd>,
-    count:number
+    count:number,
 }
 
 const initialState: ApplicationState = {
     applications: [],
-    count: 0
+    count: 0,
 };
 
 

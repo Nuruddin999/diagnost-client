@@ -3,7 +3,8 @@ export const TYPES = {
     userLoginType:'user/login',
     userRegisterType:'user/register',
     userCheckType:'user/check',
-    userLogOut:'user/logout'
+    userLogOut:'user/logout',
+    userCheckIsAdmin:'user/checkIsSuperAdmn'
 }
 export type registeredUser = {
     email: string,
@@ -32,3 +33,4 @@ export const registerUser = createAction(TYPES.userRegisterType, function prepar
 })
 export const checkUser = createAction(TYPES.userCheckType)
 export const logOutUser = createAction(TYPES.userLogOut)
+export const checkIsSuperAdmin = createAction(TYPES.userCheckIsAdmin)

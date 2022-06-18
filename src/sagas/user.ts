@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects"
-import { checkAuth, loginApi, logOut, registerApi } from "../api/user"
-import { changeLoadStatus, changeReqStatus, saveUser } from "../reducers/userSlice"
+import { checkAuth, loginApi, logOut, registerApi, checkHasSuperAdmin } from "../api/user"
+import { changeLoadStatus, changeReqStatus, saveSuperUser, saveUser } from "../reducers/userSlice"
 type loginUserResponse = {
     accessToken: string,
     refreshToken: string,
@@ -64,6 +64,9 @@ export function* registerUser(body: { type: 'user/register', payload: { email: s
 export function* checkUserAuth() {
     try {
         yield put(changeLoadStatus(true))
+        const  { superAdmin } = yield call(checkHasSuperAdmin)
+        console.log(superAdmin)
+        if(superAdmin) { yield put(saveSuperUser())}
         const response: loginUserResponse = yield call(checkAuth)
         const { accessToken, refreshToken, user } = response
         if (response) {
@@ -81,6 +84,7 @@ export function* checkUserAuth() {
         yield put(saveUser({ name: 'empty', role: '', phone: '', email: '', speciality: '', isLoading: false, reqStatus: 'ok' }))
     }
 }
+
 export function* logoutUser() {
     try {
         yield put(changeLoadStatus(true))

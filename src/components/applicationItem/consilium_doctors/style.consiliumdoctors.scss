@@ -2,13 +2,13 @@ h5 {
     margin-top:-12px;
     font-weight: 300;
 }
-table {
-    width: 100%;
-    border-collapse: collapse;
-    td,
-    th {
-        border: 1px solid black;
-        text-align: left;
-        padding: 2px 8px;
-    }
+
+.speciality-dropdown {
+    height: 100%;
+    width: 400px;
+    margin-top: -20px;
+    margin-left: 20px;
+}
+.speciality-fio {
+  flex: 1;
 }

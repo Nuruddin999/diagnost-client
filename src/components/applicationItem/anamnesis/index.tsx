@@ -24,6 +24,8 @@ const Anamnesis = (): React.ReactElement => {
         multiline
         maxRows={8}
         size='small'
+        placeholder='Ограничение движений преимущественно в правых конечностях, снижение памяти,
+        нарушение статики и ходьбы.'
         variant='standard'
         value={complaints}
         className='text-section'
@@ -36,6 +38,12 @@ const Anamnesis = (): React.ReactElement => {
         multiline
         maxRows={8}
         size='small'
+        placeholder='В августе 2012 года получил огнестрельное ранение в голову, сразу после травмы
+        был госпитализирован в Кизилюртовскую ГБ, там получал медикаментозное и оперативное
+        лечение (трепанация черепа); с тех пор является инвалидом, получает периодическое
+        амбулаторное лечение, стационарное лечения, реабилитационное лечение со слабым и
+        непродолжительным положительным эффектом, отмечается постепенное прогрессирование
+        симптоматики, является инвалидом 1й группы.'
         variant='standard'
         className='text-section'
         value={anamnesis}
@@ -48,6 +56,8 @@ const Anamnesis = (): React.ReactElement => {
         multiline
         maxRows={8}
         size='small'
+        placeholder='предоставлен ВЭ от 2012 года сразу после аварии и от 2021г из
+        реабилитационного центра, где описан DS подопечного, его объективное состояние.'
         variant='standard'
         className='text-section'
         value={diagnosticData}

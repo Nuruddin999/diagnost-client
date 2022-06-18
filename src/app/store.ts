@@ -2,13 +2,15 @@ import { Action, combineReducers, configureStore, ThunkAction } from '@reduxjs/t
 import createSagaMiddleware from 'redux-saga';
 import applicationItemSlice from '../reducers/applicationItemSlice';
 import applicationSlice from '../reducers/applicationSlice';
+import uiSlice  from '../reducers/ui';
 import userSlice from '../reducers/userSlice';
 import runSagas from '../sagas';
 
 const rootReducer = combineReducers({
   user: userSlice,
   application:applicationSlice,
-  applicationItem:applicationItemSlice
+  applicationItem:applicationItemSlice,
+  ui: uiSlice
 })
 
 export type RootState = ReturnType<typeof rootReducer>

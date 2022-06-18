@@ -4,13 +4,16 @@ export const Types = {
     applicationAdd: 'application/add',
     applicationGet: 'application/get',
     applicationGetOne: 'application/getone',
-    applicationUpdate: 'application/update'
+    applicationUpdate: 'application/update',
+    applicationDel: 'application/deleteone',
 }
 export type applicationForAdd = {
     id?: number,
-    name: string,
+    patientName: string,
+    patientBirthDate: string,
     patientRequest: string,
     fundName: string,
+    fundRequest: string,
     manager: string,
     creationDate: string,
     execDate: string
@@ -31,6 +34,14 @@ export const getApplication = createAction(Types.applicationGet, function prepar
     }
 })
 export const getOneApplication = createAction(Types.applicationGetOne, function prepare(id: string) {
+    return {
+        payload: {
+            id
+        },
+    }
+})
+
+export const deleteOneApplication = createAction(Types.applicationDel, function prepare(id: string) {
     return {
         payload: {
             id

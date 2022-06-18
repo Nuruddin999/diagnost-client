@@ -32,10 +32,17 @@ export const getOneApplicationApi = async (id: string) => {
  * @param {Object} application обновленное заключение.
  */
 export const updateOneApplicationApi = async (application: applicationInitialState) => {
-    console.log('application in api', application)
     const response = await diagnostApi.post('/updappl', {
         ...application
     })
+    return response.data
+}
+/**
+ * Удаление одного заключения по id.
+ * @param {number} id Id заключения.
+ */
+ export const deleteOneApplicationApi = async (id: string) => {
+    const response = await diagnostApi.get(`/applicationdel/${id}`)
     return response.data
 }
 

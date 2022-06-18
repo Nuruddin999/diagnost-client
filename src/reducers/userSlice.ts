@@ -8,7 +8,8 @@ export interface UserState {
   email:string,
   speciality:string,
   isLoading: boolean ,
-  reqStatus:string
+  reqStatus:string,
+  hasSuperUser?: boolean
 }
 
 const initialState: UserState = {
@@ -18,7 +19,8 @@ const initialState: UserState = {
   email:'',
   speciality:'',
   isLoading:  false,
-  reqStatus: 'no'
+  reqStatus: 'no',
+  hasSuperUser: false
 };
 
 
@@ -38,12 +40,15 @@ export const userSlice = createSlice({
     },
     changeReqStatus:(state,action:PayloadAction<string>) => {
       state.reqStatus=action.payload
-    }
+    },
+    saveSuperUser:(state) => {
+      state.hasSuperUser=true
+    },
 
   },
 });
 
-export const { saveUser, changeReqStatus, changeLoadStatus } = userSlice.actions;
+export const { saveUser, changeReqStatus, changeLoadStatus, saveSuperUser } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
