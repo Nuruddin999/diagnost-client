@@ -1,5 +1,4 @@
 import { createAction } from "@reduxjs/toolkit";
-import { applicationInitialState } from "../reducers/applicationItemSlice";
 export const Types = {
     applicationAdd: 'application/add',
     applicationGet: 'application/get',

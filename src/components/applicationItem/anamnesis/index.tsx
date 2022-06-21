@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React from "react";
 //import './style.dash.scss'
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button, TextField, Typography, IconButton } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import { RootState } from "../../../app/store";
 import './style.anamnesis.scss'
 import { changeComplaints, changeAnamnesis, changeDiagnosticData } from "../../../reducers/applicationItemSlice";
