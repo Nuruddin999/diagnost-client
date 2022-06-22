@@ -5,7 +5,6 @@ import {
   Switch,
   Route,
   Redirect,
-  HashRouter
 } from "react-router-dom";
 import Dashboard from './components/dashboard/dashboard';
 import MyDoc from './components/applicationItem/pdfdoc/pdfdoc';
@@ -13,7 +12,7 @@ import MyDoc from './components/applicationItem/pdfdoc/pdfdoc';
 function App() {
 
   return (
-    <HashRouter basename='/'>
+    <Router>
       <div className="App">
         {/* <Auth /> */}
         <Switch>
@@ -31,7 +30,7 @@ function App() {
           </Route>
         </Switch>
       </div>
-    </HashRouter >
+    </Router >
   );
 }
 
