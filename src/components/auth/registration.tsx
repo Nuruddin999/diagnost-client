@@ -7,6 +7,7 @@ import { RootState } from "../../app/store";
 import { changeLoadStatus, changeReqStatus } from "../../reducers/userSlice";
 import { Loader } from "../loader/loader";
 import './style.auth.scss'
+import { typography } from "@mui/system";
 
 export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean }): React.ReactElement => {
   const [email, setEmail] = useState('')
@@ -37,7 +38,7 @@ export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean 
   }
   const renderRegisterButton = () => {
     if (reqStatus === 'ok') {
-      return  <Typography className='success-reg' align='center'>
+      return <Typography className='success-reg' align='center'>
         Пользователь успешно зарегистрирован
       </Typography>
     }
@@ -61,7 +62,17 @@ export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean 
       setTimeout(() => fillRegistrationForm(false), 2000)
     }
   }, [reqStatus])
-  return <div className={'auth-wrapper'}>
+  return <div className={'registration-main'}>
+ <div className={'auth-wrapper'}>
+ {
+    notHaveSuperUser && <div className={'nosuperuser-title'}>
+    <Typography variant='h4' >
+      Добро пожаловать в систему
+    </Typography>
+      <Typography>
+        Зарегистрируйте главного администратора
+      </Typography></div>
+  }
     <div className={"auth-container"}>
       <form onSubmit={(event) => onSubmit(event)}>
         <TextField value={email}
@@ -126,4 +137,5 @@ export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean 
       </form>
     </div>
   </div>
+  </div >
 }

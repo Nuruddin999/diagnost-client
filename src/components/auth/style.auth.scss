@@ -1,22 +1,24 @@
 .auth-wrapper {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     height: 100%;
     .auth-container {
-        margin: auto;
-        width: calc(100%/12 * 3);
+        width: calc(100% / 12 * 3);
         display: flex;
         flex-direction: column;
-        padding: .5em;
+        padding: 0.5em;
         .login-button {
-            margin-top: .5em;
+            margin-top: 0.5em;
         }
         .success-reg {
-            padding: .5em;
+            padding: 0.5em;
             width: 100%;
             color: #1976d2;
         }
         .error-reg {
-            padding: .5em;
+            padding: 0.5em;
             width: 100%;
             color: red;
             font-size: 14px;
@@ -27,10 +29,17 @@
     width: 100%;
     display: flex;
     align-items: center;
-    .btn-title, .btn-ldr {
+    .btn-title,
+    .btn-ldr {
         margin-left: auto;
     }
 }
 .select {
     width: 100%;
+}
+.registration-main {
+    height: 100%;
+    .nosuperuser-title {
+        margin-top: 60px;
+    }
 }

@@ -4,9 +4,7 @@ import { diagnostApi } from './index';
 export const addApplicationApi = async (application: applicationForAdd) => {
     const response = await diagnostApi.post('/application', {
         ...application,
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
-
-    })
+    }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
     return response.data
 }
 /**
@@ -39,8 +37,7 @@ export const getOneApplicationApi = async (id: string) => {
 export const updateOneApplicationApi = async (application: applicationInitialState) => {
     const response = await diagnostApi.post('/updappl', {
         ...application,
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
-    })
+    }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
     return response.data
 }
 /**
