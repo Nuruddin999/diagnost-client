@@ -3,7 +3,9 @@ import { applicationInitialState } from '../reducers/applicationItemSlice';
 import { diagnostApi } from './index';
 export const addApplicationApi = async (application: applicationForAdd) => {
     const response = await diagnostApi.post('/application', {
-        ...application
+        ...application,
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
+
     })
     return response.data
 }
@@ -15,6 +17,7 @@ export const addApplicationApi = async (application: applicationForAdd) => {
  */
 export const getApplicationApi = async (page: number, limit: number) => {
     const response = await diagnostApi.get('/applications', {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
         params: { page, limit }
     })
     return response.data
@@ -24,7 +27,9 @@ export const getApplicationApi = async (page: number, limit: number) => {
  * @param {number} id Id заключения.
  */
 export const getOneApplicationApi = async (id: string) => {
-    const response = await diagnostApi.get(`/applications/${id}`)
+    const response = await diagnostApi.get(`/applications/${id}`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
+    })
     return response.data
 }
 /**
@@ -33,7 +38,8 @@ export const getOneApplicationApi = async (id: string) => {
  */
 export const updateOneApplicationApi = async (application: applicationInitialState) => {
     const response = await diagnostApi.post('/updappl', {
-        ...application
+        ...application,
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
     })
     return response.data
 }
@@ -41,8 +47,11 @@ export const updateOneApplicationApi = async (application: applicationInitialSta
  * Удаление одного заключения по id.
  * @param {number} id Id заключения.
  */
- export const deleteOneApplicationApi = async (id: string) => {
-    const response = await diagnostApi.get(`/applicationdel/${id}`)
+export const deleteOneApplicationApi = async (id: string) => {
+    const response = await diagnostApi.get(`/applicationdel/${id}`,
+        {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
+        })
     return response.data
 }
 

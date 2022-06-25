@@ -37,7 +37,7 @@ export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean 
   }
   const renderRegisterButton = () => {
     if (reqStatus === 'ok') {
-      return <Typography className='success-reg' align='center'>
+      return  <Typography className='success-reg' align='center'>
         Пользователь успешно зарегистрирован
       </Typography>
     }

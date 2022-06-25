@@ -238,7 +238,6 @@ function MyDocContent({ applItem }) {
   }
   const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments } = useSelector((state) => state.applicationItem)
   const { role } = useSelector(state => state.user)
-  console.log(role)
   const currentYear = new Date().getFullYear()
   const yearsOld = new Date(patientBirthDate).getFullYear()
   const month = new Date(patientBirthDate).getMonth()

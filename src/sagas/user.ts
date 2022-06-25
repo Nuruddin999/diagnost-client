@@ -1,5 +1,6 @@
-import { call, put } from "redux-saga/effects"
+import { call, put, select } from "redux-saga/effects"
 import { checkAuth, loginApi, logOut, registerApi, checkHasSuperAdmin } from "../api/user"
+import { RootState } from "../app/store"
 import { changeLoadStatus, changeReqStatus, saveSuperUser, saveUser } from "../reducers/userSlice"
 type loginUserResponse = {
     accessToken: string,
@@ -47,6 +48,10 @@ export function* registerUser(body: { type: 'user/register', payload: { email: s
         if (response) {
             yield put(changeLoadStatus(false))
             yield put(changeReqStatus('ok'))
+            const hasSuperUser: boolean = yield select((state: RootState) => state.user.hasSuperUser)
+            if(!hasSuperUser) {
+                yield put(saveSuperUser(true))
+            }
         }
     } catch (e: any) {
         if (e.response) {
@@ -64,9 +69,8 @@ export function* registerUser(body: { type: 'user/register', payload: { email: s
 export function* checkUserAuth() {
     try {
         yield put(changeLoadStatus(true))
-        const  { superAdmin } = yield call(checkHasSuperAdmin)
-        console.log(superAdmin)
-        if(superAdmin) { yield put(saveSuperUser())}
+        const { superAdmin } = yield call(checkHasSuperAdmin)
+        if (!superAdmin) { yield put(saveSuperUser(false)) }
         const response: loginUserResponse = yield call(checkAuth)
         const { accessToken, refreshToken, user } = response
         if (response) {

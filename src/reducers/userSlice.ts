@@ -20,7 +20,7 @@ const initialState: UserState = {
   speciality:'',
   isLoading:  false,
   reqStatus: 'no',
-  hasSuperUser: false
+  hasSuperUser: true
 };
 
 
@@ -41,8 +41,8 @@ export const userSlice = createSlice({
     changeReqStatus:(state,action:PayloadAction<string>) => {
       state.reqStatus=action.payload
     },
-    saveSuperUser:(state) => {
-      state.hasSuperUser=true
+    saveSuperUser:(state, action:PayloadAction<boolean>) => {
+      state.hasSuperUser=action.payload
     },
 
   },

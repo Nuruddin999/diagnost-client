@@ -9,7 +9,6 @@ import './style.diagnostic.scss'
 import NoResult from "../../no-result/no-result";
 
 const DiagnosticForm = (): React.ReactElement => {
-   console.log('render DiagnosticForm')
    const dispatch = useDispatch()
    const diagnosticProp = useSelector((state: RootState) => state.applicationItem.diagnostic)
    const [diagnosis, setDiagnosis] = useState('')

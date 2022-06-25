@@ -9,7 +9,6 @@ import { IconButton } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useHistory } from "react-router-dom";
 import { openModal } from "../../reducers/ui";
-import { Loader } from "../loader/loader";
 
 const ReportList = (): React.ReactElement => {
    const dispatch = useDispatch()
@@ -17,7 +16,6 @@ const ReportList = (): React.ReactElement => {
    const applications = useSelector((state: RootState) => state.application.applications)
    const status = useSelector((state: RootState) => state.ui.status)
    const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
-   console.log(applications)
    const count = useSelector((state: RootState) => state.application.count)
    const [page, setPage] = React.useState(1);
    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {

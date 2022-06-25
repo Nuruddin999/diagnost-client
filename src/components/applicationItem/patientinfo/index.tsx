@@ -12,8 +12,6 @@ const PatientInfo = (): React.ReactElement => {
   const patientBirthDate = useSelector((state: RootState) => state.applicationItem.patientBirthDate)
   const patientName = useSelector((state: RootState) => state.applicationItem.patientName)
   let pdate= new Date(patientBirthDate)
-  console.log('pdate',pdate)
-  console.log('patientBirthDate', new Date(patientBirthDate.split(',')[0]))
   const dispatch = useDispatch()
   return <div className="patient-info">
     <TextField
