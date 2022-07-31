@@ -25,10 +25,16 @@ export const addApplication = createAction(Types.applicationAdd, function prepar
         },
     }
 })
-export const getApplication = createAction(Types.applicationGet, function prepare(page: number, limit: number) {
+export const getApplication = createAction(Types.applicationGet, function prepare(page: number,
+    limit: number,
+    manager: string,
+    patientName: string,
+    patientRequest: string,
+    fundName: string,
+    fundRequest: string) {
     return {
         payload: {
-            page, limit
+            page, limit, manager, patientName, patientRequest, fundName, fundRequest
         },
     }
 })

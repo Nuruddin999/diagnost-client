@@ -1,5 +1,6 @@
-import { Button, Typography, Pagination, Stack } from "@mui/material";
-import React, { useState, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Button, Typography, Pagination, TextField } from "@mui/material";
+import React, { useEffect, useCallback } from "react";
 import './style.reportlist.scss'
 import { useDispatch, useSelector } from "react-redux";
 import { deleteOneApplication, getApplication } from "../../actions/application";
@@ -9,81 +10,117 @@ import { IconButton } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useHistory } from "react-router-dom";
 import { openModal } from "../../reducers/ui";
+import isObject from "lodash/isObject";
+import { debounce } from "lodash";
 
 const ReportList = (): React.ReactElement => {
-   const dispatch = useDispatch()
-   const history = useHistory()
-   const applications = useSelector((state: RootState) => state.application.applications)
-   const status = useSelector((state: RootState) => state.ui.status)
-   const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
-   const count = useSelector((state: RootState) => state.application.count)
-   const [page, setPage] = React.useState(1);
-   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-      setPage(value);
-   };
-   const deleteAppl = (value: number) => {
-      dispatch(deleteOneApplication(value.toString()));
-   };
-   useEffect(() => {
-      dispatch(getApplication(page, 10))
-   }, [page])
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const applications = useSelector((state: RootState) => state.application.applications)
+  const status = useSelector((state: RootState) => state.ui.status)
+  const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
+  const count = useSelector((state: RootState) => state.application.count)
+  const [page, setPage] = React.useState(1);
+  const [patientName, setPatientName] = React.useState('');
+  const [patientRequest, setPatientRequest] = React.useState('');
+  const [fundRequest, setFundRequest] = React.useState('');
+  const [fundName, setFundName] = React.useState('');
+  const [manager, setManager] = React.useState('');
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+  const deleteAppl = (value: number) => {
+    dispatch(deleteOneApplication(value.toString()));
+  };
+  const tableData = ['№', { title: 'ФИО пациента', field: patientName, onChange: setPatientName }, 'Дата рождения', { title: 'Запрос пациента', field: patientRequest, onChange: setPatientRequest }, { title: 'Название фонда', field: fundName, onChange: setFundName }, { title: 'Запрос фонда', field: fundRequest, onChange: setFundRequest }, { title: 'Ответственный', field: manager, onChange: setManager }, 'Дата создания', 'Дата исполнения', 'Удалить']
+
+  const changeHandler = (e: any, field: string, callback: (title: string) => void) => {
+    if (e.target.value.length > 2) {
+      callback(e.target.value)
+    }
+    else if (field.length > 2 && e.target.value.length === 0 )  {
+        callback('')
+    }
+  };
+  const debouncedChangeHandler = useCallback(
+    debounce(changeHandler, 300)
+    , []);
 
 
-   /**
-    * Переход на отдельное заключение
-    * @param {number} id Id заключения.
-    */
-   const goToApplItem = (id: number | undefined) => {
-      history.push(`application/${id}`)
-   }
-   return <div className='add-appl-container'>
-      {isModalOpened && <AddModal  />}
-      <div className='add-button-wrapper'>
-         <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
-            <Typography>Новое задание</Typography>
-         </Button>
-      </div>
-      <div className="appl-table">
-         <table>
-            <tr>
-               {['№','ФИО пациента','Дата рождения','Запрос пациента','Название фонда','Запрос фонда','Ответственный','Дата создания','Дата исполнения','Удалить'].map(el => <th>
-                  <span>
-                     {el}
-                  </span>
-               </th>)}
-            </tr>
-            <tbody>
-               {applications.length > 0 && applications.map((appl, index) => <tr onClick={() => goToApplItem(appl.id)}>
-                  <td>{index + 1}</td>
-                  <td>{appl.patientName}</td>
-                  <td>{new Date(appl.patientBirthDate).toLocaleString()}</td>
-                  <td>{appl.patientRequest}</td>
-                  <td>{appl.fundName}</td>
-                  <td>{appl.fundRequest}</td>
-                  <td>{appl.manager}</td>
-                  <td>{new Date(appl.creationDate).toLocaleString()}</td>
-                  <td>{appl.execDate}</td>
-                  <td><IconButton className='delete-button' onClick={(e:any) => {
-                     e.stopPropagation()
-                     appl.id && deleteAppl(appl.id)}}>
-                     <DeleteOutlineIcon />
-                  </IconButton></td>
-               </tr>)}
-            </tbody>
-         </table>
-      </div>
-      <div className="pagination">
-         <Pagination
-            count={(count / 10) + 1}
-            variant="outlined"
-            shape="rounded"
-            onChange={handleChange}
-            size='large'
-            color="primary"
-            boundaryCount={10}
-         />
-      </div>
-   </div>
+  useEffect(() => {
+    dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
+  }, [page])
+
+  useEffect(() => {
+   dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
+  }, [manager, patientName, patientRequest, fundName, fundRequest])
+
+  /**
+   * Переход на отдельное заключение
+   * @param {number} id Id заключения.
+   */
+  const goToApplItem = (id: number | undefined) => {
+    history.push(`application/${id}`)
+  }
+  return <div className='add-appl-container'>
+    {isModalOpened && <AddModal />}
+    <div className='add-button-wrapper'>
+      <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
+        <Typography>Новое задание</Typography>
+      </Button>
+    </div>
+    <div className="appl-table">
+      <table>
+        <tr>
+          {tableData.map(el => <th>
+            <div>
+              {isObject(el) &&
+                <TextField
+                  onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
+                  type="text"
+                  size="small"
+                  placeholder="Поиск"
+                />
+              }
+              <span>
+                {isObject(el) ? el.title : el}
+              </span>
+            </div>
+          </th>)}
+        </tr>
+        <tbody>
+          {applications.length > 0 && applications.map((appl, index) => <tr onClick={() => goToApplItem(appl.id)}>
+            <td>{index + 1}</td>
+            <td>{appl.patientName}</td>
+            <td>{new Date(appl.patientBirthDate).toLocaleString()}</td>
+            <td>{appl.patientRequest}</td>
+            <td>{appl.fundName}</td>
+            <td>{appl.fundRequest}</td>
+            <td>{appl.manager}</td>
+            <td>{new Date(appl.creationDate).toLocaleString()}</td>
+            <td>{appl.execDate}</td>
+            <td><IconButton className='delete-button' onClick={(e: any) => {
+              e.stopPropagation()
+              appl.id && deleteAppl(appl.id)
+            }}>
+              <DeleteOutlineIcon />
+            </IconButton></td>
+          </tr>)}
+        </tbody>
+      </table>
+    </div>
+    <div className="pagination">
+      <Pagination
+        count={(count / 10) + 1}
+        variant="outlined"
+        shape="rounded"
+        onChange={handleChange}
+        size='large'
+        color="primary"
+        boundaryCount={10}
+      />
+    </div>
+  </div>
 
 }
 export default ReportList

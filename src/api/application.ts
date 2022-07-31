@@ -13,10 +13,16 @@ export const addApplicationApi = async (application: applicationForAdd) => {
  * @param {number} limit Сколько показывать.
  * @returns
  */
-export const getApplicationApi = async (page: number, limit: number) => {
-    const response = await diagnostApi.get('/applications', {
+export const getApplicationApi = async (page: number,
+    limit: number,
+    manager: string,
+    patientName: string,
+    patientRequest: string,
+    fundName: string,
+    fundRequest: string) => {
+    const response = await diagnostApi.get('/appls', {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
-        params: { page, limit }
+        params: { page, limit, manager, patientName, patientRequest, fundName, fundRequest }
     })
     return response.data
 }
