@@ -74,6 +74,9 @@ const ReportList = (): React.ReactElement => {
         <tr>
           {tableData.map(el => <th>
             <div>
+              <span>
+                {isObject(el) ? el.title : el}
+              </span>
               {isObject(el) &&
                 <TextField
                   onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
@@ -82,9 +85,6 @@ const ReportList = (): React.ReactElement => {
                   placeholder="Поиск"
                 />
               }
-              <span>
-                {isObject(el) ? el.title : el}
-              </span>
             </div>
           </th>)}
         </tr>
