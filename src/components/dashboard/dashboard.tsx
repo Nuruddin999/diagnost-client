@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import {
-   BrowserRouter as Router,
    Switch,
    Route,
    Link,
@@ -25,7 +24,6 @@ const Dashboard = (): React.ReactElement => {
    const dispatch = useDispatch()
    const logOut = () => dispatch(logOutUser())
    useEffect(() => {
-      ('use effect')
       dispatch(checkUser())
    }, [])
    return !hasSuperUser ? <Registration notHaveSuperUser /> :  name === '' ? <CircularProgress /> : <div className="dashboard">

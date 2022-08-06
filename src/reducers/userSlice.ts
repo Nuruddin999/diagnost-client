@@ -1,26 +1,28 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 
 export interface UserState {
   phone: string;
   role: string,
-  name:string,
-  email:string,
-  speciality:string,
-  isLoading: boolean ,
-  reqStatus:string,
+  name: string,
+  email: string,
+  speciality: string,
+  isLoading: boolean,
+  reqStatus: string,
   hasSuperUser?: boolean
+  isDeletedPlace?: boolean
 }
 
 const initialState: UserState = {
   phone: '',
   role: 'doctor',
-  name:'',
-  email:'',
-  speciality:'',
-  isLoading:  false,
+  name: '',
+  email: '',
+  speciality: '',
+  isLoading: false,
   reqStatus: 'no',
-  hasSuperUser: true
+  hasSuperUser: true,
+  isDeletedPlace: false
 };
 
 
@@ -29,20 +31,21 @@ export const userSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    saveUser: (state,action: PayloadAction<UserState>) => {
-      state.email=action.payload.email
-      state.role=action.payload.role
-      state.isLoading=action.payload.isLoading
-      state.name=action.payload.name
+    saveUser: (state, action: PayloadAction<UserState>) => {
+      state.email = action.payload.email
+      state.role = action.payload.role
+      state.isLoading = action.payload.isLoading
+      state.name = action.payload.name
+      state.isDeletedPlace = action.payload.isDeletedPlace
     },
-    changeLoadStatus:(state,action:PayloadAction<boolean>) => {
-      state.isLoading=action.payload
+    changeLoadStatus: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload
     },
-    changeReqStatus:(state,action:PayloadAction<string>) => {
-      state.reqStatus=action.payload
+    changeReqStatus: (state, action: PayloadAction<string>) => {
+      state.reqStatus = action.payload
     },
-    saveSuperUser:(state, action:PayloadAction<boolean>) => {
-      state.hasSuperUser=action.payload
+    saveSuperUser: (state, action: PayloadAction<boolean>) => {
+      state.hasSuperUser = action.payload
     },
 
   },

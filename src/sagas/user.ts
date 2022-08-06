@@ -1,5 +1,5 @@
 import { call, put, select } from "redux-saga/effects"
-import { checkAuth, loginApi, logOut, registerApi, checkHasSuperAdmin } from "../api/user"
+import { checkAuth, loginApi, logOut, registerApi, checkHasSuperAdmin, changeIsDeletedApi } from "../api/user"
 import { RootState } from "../app/store"
 import { changeLoadStatus, changeReqStatus, saveSuperUser, saveUser } from "../reducers/userSlice"
 type loginUserResponse = {
@@ -10,7 +10,7 @@ type loginUserResponse = {
         name: string,
         phone: string,
         speciality: string,
-        role: string
+        role: string,
     }
 }
 /**
@@ -97,6 +97,24 @@ export function* logoutUser() {
             localStorage.removeItem('dtokenn')
             localStorage.removeItem('refreshToken')
             yield put(saveUser({ name: 'empty', role: '', phone: '', email: '', speciality: '', isLoading: false, reqStatus: 'ok' }))
+        }
+    } catch (e: any) {
+        if (e.response) {
+            yield put(changeReqStatus(e.response?.data?.message))
+        }
+        else {
+            yield put(changeReqStatus('Неизвестаня ошибка'))
+        }
+    }
+}
+
+export function* changeIsDeletedPlace(body: { type: 'user/changeIsDeletedPlaceType', payload: { email: string} }) {
+    try {
+        yield put(changeLoadStatus(true))
+        const response: loginUserResponse = yield call(changeIsDeletedApi, body.payload.email )
+        const { user } = response
+        if (response) {
+            yield put(saveUser({ ...user, isLoading: false, reqStatus: 'ok' }))
         }
     } catch (e: any) {
         if (e.response) {

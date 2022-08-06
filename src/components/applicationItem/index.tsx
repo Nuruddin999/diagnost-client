@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getOneApplication, updateApplication } from "../../actions/application";
@@ -8,7 +8,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { RootState } from "../../app/store";
 import './style.applicationitem.scss'
 import DiagnosticForm from "./diagnostic/consiliumDoctors";
-import { saveComment, successUpdate } from "../../reducers/applicationItemSlice";
+import { successUpdate } from "../../reducers/applicationItemSlice";
 import CheckupPlanForm from "./checkup_plans/checkupPlans";
 import Anamnesis from "./anamnesis";
 import PatientInfo from "./patientinfo";
@@ -18,15 +18,8 @@ import Comments from "./comments";
 const ApplicationItem = (): React.ReactElement => {
   const { id } = useParams<{ id: string }>()
   const status = useSelector((state: RootState) => state.applicationItem.status)
-  const [oneComment, setComment] = useState('')
-  const [fio, setFIO] = useState('')
+
   const dispatch = useDispatch()
-  /**
-   * Сохраняем пояснение в стэйт
-   */
-  const addComment = () => {
-    dispatch(saveComment(oneComment))
-  }
   /**
    * Обновляем заключение.
    */

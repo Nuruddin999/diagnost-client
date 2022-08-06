@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useSelector } from 'react-redux';
 import { Document, Page, PDFViewer, Text, StyleSheet, View, Font, Image } from '@react-pdf/renderer'
 import './style.pdfdoc.scss'
 import hopedoc from '../../../hopedoc.png'
 import TimesNewRomanFont from '../../../TimesNewRomanPSMT.ttf'
 import TimesNewRomanBoldFont from '../../../TimesNewRomanPS-BoldMT.ttf'
-import { RootState } from "../../../app/store";
 
 Font.register({
   family: "Roboto",
@@ -226,7 +225,7 @@ const styles = StyleSheet.create({
 
 });
 
-function MyDocContent({ applItem }) {
+function MyDocContent({ applItem, isDeletedPlace, status }) {
   let list = []
 
   for (let index = 0; index < 50; index++) {
@@ -237,7 +236,7 @@ function MyDocContent({ applItem }) {
     list.push(consdoc)
   }
   const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments } = useSelector((state) => state.applicationItem)
-  const { role } = useSelector(state => state.user)
+
   const currentYear = new Date().getFullYear()
   const yearsOld = new Date(patientBirthDate).getFullYear()
   const month = new Date(patientBirthDate).getMonth()
@@ -256,7 +255,7 @@ function MyDocContent({ applItem }) {
             </View>
           </View>
           <Text style={styles.recomenTitle}>
-            РЕКОМЕНДАЦИИ ВРАЧА
+            {status}
           </Text>
           <Text style={styles.subtitle}>
             (ВНИМАНИЕ! ДОКУМЕНТ ИСКЛЮЧИТЕЛЬНО ДЛЯ ВНУТРЕННЕГО ПОЛЬЗОВАНИЯ ОРГАНИЗАЦИИ)
@@ -344,13 +343,13 @@ function MyDocContent({ applItem }) {
               <View style={{ ...styles.tableRow, alignItems: 'center' }}>
                 <Text style={{ ...styles.tablHeaderNum, fontFamily: 'Times New Roman Bold' }}>№</Text>
                 <Text style={styles.tablHeaderTypeExamine}>Вид обледования</Text>
-                {role === 'doctor' &&  <Text style={styles.tablHeaderPlaceExamine}>Место</Text> }
+                {(!isDeletedPlace || status) && <Text style={styles.tablHeaderPlaceExamine}>Место</Text>}
                 <Text style={styles.tablHeaderTargetExamine}>Цель проведения обследования</Text>
               </View>
               {checkupPlans.map((checkUpPlan, index) => <View style={styles.tableRow} wrap={false}>
                 <Text style={styles.tablHeaderNum}>{index + 1}</Text>
                 <Text style={styles.tablHeaderTypeExamine}>{checkUpPlan.kind}</Text>
-                {role === 'doctor' &&  <Text style={styles.tablHeaderPlaceExamine}>{checkUpPlan.place}</Text> }
+                {(!isDeletedPlace || status) && <Text style={styles.tablHeaderPlaceExamine}>{checkUpPlan.place}</Text>}
                 <Text style={styles.tablHeaderTargetExamine}>{checkUpPlan.target}</Text>
               </View>)}
             </View> : null}

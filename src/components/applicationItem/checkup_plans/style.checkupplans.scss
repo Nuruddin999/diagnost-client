@@ -5,3 +5,12 @@ h5 {
 table {
     width: 100%;
 }
+.place {
+    position: relative;
+    width: 100%;
+    .hide-place {
+        position: absolute;
+        top: -30px;
+        right: 2px;
+    }
+}

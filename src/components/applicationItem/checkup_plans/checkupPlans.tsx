@@ -1,28 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
-import { IconButton, TextField, Typography } from "@mui/material";
+import { Button, IconButton, TextField, Typography } from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { changeCheckupPlan, saveCheckupPlan, deleteCheckupPlan } from "../../../reducers/applicationItemSlice";
 import './style.checkupplans.scss'
 import NoResult from "../../no-result/no-result";
+import CloseIcon from '@mui/icons-material/Close';
+import { changeIsDeletedPlaceAction } from "../../../actions/user";
+
 
 const CheckupPlanForm = (): React.ReactElement => {
   const dispatch = useDispatch()
   const checkupPlansProp = useSelector((state: RootState) => state.applicationItem.checkupPlans)
+  const { role, email, isDeletedPlace } = useSelector((state: RootState) => state.user)
   const [kind, setKind] = useState('')
   const [place, setPlace] = useState('')
   const [target, setTarget] = useState('')
+  const bc = useMemo(() => new BroadcastChannel('pdf_channel'), []);
   const addConsliliumDoctor = () => {
     dispatch(saveCheckupPlan({ kind, place, target }))
   }
   const deletePlan = (index: number) => {
     dispatch(deleteCheckupPlan(index))
   }
-
+  const sendBroadcastMessage = () => {
+    dispatch(changeIsDeletedPlaceAction(email))
+    bc.postMessage(isDeletedPlace);
+  }
+  useEffect(() => {
+    return () => {
+      bc.close();
+    };
+  }, [bc]);
   return <div>
-  { checkupPlansProp.length > 0 ? <table>
+    {checkupPlansProp.length > 0 ? <table>
       <tr>
         <th>
           <span>
@@ -34,11 +47,11 @@ const CheckupPlanForm = (): React.ReactElement => {
             Вид обследования
           </span>
         </th>
-        <th>
+        {!isDeletedPlace && <th>
           <span>
             Место
           </span>
-        </th>
+        </th>}
         <th>Цель проведения обследования</th>
         <th>
         </th>
@@ -54,14 +67,16 @@ const CheckupPlanForm = (): React.ReactElement => {
             placeholder='Вид обследования'
             onChange={(e) => dispatch(changeCheckupPlan({ index, checkupPlan: { kind: e.target.value, place: checkupPlan.place, target: checkupPlan.target } }))}
           /></td>
-          <td>    <TextField
-            value={checkupPlan.place}
-            variant='standard'
-            size='small'
-            fullWidth
-            placeholder='Место'
-            onChange={(e) => dispatch(changeCheckupPlan({ index, checkupPlan: { kind: checkupPlan.kind, place: e.target.value, target: checkupPlan.target } }))}
-          /></td>
+          {!isDeletedPlace && <td>
+            <TextField
+              value={checkupPlan.place}
+              variant='standard'
+              size='small'
+              fullWidth
+              placeholder='Место'
+              onChange={(e) => dispatch(changeCheckupPlan({ index, checkupPlan: { kind: checkupPlan.kind, place: e.target.value, target: checkupPlan.target } }))}
+            />
+          </td>}
           <td>    <TextField
             value={checkupPlan.target}
             variant='standard'
@@ -78,30 +93,41 @@ const CheckupPlanForm = (): React.ReactElement => {
     </table> : <NoResult />}
     <Typography>Добавить план обследования в таблицу</Typography>
     <div className="add-in-table-section">
-          <TextField
-      value={kind}
-      variant='outlined'
-      size='small'
-      fullWidth
-      placeholder='Вид обследования'
-      onChange={(e) => setKind(e.target.value)}
-    /> <TextField
-      value={place}
-      variant='outlined'
-      size='small'
-      fullWidth
-      placeholder='Место'
-      onChange={(e) => setPlace(e.target.value)}
-    /> <TextField
-      value={target}
-      variant='outlined'
-      size='small'
-      fullWidth
-      placeholder='Цель проведения обследования'
-      onChange={(e) => setTarget(e.target.value)}
-    /> <IconButton onClick={addConsliliumDoctor} >
-      <AddCircleIcon  className='add-in-table-svg '/>
-    </IconButton>
+      <TextField
+        value={kind}
+        variant='outlined'
+        size='small'
+        fullWidth
+        placeholder='Вид обследования'
+        onChange={(e) => setKind(e.target.value)}
+      />
+      <div className='place'>
+        {role !== 'doctor' &&
+          <div>
+            {!isDeletedPlace && <IconButton size='small' className='hide-place' onClick={sendBroadcastMessage}>
+              <CloseIcon />
+            </IconButton>}
+          </div>
+        }
+        {!isDeletedPlace ? <TextField
+          value={place}
+          variant='outlined'
+          size='small'
+          fullWidth
+          placeholder='Место'
+          onChange={(e) => setPlace(e.target.value)}
+        /> : <Button onClick={sendBroadcastMessage}>показать</Button>}
+      </div>
+      <TextField
+        value={target}
+        variant='outlined'
+        size='small'
+        fullWidth
+        placeholder='Цель проведения обследования'
+        onChange={(e) => setTarget(e.target.value)}
+      /> <IconButton onClick={addConsliliumDoctor} >
+        <AddCircleIcon className='add-in-table-svg ' />
+      </IconButton>
     </div>
 
   </div>
