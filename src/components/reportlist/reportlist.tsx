@@ -17,7 +17,7 @@ const ReportList = (): React.ReactElement => {
   const dispatch = useDispatch()
   const history = useHistory()
   const applications = useSelector((state: RootState) => state.application.applications)
-  const status = useSelector((state: RootState) => state.ui.status)
+  const role = useSelector((state: RootState) => state.user.role)
   const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
   const count = useSelector((state: RootState) => state.application.count)
   const [page, setPage] = React.useState(1);
@@ -38,21 +38,21 @@ const ReportList = (): React.ReactElement => {
     if (e.target.value.length > 2) {
       callback(e.target.value)
     }
-    else if (field.length > 2 && e.target.value.length === 0 )  {
-        callback('')
+    else if (field.length > 2 && e.target.value.length === 0) {
+      callback('')
     }
   };
   const debouncedChangeHandler = useCallback(
     debounce(changeHandler, 300)
     , []);
 
-
+  const isNotRenderDelete = (el: any) => role === 'doctor' && el !== 'Удалить'
   useEffect(() => {
     dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
   }, [page])
 
   useEffect(() => {
-   dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
+    dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
   }, [manager, patientName, patientRequest, fundName, fundRequest])
 
   /**
@@ -72,7 +72,7 @@ const ReportList = (): React.ReactElement => {
     <div className="appl-table">
       <table>
         <tr>
-          {tableData.map(el => <th>
+          {tableData.map(el => (role !== 'doctor' || isNotRenderDelete(el)) && (<th>
             <div>
               <span>
                 {isObject(el) ? el.title : el}
@@ -86,7 +86,7 @@ const ReportList = (): React.ReactElement => {
                 />
               }
             </div>
-          </th>)}
+          </th>))}
         </tr>
         <tbody>
           {applications.length > 0 && applications.map((appl, index) => <tr onClick={() => goToApplItem(appl.id)}>
@@ -99,12 +99,12 @@ const ReportList = (): React.ReactElement => {
             <td>{appl.manager}</td>
             <td>{new Date(appl.creationDate).toLocaleString()}</td>
             <td>{appl.execDate}</td>
-            <td><IconButton className='delete-button' onClick={(e: any) => {
+            {(role !== 'doctor') && <td><IconButton className='delete-button' onClick={(e: any) => {
               e.stopPropagation()
               appl.id && deleteAppl(appl.id)
             }}>
               <DeleteOutlineIcon />
-            </IconButton></td>
+            </IconButton></td>}
           </tr>)}
         </tbody>
       </table>
