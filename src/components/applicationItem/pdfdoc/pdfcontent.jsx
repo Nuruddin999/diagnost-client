@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottom: '1px solid black',
     fontSize: '11px',
-    margin: '10px 30px 0 30px',
+    margin: '10px auto',
     paddingBottom: '10px',
     justifyContent: 'space-between'
   },
@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     fontFamily: "Times New Roman Bold",
     textAlign: 'center',
-    color: 'red'
+    color: 'red',
+    margin:'0 auto'
   },
   author: {
     fontSize: 12,
@@ -110,7 +111,6 @@ const styles = StyleSheet.create({
   birthWrapper: {
     display: 'flex',
     flexDirection: 'row',
-    marginHorizontal: 30,
     marginTop: 24
   },
   birthText: {
@@ -120,8 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 10
   },
   anamnesisSection: {
-    width: '90%',
-    margin: '0px 30px',
+    textAlign:'center'
   },
   reasonTitle: {
     fontWeight: 700,
@@ -149,8 +148,7 @@ const styles = StyleSheet.create({
     fontFamily: "Times New Roman Bold",
   },
   tabl: {
-    width: '90%',
-    margin: '0 auto 0',
+
   },
   tableRow: {
     ...(trow),
@@ -221,6 +219,10 @@ const styles = StyleSheet.create({
     borderBottom: '1px solid black',
     marginLeft: '10px',
     padding: '5px'
+  },
+  commonSize: {
+    width:'80%',
+    marginHorizontal:'auto'
   }
 
 });
@@ -246,7 +248,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
     <PDFViewer>
       <Document>
         <Page style={styles.title}>
-          <View style={{ ...styles.hdr, marginBottom: 5 }} fixed>
+          <View style={{ ...styles.commonSize, ...styles.hdr, marginBottom: 5 }} fixed>
             <Image src={hopedoc} style={styles.hdrimg} />
             <View>
               <Text>г Махачкала, ул Батырая 11</Text>
@@ -257,10 +259,10 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           <Text style={styles.recomenTitle}>
             {status}
           </Text>
-          <Text style={styles.subtitle}>
+          <Text style={{...styles.commonSize, ...styles.subtitle}}>
             (ВНИМАНИЕ! ДОКУМЕНТ ИСКЛЮЧИТЕЛЬНО ДЛЯ ВНУТРЕННЕГО ПОЛЬЗОВАНИЯ ОРГАНИЗАЦИИ)
           </Text>
-          <View style={styles.birthWrapper}>
+          <View style={{...styles.commonSize, ...styles.birthWrapper}}>
             {patientName ? <View style={styles.birth}>
               <Text>
                 {patientName}
@@ -280,7 +282,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           </View>
           <Text style={styles.reasonTitle}>На основании: </Text>
           <Text style={styles.reasonSubTitle}> (указать основания: жалобы, симптомы, синдромы подозрения врача и пр.): </Text>
-          <View style={styles.anamnesisSection}>
+          <View style={{ ...styles.commonSize, ...styles.anamnesisSection}}>
             {complaint ? <Text style={styles.complaintTitle}><Text style={styles.complaintTitleFirstWord}>Жалоб: </Text> {complaint}</Text> : null}
             {anamnesis ? <Text style={styles.complaintTitle}><Text style={styles.complaintTitleFirstWord}>Анамнеза: </Text>{anamnesis}
             </Text> : null}
@@ -289,7 +291,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           <View>
             <Text style={{ ...styles.reasonTitle, marginTop: 12 }} wrap={false}>Проведен дистанционный врачебный консилиум в составе:</Text>
             <Text style={{ ...styles.reasonTitle, fontSize: 10, marginTop: 4 }}>(указать ФИО и специальности врачей, которые участвовали в формировании заключения): </Text>
-            {consiliumDoctors ? <View style={{ ...styles.tabl, marginTop: 10 }} wrap={false}>
+            {consiliumDoctors ? <View style={{ ...styles.commonSize, ...styles.tabl, marginTop: 10 }} wrap={false}>
               <View style={styles.tableRow}>
                 <Text style={{ ...styles.tablHeaderNum, fontFamily: 'Times New Roman Bold' }}>№</Text>
                 <Text style={{ ...styles.tablHeaderFIO, fontFamily: 'Times New Roman Bold' }}>ФИО врача</Text>
@@ -302,7 +304,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               </View>)}
             </View> : null}
           </View>
-          <View style={{ marginTop: 14, marginHorizontal: 30 }}>
+          <View style={{ marginTop: 14, ...styles.commonSize }}>
             <Text style={{ fontFamily: 'Times New Roman Bold' }}>С целью проведения дифференциальной диагностики между</Text>
             <Text style={{ fontFamily: 'Times New Roman Bold', fontSize: 10 }}>(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)</Text>
             <View style={{ ...styles.tabl, marginTop: 10 }}>
@@ -316,7 +318,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               </View>)}
             </View>
           </View>
-          <View style={{ marginTop: 14 }}>
+          <View style={{ marginTop: 14, ...styles.commonSize }}>
             <View style={styles.probableDiagnosis} wrap={false}>
               <Text style={styles.probableDiagnosisNum}>
                 Выявлен наиболее вероятный
@@ -335,12 +337,12 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               </Text>
             </View>
           </View>
-          <View>
-            {checkupPlans.length > 0 ? <View style={styles.tabl}>
-              <Text style={{ fontFamily: 'Times New Roman Bold' }}>
+          <View style={{ marginTop: 14, ...styles.commonSize }}>
+            {checkupPlans.length > 0 ? <View style={styles.tabl} wrap={false}>
+              <Text style={{ fontFamily: 'Times New Roman Bold' }} wrap={false}>
                 На основании проведенного консилиума рекомендован план лечения (ПЛ):
               </Text>
-              <View style={{ ...styles.tableRow, alignItems: 'center' }}>
+              <View style={{ ...styles.tableRow, alignItems: 'center' }} wrap={false}>
                 <Text style={{ ...styles.tablHeaderNum, fontFamily: 'Times New Roman Bold' }}>№</Text>
                 <Text style={styles.tablHeaderTypeExamine}>Вид обледования</Text>
                 {(!isDeletedPlace || status) && <Text style={styles.tablHeaderPlaceExamine}>Место</Text>}
@@ -353,8 +355,8 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                 <Text style={styles.tablHeaderTargetExamine}>{checkUpPlan.target}</Text>
               </View>)}
             </View> : null}
-            {comments ? <View style={styles.tabl} wrap={false}>
-              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }}>Пояснения:</Text>
+            {comments ? <View style={styles.tabl}>
+              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }}wrap={false}>Пояснения:</Text>
               {comments.map((comment, index) => <View style={{ ...styles.commentsWrapper, marginTop: 14 }} wrap={false}>
                 <Text style={styles.commentsNum}>{index + 1}</Text>
                 <Text style={styles.commentsSecText}>{comment.comment}</Text>
