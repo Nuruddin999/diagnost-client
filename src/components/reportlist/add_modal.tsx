@@ -21,8 +21,6 @@ const AddModal = (): React.ReactElement => {
   const [fundName, setFundName] = useState('')
   const [fundRequest, setFundRequest] = useState('')
   const [manager, setManager] = useState('')
-  // const [creationDate, setValue] = useState(new Date())
-  // const [execDate, setExecValue] = useState(new Date())
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
     dispatch(addApplication({
@@ -32,7 +30,7 @@ const AddModal = (): React.ReactElement => {
       fundName,
       fundRequest,
       manager,
-      creationDate: new Date().toString(),
+      creationDate: new Date().toLocaleString(),
       execDate: '',
     }))
   }

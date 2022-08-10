@@ -1,4 +1,3 @@
-import React, { useEffect, useState, useMemo } from "react";
 import { useSelector } from 'react-redux';
 import { Document, Page, PDFViewer, Text, StyleSheet, View, Font, Image } from '@react-pdf/renderer'
 import './style.pdfdoc.scss'
@@ -67,7 +66,7 @@ const styles = StyleSheet.create({
     fontFamily: "Times New Roman Bold",
     textAlign: 'center',
     color: 'red',
-    margin:'0 auto'
+    margin: '0 auto'
   },
   author: {
     fontSize: 12,
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 10
   },
   anamnesisSection: {
-    textAlign:'center'
+    textAlign: 'center'
   },
   reasonTitle: {
     fontWeight: 700,
@@ -221,8 +220,17 @@ const styles = StyleSheet.create({
     padding: '5px'
   },
   commonSize: {
-    width:'80%',
-    marginHorizontal:'auto'
+    width: '80%',
+    marginHorizontal: 'auto'
+  },
+  finalDateAndFio: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  finalDateAndFioText: {
+    padding: '25px',
+    textDecoration: 'underline'
   }
 
 });
@@ -237,8 +245,8 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
     }
     list.push(consdoc)
   }
-  const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments } = useSelector((state) => state.applicationItem)
-
+  const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments, execDate, manager, } = applItem
+console.log('manager',manager)
   const currentYear = new Date().getFullYear()
   const yearsOld = new Date(patientBirthDate).getFullYear()
   const month = new Date(patientBirthDate).getMonth()
@@ -259,10 +267,10 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           <Text style={styles.recomenTitle}>
             {status}
           </Text>
-          <Text style={{...styles.commonSize, ...styles.subtitle}}>
+          <Text style={{ ...styles.commonSize, ...styles.subtitle }}>
             (ВНИМАНИЕ! ДОКУМЕНТ ИСКЛЮЧИТЕЛЬНО ДЛЯ ВНУТРЕННЕГО ПОЛЬЗОВАНИЯ ОРГАНИЗАЦИИ)
           </Text>
-          <View style={{...styles.commonSize, ...styles.birthWrapper}}>
+          <View style={{ ...styles.commonSize, ...styles.birthWrapper }}>
             {patientName ? <View style={styles.birth}>
               <Text>
                 {patientName}
@@ -282,7 +290,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           </View>
           <Text style={styles.reasonTitle}>На основании: </Text>
           <Text style={styles.reasonSubTitle}> (указать основания: жалобы, симптомы, синдромы подозрения врача и пр.): </Text>
-          <View style={{ ...styles.commonSize, ...styles.anamnesisSection}}>
+          <View style={{ ...styles.commonSize, ...styles.anamnesisSection }}>
             {complaint ? <Text style={styles.complaintTitle}><Text style={styles.complaintTitleFirstWord}>Жалоб: </Text> {complaint}</Text> : null}
             {anamnesis ? <Text style={styles.complaintTitle}><Text style={styles.complaintTitleFirstWord}>Анамнеза: </Text>{anamnesis}
             </Text> : null}
@@ -356,13 +364,17 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               </View>)}
             </View> : null}
             {comments ? <View style={styles.tabl}>
-              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }}wrap={false}>Пояснения:</Text>
+              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }} wrap={false}>Пояснения:</Text>
               {comments.map((comment, index) => <View style={{ ...styles.commentsWrapper, marginTop: 14 }} wrap={false}>
                 <Text style={styles.commentsNum}>{index + 1}</Text>
                 <Text style={styles.commentsSecText}>{comment.comment}</Text>
               </View>)}
             </View> : null}
           </View>
+          {execDate && manager ? <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }}>
+            <Text>{execDate.substring(0, 10)}</Text>
+            <Text>{manager}</Text>
+          </View> : null}
         </Page>
       </Document>
     </PDFViewer>

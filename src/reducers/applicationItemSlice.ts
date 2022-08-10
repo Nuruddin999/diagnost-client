@@ -77,6 +77,8 @@ export const applicationItemSlice = createSlice({
       state.patientName = action.payload.patientName
       state.patientBirthDate = action.payload.patientBirthDate
       state.comments = action.payload.Comments.length > 0 ? action.payload.Comments : state.comments
+      state.execDate = action.payload.execDate
+      state.manager = action.payload.manager
     },
     saveConsiliumDoctors: (state, action: PayloadAction<consiliumDoctor>) => {
       state.consiliumDoctors = [...state.consiliumDoctors, { name: action.payload.name, speciality: action.payload.speciality }]

@@ -98,7 +98,7 @@ const ReportList = (): React.ReactElement => {
             <td>{appl.fundRequest}</td>
             <td>{appl.manager}</td>
             <td>{new Date(appl.creationDate).toLocaleString()}</td>
-            <td>{appl.execDate}</td>
+            <td>{new Date(appl.execDate).toLocaleString()}</td>
             {(role !== 'doctor') && <td><IconButton className='delete-button' onClick={(e: any) => {
               e.stopPropagation()
               appl.id && deleteAppl(appl.id)
