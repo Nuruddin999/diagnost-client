@@ -15,7 +15,7 @@ export const Auth = (): React.ReactElement => {
   const [isRegistration, setRegistration] = useState(false)
   const [isAlert, showAllert] = useState(false)
   const [isRedirect, setRedirect] = useState(false)
-  const { isLoading, role: roleUser, reqStatus } = useSelector((state: RootState) => state.user)
+  const { isLoading, user, reqStatus } = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch()
   const onSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -68,7 +68,7 @@ export const Auth = (): React.ReactElement => {
           <Loader title='Войти' isLoading={isLoading} />
         </Button>}
       </form>
-      {roleUser !== '' && <Redirect to='/' />}
+      {user.role !== '' && <Redirect to='/' />}
     </div>
   </div>
 }

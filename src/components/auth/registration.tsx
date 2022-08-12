@@ -16,7 +16,7 @@ export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean 
   const [speciality, setSpeciality] = useState('')
   const [phone, setPhone] = useState('')
   const [role, setRole] = useState('')
-  const { isLoading, role: roleUser, reqStatus } = useSelector((state: RootState) => state.user)
+  const { isLoading, reqStatus } = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch()
   const onSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();

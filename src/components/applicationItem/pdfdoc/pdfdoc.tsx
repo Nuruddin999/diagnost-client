@@ -18,7 +18,7 @@ Font.register({
 function MyDoc() {
   const { id } = useParams<{ id: string }>()
   const applItem = useSelector((state: RootState) => state.applicationItem)
-  const { isDeletedPlace } = useSelector((state: RootState) => state.user)
+  const { isDeletedPlace } = useSelector((state: RootState) => state.user.user)
   const [status, setStatus] = useState(isDeletedPlace)
   const bc = new BroadcastChannel('pdf_channel');
   const dispatch = useDispatch()

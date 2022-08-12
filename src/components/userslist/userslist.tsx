@@ -3,7 +3,7 @@ import { Button, Typography, Pagination, TextField } from "@mui/material";
 import React, { useEffect, useCallback } from "react";
 import './style.reportlist.scss'
 import { useDispatch, useSelector } from "react-redux";
-import { deleteOneApplication, getApplication } from "../../actions/application";
+import { deleteUser } from "../../actions/user";
 import { RootState } from "../../app/store";
 import AddModal from "./add_modal";
 import { IconButton } from '@mui/material';
@@ -12,28 +12,27 @@ import { useHistory } from "react-router-dom";
 import { openModal } from "../../reducers/ui";
 import isObject from "lodash/isObject";
 import { debounce } from "lodash";
+import { getAllUsersApi } from "../../api/user";
+import { getUserByLetter } from "../../actions/user";
 
-const ReportList = (): React.ReactElement => {
+const UsersList = (): React.ReactElement => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const applications = useSelector((state: RootState) => state.application.applications)
-  console.log('appls in comp', applications)
-  const role = useSelector((state: RootState) => state.user.user.role)
+  const { users, user } = useSelector((state: RootState) => state.user)
   const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
-  const count = useSelector((state: RootState) => state.application.count)
+  const count = useSelector((state: RootState) => state.user.count)
   const [page, setPage] = React.useState(1);
-  const [patientName, setPatientName] = React.useState('');
-  const [patientRequest, setPatientRequest] = React.useState('');
-  const [fundRequest, setFundRequest] = React.useState('');
-  const [fundName, setFundName] = React.useState('');
-  const [manager, setManager] = React.useState('');
+  const [name, setUserName] = React.useState('');
+  const [speciality, setUserPosition] = React.useState('');
+  const [phone, setUserPhone] = React.useState('');
+  const [email, setUserEmail] = React.useState('');
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
   const deleteAppl = (value: number) => {
-    dispatch(deleteOneApplication(value.toString()));
+    dispatch(deleteUser(value.toString()));
   };
-  const tableData = ['№', { title: 'ФИО пациента', field: patientName, onChange: setPatientName }, 'Дата рождения', { title: 'Запрос пациента', field: patientRequest, onChange: setPatientRequest }, { title: 'Название фонда', field: fundName, onChange: setFundName }, { title: 'Запрос фонда', field: fundRequest, onChange: setFundRequest }, { title: 'Ответственный', field: manager, onChange: setManager }, 'Дата создания', 'Дата исполнения', 'Удалить']
+  const tableData = ['№', { title: 'ФИО', field: name, onChange: setUserName }, { title: 'должность', field: speciality, onChange: setUserPosition }, { title: 'email', field: email, onChange: setUserEmail }, { title: 'Контакты', field: phone, onChange: setUserPhone }, 'Удалить']
 
   const changeHandler = (e: any, field: string, callback: (title: string) => void) => {
     if (e.target.value.length > 2) {
@@ -47,14 +46,13 @@ const ReportList = (): React.ReactElement => {
     debounce(changeHandler, 300)
     , []);
 
-  const isNotRenderDelete = (el: any) => role === 'doctor' && el !== 'Удалить'
   useEffect(() => {
-    dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
+    dispatch(getUserByLetter(page, 10, email, name, speciality, phone))
   }, [page])
 
   useEffect(() => {
-    dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
-  }, [manager, patientName, patientRequest, fundName, fundRequest])
+    dispatch(getUserByLetter(page, 10, email, name, speciality, phone))
+  }, [email, name, speciality, phone])
 
   /**
    * Переход на отдельное заключение
@@ -67,17 +65,19 @@ const ReportList = (): React.ReactElement => {
     {isModalOpened && <AddModal />}
     <div className='add-button-wrapper'>
       <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
-        <Typography>Новое задание</Typography>
+        <Typography>Новое пользователь</Typography>
       </Button>
     </div>
     <div className="appl-table">
       <table>
         <tr>
-          {tableData.map(el => (role !== 'doctor' || isNotRenderDelete(el)) && (<th>
+          {tableData.map(el => (<th>
             <div>
-              <span>
-                {isObject(el) ? el.title : el}
-              </span>
+              <div>
+                <span>
+                  {isObject(el) ? el.title : el}
+                </span>
+              </div>
               {isObject(el) &&
                 <TextField
                   onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
@@ -90,22 +90,18 @@ const ReportList = (): React.ReactElement => {
           </th>))}
         </tr>
         <tbody>
-          {applications.length > 0 && applications.map((appl, index) => <tr onClick={() => goToApplItem(appl.id)}>
+          {users.length > 0 && users.map((userItem, index) => <tr onClick={() => goToApplItem(userItem.id)}>
             <td>{index + 1}</td>
-            <td>{appl.patientName}</td>
-            <td>{new Date(appl.patientBirthDate).toLocaleString()}</td>
-            <td>{appl.patientRequest}</td>
-            <td>{appl.fundName}</td>
-            <td>{appl.fundRequest}</td>
-            <td>{appl.manager}</td>
-            <td>{new Date(appl.creationDate).toLocaleString()}</td>
-            <td>{appl.execDate}</td>
-            {(role !== 'doctor') && <td><IconButton className='delete-button' onClick={(e: any) => {
+            <td>{userItem.name}</td>
+            <td>{userItem.speciality}</td>
+            <td>{userItem.email}</td>
+            <td>{userItem.phone}</td>
+            <td><IconButton className='delete-button' onClick={(e: any) => {
               e.stopPropagation()
-              appl.id && deleteAppl(appl.id)
+              userItem.id && deleteAppl(userItem.id)
             }}>
               <DeleteOutlineIcon />
-            </IconButton></td>}
+            </IconButton></td>
           </tr>)}
         </tbody>
       </table>
@@ -124,4 +120,4 @@ const ReportList = (): React.ReactElement => {
   </div>
 
 }
-export default ReportList
+export default UsersList

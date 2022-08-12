@@ -1,17 +1,24 @@
 import { call, put, select } from "redux-saga/effects"
-import { checkAuth, loginApi, logOut, registerApi, checkHasSuperAdmin, changeIsDeletedApi } from "../api/user"
+import { getUserByLetter } from "../actions/user"
+import { checkAuth, loginApi, logOut, registerApi, checkHasSuperAdmin, changeIsDeletedApi, getAllUsersApi, deleteUserApi } from "../api/user"
 import { RootState } from "../app/store"
-import { changeLoadStatus, changeReqStatus, saveSuperUser, saveUser } from "../reducers/userSlice"
+import { changeLoadStatus, changeReqStatus, saveSuperUser, saveUser, saveUsers, User } from "../reducers/userSlice"
+
 type loginUserResponse = {
     accessToken: string,
     refreshToken: string,
     user: {
+        id:number,
         email: string,
         name: string,
         phone: string,
         speciality: string,
         role: string,
     }
+}
+type allUsersResponse = {
+    count: number,
+    rows: Array<User>
 }
 /**
  * Вход в систему.
@@ -26,7 +33,7 @@ export function* loginUser(login: { type: 'user/login', payload: { email: string
         if (response) {
             localStorage.setItem('dtokenn', accessToken)
             localStorage.setItem('refreshToken', refreshToken)
-            yield put(saveUser({ ...user, isLoading: false, reqStatus: 'ok' }))
+            yield put(saveUser({ user, isLoading: false, reqStatus: 'ok' }))
         }
     } catch (e: any) {
         if (e.response) {
@@ -44,14 +51,15 @@ export function* loginUser(login: { type: 'user/login', payload: { email: string
 export function* registerUser(body: { type: 'user/register', payload: { email: string, password: string, name: string, speciality: string, phone: string, role: string } }) {
     try {
         yield put(changeLoadStatus(true))
-        const response: unknown = yield call(registerApi, body.payload)
+        const response: {user: string} = yield call(registerApi, body.payload)
         if (response) {
             yield put(changeLoadStatus(false))
             yield put(changeReqStatus('ok'))
             const hasSuperUser: boolean = yield select((state: RootState) => state.user.hasSuperUser)
-            if(!hasSuperUser) {
+            if (!hasSuperUser) {
                 yield put(saveSuperUser(true))
             }
+            yield put(getUserByLetter(1, 10, '', '' , '', ''))
         }
     } catch (e: any) {
         if (e.response) {
@@ -76,7 +84,7 @@ export function* checkUserAuth() {
         if (response) {
             localStorage.setItem('dtokenn', accessToken)
             localStorage.setItem('refreshToken', refreshToken)
-            yield put(saveUser({ ...user, isLoading: false, reqStatus: 'ok' }))
+            yield put(saveUser({ user, isLoading: false, reqStatus: 'ok' }))
         }
     } catch (e: any) {
         if (e.response) {
@@ -85,8 +93,8 @@ export function* checkUserAuth() {
         else {
             yield put(changeReqStatus('Неизвестаня ошибка'))
         }
-        yield put(saveUser({ name: 'empty', role: '', phone: '', email: '', speciality: '', isLoading: false, reqStatus: 'ok' }))
-    }
+        yield put(saveUser({user:{id:0, name: 'empty', role: '', phone: '', email: '', speciality: '' }, isLoading: false, reqStatus: 'ok' }))
+}
 }
 
 export function* logoutUser() {
@@ -96,7 +104,7 @@ export function* logoutUser() {
         if (response) {
             localStorage.removeItem('dtokenn')
             localStorage.removeItem('refreshToken')
-            yield put(saveUser({ name: 'empty', role: '', phone: '', email: '', speciality: '', isLoading: false, reqStatus: 'ok' }))
+            yield put(saveUser({ user: {id:0, name: 'empty', role: '', phone: '', email: '', speciality: '' }, isLoading: false, reqStatus: 'ok' }))
         }
     } catch (e: any) {
         if (e.response) {
@@ -108,13 +116,13 @@ export function* logoutUser() {
     }
 }
 
-export function* changeIsDeletedPlace(body: { type: 'user/changeIsDeletedPlaceType', payload: { email: string} }) {
+export function* changeIsDeletedPlace(body: { type: 'user/changeIsDeletedPlaceType', payload: { email: string } }) {
     try {
         yield put(changeLoadStatus(true))
-        const response: loginUserResponse = yield call(changeIsDeletedApi, body.payload.email )
+        const response: loginUserResponse = yield call(changeIsDeletedApi, body.payload.email)
         const { user } = response
         if (response) {
-            yield put(saveUser({ ...user, isLoading: false, reqStatus: 'ok' }))
+            yield put(saveUser({ user, isLoading: false, reqStatus: 'ok' }))
         }
     } catch (e: any) {
         if (e.response) {
@@ -125,3 +133,49 @@ export function* changeIsDeletedPlace(body: { type: 'user/changeIsDeletedPlaceTy
         }
     }
 }
+
+/**
+ * Сага получения списка пользователей.
+ * @param addApplication
+ */
+export function* fetchUser(getUser: { type: 'user/getByLetter', payload: { page: number, limit: number, email: string, name: string, speciality: string, phone: string } }) {
+    try {
+        //  yield put(changeLoadStatus(true))
+        const { page, limit, email, name, speciality, phone } = getUser.payload
+        const response: allUsersResponse = yield call(getAllUsersApi, page, limit, email, name, speciality, phone)
+        if (response) {
+            const { rows, count } = response
+
+            yield put(saveUsers({ users: rows, count }))
+        }
+    } catch (e: any) {
+        if (e.response) {
+            yield put(changeReqStatus(e.response?.data?.message))
+        }
+        else {
+            yield put(changeReqStatus('Неизвестаня ошибка'))
+        }
+    }
+}
+/**
+* Удаление  пользователя.
+* @param {Object} delUser .
+*/
+export function* removeUser(delUser: { type: 'user/deleteone', payload: { id: string } }) {
+
+    try {
+      const { id } = delUser.payload
+      const response: {} = yield call(deleteUserApi, id)
+      if (response) {
+        yield put(changeReqStatus('success'))
+        yield put(getUserByLetter(1, 10, '', '' , '', ''))
+      }
+    } catch (e: any) {
+      if (e.response) {
+        yield put(changeReqStatus(e.response?.data?.message))
+      }
+      else {
+        yield put(changeReqStatus('Неизвестаня ошибка'))
+      }
+    }
+  }

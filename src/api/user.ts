@@ -30,4 +30,29 @@ export const changeIsDeletedApi = async (email: string) => {
     }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
     return response.data
 }
+export const getAllUsersApi = async (page: number,
+    limit: number,
+    email: string,
+    name: string,
+    speciality: string,
+    phone: string ) => {
+    const response = await diagnostApi.get('/users', {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
+        params: { page, limit, email, name, speciality, phone }
+    })
+    return response.data
+}
+/**
+ * Удаление одного пользователя по id.
+ * @param {number} id Id заключения.
+ */
+
+ export const deleteUserApi = async (id: string) => {
+    const response = await diagnostApi.get(`/userdel/${id}`,
+        {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
+        })
+    return response.data
+}
+
 

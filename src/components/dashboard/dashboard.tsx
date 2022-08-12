@@ -16,17 +16,18 @@ import { checkUser, logOutUser } from "../../actions/user";
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import ApplicationItem from "../applicationItem";
 import { Registration } from "../auth/registration";
+import UsersList from "../userslist/userslist";
 
 
 const Dashboard = (): React.ReactElement => {
-   const { name, isLoading, role, hasSuperUser } = useSelector((state: RootState) => state.user)
-   let match = useRouteMatch();
+   const { user, hasSuperUser } = useSelector((state: RootState) => state.user)
+   const { name, role } = user
    const dispatch = useDispatch()
    const logOut = () => dispatch(logOutUser())
    useEffect(() => {
       dispatch(checkUser())
    }, [])
-   return !hasSuperUser ? <Registration notHaveSuperUser /> :  name === '' ? <CircularProgress /> : <div className="dashboard">
+   return !hasSuperUser ? <Registration notHaveSuperUser /> : name === '' ? <CircularProgress /> : <div className="dashboard">
       <div className="dasheader">
          <div className='user-block'>
             <Typography variant="body1" >
@@ -57,6 +58,11 @@ const Dashboard = (): React.ReactElement => {
                      Новый пользователь
                   </Button>
                </Link>
+               <Link to='/main/users'>
+                  <Button size='small' color='inherit'>
+                     Пользователи
+                  </Button>
+               </Link>
             </div>}
          </div>
          <div className="main-content">
@@ -69,6 +75,9 @@ const Dashboard = (): React.ReactElement => {
                </Route>
                <Route path='/main/newuser'>
                   {role !== 'doctor' ? <Registration /> : <Typography align='center'>Недостаточно прав</Typography>}
+               </Route>
+               <Route path='/main/users'>
+                  {role !== 'doctor' ? <UsersList /> : <Typography align='center'>Недостаточно прав</Typography>}
                </Route>
             </Switch>
          </div>

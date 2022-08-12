@@ -2,7 +2,7 @@ import { all, takeLatest } from 'redux-saga/effects';
 import { Types } from '../actions/application';
 import { TYPES } from '../actions/user';
 import { addApplication, fetchApplication, fetchOneApplication, removeOneApplication, updateOneApplication } from './application';
-import { checkUserAuth, loginUser, logoutUser, registerUser, changeIsDeletedPlace } from './user';
+import { checkUserAuth, loginUser, logoutUser, registerUser, changeIsDeletedPlace, fetchUser, removeUser } from './user';
 export default function* runSagas(){
     yield all([
         takeLatest(TYPES.userLoginType, loginUser),
@@ -10,6 +10,8 @@ export default function* runSagas(){
         takeLatest(TYPES.userCheckType, checkUserAuth),
         takeLatest(TYPES.userLogOut, logoutUser),
         takeLatest(TYPES.changeIsDeletedPlaceType, changeIsDeletedPlace),
+        takeLatest(TYPES.getByLetter, fetchUser),
+        takeLatest(TYPES.userDel, removeUser),
         takeLatest(Types.applicationAdd, addApplication),
         takeLatest(Types.applicationGet, fetchApplication),
         takeLatest(Types.applicationGetOne, fetchOneApplication),

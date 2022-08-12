@@ -14,7 +14,7 @@ import { changeIsDeletedPlaceAction } from "../../../actions/user";
 const CheckupPlanForm = (): React.ReactElement => {
   const dispatch = useDispatch()
   const checkupPlansProp = useSelector((state: RootState) => state.applicationItem.checkupPlans)
-  const { role, email, isDeletedPlace } = useSelector((state: RootState) => state.user)
+  const { role, email, isDeletedPlace } = useSelector((state: RootState) => state.user.user)
   const [kind, setKind] = useState('')
   const [place, setPlace] = useState('')
   const [target, setTarget] = useState('')

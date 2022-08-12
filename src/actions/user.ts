@@ -5,7 +5,9 @@ export const TYPES = {
     userCheckType:'user/check',
     userLogOut:'user/logout',
     userCheckIsAdmin:'user/checkIsSuperAdmn',
-    changeIsDeletedPlaceType:'user/changeIsDeletedPlaceType'
+    changeIsDeletedPlaceType:'user/changeIsDeletedPlaceType',
+    getByLetter:'user/getByLetter',
+    userDel: 'user/deleteone',
 }
 export type registeredUser = {
     email: string,
@@ -38,6 +40,26 @@ export const registerUser = createAction(TYPES.userRegisterType, function prepar
     return {
         payload: {
            ...body
+        },
+    }
+})
+
+export const getUserByLetter = createAction(TYPES.getByLetter, function prepare(page: number,
+    limit: number,
+    email: string,
+    name: string,
+    speciality: string,
+    phone: string) {
+    return {
+        payload: {
+            page, limit, email, name, speciality, phone
+        },
+    }
+})
+export const deleteUser = createAction(TYPES.userDel, function prepare(id: string) {
+    return {
+        payload: {
+            id
         },
     }
 })
