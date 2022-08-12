@@ -2,6 +2,8 @@ import { useSelector } from 'react-redux';
 import { Document, Page, PDFViewer, Text, StyleSheet, View, Font, Image } from '@react-pdf/renderer'
 import './style.pdfdoc.scss'
 import hopedoc from '../../../hopedoc.png'
+import sign from '../../../sign.jpeg'
+import sell from '../../../sell.jpeg'
 import TimesNewRomanFont from '../../../TimesNewRomanPSMT.ttf'
 import TimesNewRomanBoldFont from '../../../TimesNewRomanPS-BoldMT.ttf'
 
@@ -133,7 +135,7 @@ const styles = StyleSheet.create({
   complaintTitle: {
     flexDirection: 'row',
     marginTop: 12,
-    width: '97%',
+    width: '100%',
     textAlign: 'left',
     flexWrap: 'wrap'
   },
@@ -205,19 +207,17 @@ const styles = StyleSheet.create({
   },
   commentsWrapper: {
     ...(trow),
-    alignItems: 'center'
+    alignItems: 'start'
   },
   commentsNum: {
     width: '50px',
     textAlign: 'left',
-    padding: '5px'
+    padding: '0px'
   },
   commentsSecText: {
-    width: '1000px',
+    width: '100%',
     textAlign: 'left',
     borderBottom: '1px solid black',
-    marginLeft: '10px',
-    padding: '5px'
   },
   commonSize: {
     width: '80%',
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
   finalDateAndFio: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   finalDateAndFioText: {
     padding: '25px',
@@ -246,7 +246,6 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
     list.push(consdoc)
   }
   const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments, execDate, manager, } = applItem
-console.log('manager',manager)
   const currentYear = new Date().getFullYear()
   const yearsOld = new Date(patientBirthDate).getFullYear()
   const month = new Date(patientBirthDate).getMonth()
@@ -371,10 +370,17 @@ console.log('manager',manager)
               </View>)}
             </View> : null}
           </View>
-          {execDate && manager ? <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }}>
-            <Text>{execDate.substring(0, 10)}</Text>
-            <Text>{manager}</Text>
-          </View> : null}
+          {execDate && manager ?
+            <View wrap={false}>
+              <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }}>
+                <Text>{execDate.substring(0, 10)}</Text>
+                <Text>{manager}</Text>
+              </View>
+              <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }}>
+                <Image src={sign} style={styles.hdrimg} />
+                <Image src={sell} style={styles.hdrimg} />
+              </View>
+            </View> : null}
         </Page>
       </Document>
     </PDFViewer>

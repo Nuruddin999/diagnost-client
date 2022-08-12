@@ -1,4 +1,4 @@
-import { Button, Typography, TextField } from "@mui/material";
+import { Button, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { DatePicker, LocalizationProvider } from "@mui/lab"
@@ -11,6 +11,7 @@ import './style.addmodal.scss'
 import { openModal } from "../../reducers/ui";
 import { Loader } from "../loader/loader";
 import { RootState } from "../../app/store";
+import { specialities } from "../../constants";
 
 const AddModal = (): React.ReactElement => {
   const status = useSelector((state:RootState)=>state.ui.status)
@@ -21,6 +22,8 @@ const AddModal = (): React.ReactElement => {
   const [fundName, setFundName] = useState('')
   const [fundRequest, setFundRequest] = useState('')
   const [manager, setManager] = useState('')
+  const [speciality, setSpeciality] = useState('')
+
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
     dispatch(addApplication({
@@ -29,7 +32,7 @@ const AddModal = (): React.ReactElement => {
       patientRequest,
       fundName,
       fundRequest,
-      manager,
+      manager: `${speciality}  ${manager}`,
       creationDate: new Date().toLocaleString(),
       execDate: '',
     }))
@@ -80,13 +83,28 @@ const AddModal = (): React.ReactElement => {
             onChange={(event: any) => setFundRequest(event.target.value)}
             required
           />
+          <div className="manager-field">
+            <Typography children='Ответственный'/>
           <TextField
-            placeholder='Ответственный'
+            placeholder='ФИО'
             size='small'
             value={manager}
             onChange={(event: any) => setManager(event.target.value)}
             required
           />
+                <FormControl variant="standard" fullWidth>
+               <InputLabel id="demo-simple-select-standard-label">Специальность</InputLabel>
+               <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  value={speciality}
+                  onChange={(e) => setSpeciality(e.target.value)}
+                  label="Специальность"
+               >
+                  {specialities.map(speciality => <MenuItem value={speciality}>{speciality}</MenuItem>)}
+               </Select>
+            </FormControl>
+          </div>
         </div>
         <Button size='small' variant='contained' className='add-button' type='submit'>
         <Loader title='Добавить задание' isLoading={status === 'pending'} />

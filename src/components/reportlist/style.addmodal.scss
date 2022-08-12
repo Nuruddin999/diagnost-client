@@ -10,11 +10,11 @@
     justify-content: center;
     align-items: center;
     .add-form-wrapper {
-        height: 200px;
         width: 70%;
         background: white;
         position: relative;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         padding: 24px;
@@ -34,9 +34,15 @@
         }
         .form {
             display: grid;
-            grid-template-columns: auto auto auto;
+            grid-template-columns: auto;
             gap: 16px;
             width: 100%;
+            text-align: left;
+            padding: 15px;
+            .manager-field {
+                border: 1px solid gray;
+                padding: 10px
+            }
         }
         .add-button {
             background-color: #1f75cb;
