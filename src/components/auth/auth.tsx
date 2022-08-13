@@ -7,7 +7,7 @@ import { login, registerUser } from "../../actions/user";
 import { RootState } from "../../app/store";
 import { changeLoadStatus, changeReqStatus } from "../../reducers/userSlice";
 import { Loader } from "../loader/loader";
-import './style.auth.scss'
+import '../common/style.auth.scss'
 
 export const Auth = (): React.ReactElement => {
   const [email, setEmail] = useState('')

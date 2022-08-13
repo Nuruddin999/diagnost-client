@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, TextField, Select, MenuItem, Typography, Alert, Modal } from "@mui/material";
+import { Button, TextField, Select, MenuItem, Typography, FormControl, InputLabel } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { registerUser } from "../../actions/user";
@@ -8,6 +8,7 @@ import { changeLoadStatus, changeReqStatus } from "../../reducers/userSlice";
 import { Loader } from "../loader/loader";
 import './style.auth.scss'
 import { typography } from "@mui/system";
+import { specialities } from "../../constants";
 
 export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean }): React.ReactElement => {
   const [email, setEmail] = useState('')
@@ -102,15 +103,18 @@ export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean 
             placeholder='ФИО'
             margin='normal'
             onChange={(event) => setName(event?.target.value)} />
-          <TextField
-            value={speciality}
-            type='text'
-            required
-            size='small'
-            fullWidth
-            placeholder='Специальность'
-            margin='normal'
-            onChange={(event) => setSpeciality(event?.target.value)} />
+         <FormControl variant="standard" fullWidth>
+               <InputLabel id="demo-simple-select-standard-label">Специальность</InputLabel>
+               <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard"
+                  value={speciality}
+                  onChange={(e) => setSpeciality(e.target.value)}
+                  label="Специальность"
+               >
+                  {specialities.map(speciality => <MenuItem value={speciality}>{speciality}</MenuItem>)}
+               </Select>
+            </FormControl>
           <TextField
             value={phone}
             type='text'

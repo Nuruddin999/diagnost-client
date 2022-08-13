@@ -6,7 +6,7 @@ import { addApplication } from "../../actions/application";
 import './style.addmodal.scss'
 import { openModal } from "../../reducers/ui";
 import { RootState } from "../../app/store";
-import { Registration } from "../auth/registration";
+import { Registration } from "../common/registration";
 
 const AddModal = (): React.ReactElement => {
   const status = useSelector((state: RootState) => state.ui.status)

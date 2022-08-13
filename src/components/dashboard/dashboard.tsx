@@ -14,8 +14,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { checkUser, logOutUser } from "../../actions/user";
 import SummarizeIcon from '@mui/icons-material/Summarize';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ApplicationItem from "../applicationItem";
-import { Registration } from "../auth/registration";
+import { Registration } from "../common/registration";
 import UsersList from "../userslist/userslist";
 
 
@@ -53,15 +54,15 @@ const Dashboard = (): React.ReactElement => {
                </Link>
             </div>
             {role !== 'doctor' && <div className='list-item'>
-               <Link to='/main/newuser'>
-                  <Button size='small' color='inherit'>
-                     Новый пользователь
-                  </Button>
+               <Link to='/main/users'>
+               <ListItemIcon>
+                     <PeopleAltIcon />
+                  </ListItemIcon>
                </Link>
                <Link to='/main/users'>
-                  <Button size='small' color='inherit'>
-                     Пользователи
-                  </Button>
+               <ListItemText>
+                  Пользователи
+                  </ListItemText>
                </Link>
             </div>}
          </div>
