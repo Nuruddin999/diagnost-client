@@ -12,19 +12,20 @@ import { useHistory } from "react-router-dom";
 import { openModal } from "../../reducers/ui";
 import isObject from "lodash/isObject";
 import { debounce } from "lodash";
-import { getAllUsersApi } from "../../api/user";
+
 import { getUserByLetter } from "../../actions/user";
 
 const UsersList = (): React.ReactElement => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const { users, user } = useSelector((state: RootState) => state.user)
+  const { users } = useSelector((state: RootState) => state.user)
   const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
   const count = useSelector((state: RootState) => state.user.count)
   const [page, setPage] = React.useState(1);
   const [name, setUserName] = React.useState('');
   const [speciality, setUserPosition] = React.useState('');
   const [phone, setUserPhone] = React.useState('');
+  const [role, setUserRole] = React.useState('');
   const [email, setUserEmail] = React.useState('');
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -32,8 +33,13 @@ const UsersList = (): React.ReactElement => {
   const deleteAppl = (value: number) => {
     dispatch(deleteUser(value.toString()));
   };
-  const tableData = ['№', { title: 'ФИО', field: name, onChange: setUserName }, { title: 'должность', field: speciality, onChange: setUserPosition }, { title: 'email', field: email, onChange: setUserEmail }, { title: 'Контакты', field: phone, onChange: setUserPhone }, 'Удалить']
-
+  const tableData = ['№', { title: 'ФИО', field: name, onChange: setUserName }, { title: 'Роль', field: role, onChange: setUserRole },  { title: 'Должность', field: speciality, onChange: setUserPosition }, { title: 'Email', field: email, onChange: setUserEmail }, { title: 'Контакты', field: phone, onChange: setUserPhone }, 'Удалить']
+  const roles = {
+    doctor: 'Врач',
+    admin: 'Админ',
+    superadmin: 'Главный админ',
+    coordinator:'Координатор'
+  }
   const changeHandler = (e: any, field: string, callback: (title: string) => void) => {
     if (e.target.value.length > 2) {
       callback(e.target.value)
@@ -93,6 +99,7 @@ const UsersList = (): React.ReactElement => {
           {users.length > 0 && users.map((userItem, index) => <tr onClick={() => goToApplItem(userItem.id)}>
             <td>{index + 1}</td>
             <td>{userItem.name}</td>
+            <td>{roles[userItem.role as keyof typeof roles]}</td>
             <td>{userItem.speciality}</td>
             <td>{userItem.email}</td>
             <td>{userItem.phone}</td>
