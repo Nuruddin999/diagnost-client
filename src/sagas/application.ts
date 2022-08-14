@@ -1,5 +1,6 @@
-import { deleteOneApplicationApi, getApplicationApi, getOneApplicationApi, updateOneApplicationApi } from './../api/application';
-import { applicationForAdd, getApplication, getOneApplication } from './../actions/application';
+import { getListItemById } from './../common/api/api';
+import { deleteOneApplicationApi, getApplicationApi,  updateOneApplicationApi } from './../api/application';
+import { applicationForAdd, getApplication } from './../actions/application';
 import { call, delay, put, select } from "redux-saga/effects"
 import { changeReqStatus } from "../reducers/userSlice"
 import { addApplicationApi } from '../api/application';
@@ -108,13 +109,9 @@ export function* fetchApplication(getApplication: { type: 'application/get', pay
  */
 export function* fetchOneApplication(getApplication: { type: 'application/getone', payload: { id: string } }) {
   try {
-    //  yield put(changeLoadStatus(true))
     const { id } = getApplication.payload
-    const response: applicationItemResponse = yield call(getOneApplicationApi, id,)
+    const response: applicationItemResponse = yield call(getListItemById, id,'applications')
     if (response) {
-      //  const { rows, count } = response
-      // localStorage.setItem('dtokenn', accessToken)
-      // localStorage.setItem('refreshToken', refreshToken)
       yield put(saveApplicationItem({ ...response }))
     }
   } catch (e: any) {

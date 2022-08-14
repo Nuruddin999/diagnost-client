@@ -5,6 +5,7 @@ export const TYPES = {
     userCheckType:'user/check',
     userLogOut:'user/logout',
     userCheckIsAdmin:'user/checkIsSuperAdmn',
+    userGetOne: 'user/getone',
     changeIsDeletedPlaceType:'user/changeIsDeletedPlaceType',
     getByLetter:'user/getByLetter',
     userDel: 'user/deleteone',

@@ -1,6 +1,8 @@
 import { all, takeLatest } from 'redux-saga/effects';
 import { Types } from '../actions/application';
 import { TYPES } from '../actions/user';
+import {Types as CommonTypes} from '../common/actions/common'
+import { fetchListItem } from '../common/sagas/common';
 import { addApplication, fetchApplication, fetchOneApplication, removeOneApplication, updateOneApplication } from './application';
 import { checkUserAuth, loginUser, logoutUser, registerUser, changeIsDeletedPlace, fetchUser, removeUser } from './user';
 export default function* runSagas(){
@@ -15,6 +17,7 @@ export default function* runSagas(){
         takeLatest(Types.applicationAdd, addApplication),
         takeLatest(Types.applicationGet, fetchApplication),
         takeLatest(Types.applicationGetOne, fetchOneApplication),
+        takeLatest(CommonTypes.getListItem, fetchListItem),
         takeLatest(Types.applicationUpdate, updateOneApplication),
         takeLatest(Types.applicationDel, removeOneApplication),
     ])

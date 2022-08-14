@@ -30,8 +30,8 @@ const UsersList = (): React.ReactElement => {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
-  const deleteAppl = (value: number) => {
-    dispatch(deleteUser(value.toString()));
+  const deleteAppl = (value: string) => {
+    dispatch(deleteUser(value));
   };
   const tableData = ['№', { title: 'ФИО', field: name, onChange: setUserName }, { title: 'Роль', field: role, onChange: setUserRole },  { title: 'Должность', field: speciality, onChange: setUserPosition }, { title: 'Email', field: email, onChange: setUserEmail }, { title: 'Контакты', field: phone, onChange: setUserPhone }, 'Удалить']
   const roles = {
@@ -64,8 +64,8 @@ const UsersList = (): React.ReactElement => {
    * Переход на отдельное заключение
    * @param {number} id Id заключения.
    */
-  const goToApplItem = (id: number | undefined) => {
-    history.push(`application/${id}`)
+  const goToApplItem = (id: string | undefined) => {
+    history.push(`user/${id}`)
   }
   return <div className='add-appl-container'>
     {isModalOpened && <AddModal />}

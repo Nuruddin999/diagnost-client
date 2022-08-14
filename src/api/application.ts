@@ -27,16 +27,6 @@ export const getApplicationApi = async (page: number,
     return response.data
 }
 /**
- * Получение одного заключения по id.
- * @param {number} id Id заключения.
- */
-export const getOneApplicationApi = async (id: string) => {
-    const response = await diagnostApi.get(`/applications/${id}`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
-    })
-    return response.data
-}
-/**
  * Запрос обновления одного заключения.
  * @param {Object} application обновленное заключение.
  */

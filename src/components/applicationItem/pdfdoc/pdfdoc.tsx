@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import { getOneApplication } from '../../../actions/application';
 import MyDocContent from "./pdfcontent";
 import { checkUser } from "../../../actions/user";
+import { getListItemAction } from "../../../common/actions/common";
+import { saveApplicationItem } from "../../../reducers/applicationItemSlice";
 
 
 
@@ -24,7 +26,7 @@ function MyDoc() {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(checkUser())
-    dispatch(getOneApplication(id))
+    dispatch(getListItemAction(id, 'applications', saveApplicationItem))
   }, [])
   useEffect(() => {
     bc.onmessage = ev => {

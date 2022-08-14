@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 
 export interface User {
-  id:number,
+  id:string,
   phone: string;
   role: string,
   name: string,
@@ -13,6 +13,7 @@ export interface User {
 interface UserState {
   user: User,
   users: Array<User>,
+  useritem: User,
   isLoading: boolean,
   reqStatus: string,
   hasSuperUser?: boolean,
@@ -20,7 +21,16 @@ interface UserState {
 }
 const initialState: UserState = {
   user: {
-    id:0,
+    id:'0',
+    phone: '',
+    role: 'doctor',
+    name: '',
+    email: '',
+    speciality: '',
+    isDeletedPlace: false
+  },
+  useritem: {
+    id:'0',
     phone: '',
     role: 'doctor',
     name: '',
@@ -41,8 +51,9 @@ export const userSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    saveUser: (state, action: PayloadAction<{user: User, isLoading: boolean, reqStatus: string}>) => {
-      state.user = action.payload.user
+    saveUser: (state, action: PayloadAction<{id: string, email:string, phone:string, role:string, name:string, speciality:string, isDeletedPlace:boolean,  isLoading: boolean, reqStatus: string}>) => {
+      const {name,phone,role,email,speciality, id, isDeletedPlace } = action.payload
+      state.user = {id,phone, role, name, speciality, email, isDeletedPlace }
       state.isLoading = action.payload.isLoading
       state.reqStatus = action.payload.reqStatus
     },
@@ -58,16 +69,18 @@ export const userSlice = createSlice({
     saveUsers: (state, action: PayloadAction<{users:Array<User>, count: number}>) => {
       state.users = action.payload.users
       state.count = action.payload.count
-      // state.role = action.payload.role
-      // state.isLoading = action.payload.isLoading
-      // state.name = action.payload.name
-      // state.isDeletedPlace = action.payload.isDeletedPlace
+    },
+    saveUserItem: (state, action: PayloadAction<{id: string, email:string, phone:string, role:string, name:string, speciality:string, isDeletedPlace:boolean,  isLoading: boolean, reqStatus: string}>) => {
+      const {name,phone,role,email,speciality, id, isDeletedPlace } = action.payload
+      state.useritem = {id,phone, role, name, speciality, email, isDeletedPlace }
+      state.isLoading = action.payload.isLoading
+      state.reqStatus = action.payload.reqStatus
     },
 
   },
 });
 
-export const { saveUser, changeReqStatus, changeLoadStatus, saveSuperUser, saveUsers } = userSlice.actions;
+export const { saveUser, changeReqStatus, changeLoadStatus, saveSuperUser, saveUsers, saveUserItem } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

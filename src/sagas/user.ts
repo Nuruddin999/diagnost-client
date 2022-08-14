@@ -8,12 +8,13 @@ type loginUserResponse = {
     accessToken: string,
     refreshToken: string,
     user: {
-        id:number,
+        id:string,
         email: string,
         name: string,
         phone: string,
         speciality: string,
         role: string,
+        isDeletedPlace: boolean
     }
 }
 type allUsersResponse = {
@@ -33,7 +34,7 @@ export function* loginUser(login: { type: 'user/login', payload: { email: string
         if (response) {
             localStorage.setItem('dtokenn', accessToken)
             localStorage.setItem('refreshToken', refreshToken)
-            yield put(saveUser({ user, isLoading: false, reqStatus: 'ok' }))
+            yield put(saveUser({ ...user, isLoading: false, reqStatus: 'ok', isDeletedPlace:false }))
         }
     } catch (e: any) {
         if (e.response) {
@@ -84,7 +85,7 @@ export function* checkUserAuth() {
         if (response) {
             localStorage.setItem('dtokenn', accessToken)
             localStorage.setItem('refreshToken', refreshToken)
-            yield put(saveUser({ user, isLoading: false, reqStatus: 'ok' }))
+            yield put(saveUser({ ...user, isLoading: false, reqStatus: 'ok' }))
         }
     } catch (e: any) {
         if (e.response) {
@@ -93,7 +94,7 @@ export function* checkUserAuth() {
         else {
             yield put(changeReqStatus('Неизвестаня ошибка'))
         }
-        yield put(saveUser({user:{id:0, name: 'empty', role: '', phone: '', email: '', speciality: '' }, isLoading: false, reqStatus: 'ok' }))
+        yield put(saveUser({id:'0', name: 'empty', role: '', phone: '', email: '', speciality: '', isLoading: false, reqStatus: 'ok', isDeletedPlace: false }))
 }
 }
 
@@ -104,7 +105,7 @@ export function* logoutUser() {
         if (response) {
             localStorage.removeItem('dtokenn')
             localStorage.removeItem('refreshToken')
-            yield put(saveUser({ user: {id:0, name: 'empty', role: '', phone: '', email: '', speciality: '' }, isLoading: false, reqStatus: 'ok' }))
+            yield put(saveUser({ id:'0', email: '', role:'', name:'', isLoading: false, reqStatus: 'ok', phone:'', speciality:'',isDeletedPlace: false }))
         }
     } catch (e: any) {
         if (e.response) {
@@ -122,7 +123,7 @@ export function* changeIsDeletedPlace(body: { type: 'user/changeIsDeletedPlaceTy
         const response: loginUserResponse = yield call(changeIsDeletedApi, body.payload.email)
         const { user } = response
         if (response) {
-            yield put(saveUser({ user, isLoading: false, reqStatus: 'ok' }))
+            yield put(saveUser({ ...user , isLoading: false, reqStatus: 'ok', }))
         }
     } catch (e: any) {
         if (e.response) {

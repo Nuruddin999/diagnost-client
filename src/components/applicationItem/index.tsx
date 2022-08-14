@@ -8,12 +8,14 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { RootState } from "../../app/store";
 import './style.applicationitem.scss'
 import DiagnosticForm from "./diagnostic/consiliumDoctors";
-import { successUpdate } from "../../reducers/applicationItemSlice";
+import { saveApplicationItem, successUpdate } from "../../reducers/applicationItemSlice";
 import CheckupPlanForm from "./checkup_plans/checkupPlans";
 import Anamnesis from "./anamnesis";
 import PatientInfo from "./patientinfo";
 import MostProbDiagnosis from "./probable_diagnosis";
 import Comments from "./comments";
+import { getListItemAction } from "../../common/actions/common";
+import { saveUser } from "../../reducers/userSlice";
 
 const ApplicationItem = (): React.ReactElement => {
   const { id } = useParams<{ id: string }>()
@@ -28,7 +30,7 @@ const ApplicationItem = (): React.ReactElement => {
     dispatch(updateApplication())
   }
   useEffect(() => {
-    dispatch(getOneApplication(id))
+    dispatch(getListItemAction('4', 'users', saveUser))
   }, [])
   useEffect(() => {
     if (status === 'success') {

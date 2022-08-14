@@ -4,7 +4,6 @@ import {
    Route,
    Link,
    Redirect,
-   useRouteMatch
 } from "react-router-dom";
 import ReportList from "../reportlist/reportlist";
 import { ListItemText, IconButton, Typography, CircularProgress, ListItemIcon, Button } from "@mui/material";
@@ -18,6 +17,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ApplicationItem from "../applicationItem";
 import { Registration } from "../common/registration";
 import UsersList from "../userslist/userslist";
+import UserItem from "../useritem";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -73,6 +73,9 @@ const Dashboard = (): React.ReactElement => {
                </Route>
                <Route path='/main/application/:id'>
                   <ApplicationItem />
+               </Route>
+               <Route path='/main/user/:id'>
+                  <UserItem />
                </Route>
                <Route path='/main/newuser'>
                   {role !== 'doctor' ? <Registration /> : <Typography align='center'>Недостаточно прав</Typography>}
