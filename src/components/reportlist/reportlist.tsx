@@ -17,8 +17,7 @@ const ReportList = (): React.ReactElement => {
   const dispatch = useDispatch()
   const history = useHistory()
   const applications = useSelector((state: RootState) => state.application.applications)
-  console.log('appls in comp', applications)
-  const role = useSelector((state: RootState) => state.user.user.role)
+    const role = useSelector((state: RootState) => state.user.user.role)
   const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
   const count = useSelector((state: RootState) => state.application.count)
   const [page, setPage] = React.useState(1);

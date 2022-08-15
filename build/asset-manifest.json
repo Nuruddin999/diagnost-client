@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.a6703e0e.css",
-    "main.js": "/static/js/main.df336cfa.js",
+    "main.css": "/static/css/main.a2b3cbc9.css",
+    "main.js": "/static/js/main.ee820301.js",
     "static/media/TimesNewRomanPS-BoldMT.ttf": "/static/media/TimesNewRomanPS-BoldMT.cc3d758274d0cf379bdf.ttf",
     "static/media/TimesNewRomanPSMT.ttf": "/static/media/TimesNewRomanPSMT.ea822ef9b261e9594b74.ttf",
     "static/media/sign.jpeg": "/static/media/sign.477c0706778f2416e255.jpeg",
     "static/media/sell.jpeg": "/static/media/sell.2f62df68e29b26f0f915.jpeg",
     "static/media/hopedoc.png": "/static/media/hopedoc.ae22fcb5ef0372095b0a.png",
     "index.html": "/index.html",
-    "main.a6703e0e.css.map": "/static/css/main.a6703e0e.css.map",
-    "main.df336cfa.js.map": "/static/js/main.df336cfa.js.map"
+    "main.a2b3cbc9.css.map": "/static/css/main.a2b3cbc9.css.map",
+    "main.ee820301.js.map": "/static/js/main.ee820301.js.map"
   },
   "entrypoints": [
-    "static/css/main.a6703e0e.css",
-    "static/js/main.df336cfa.js"
+    "static/css/main.a2b3cbc9.css",
+    "static/js/main.ee820301.js"
   ]
 }

@@ -64,82 +64,82 @@ export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean 
     }
   }, [reqStatus])
   return <div className={'registration-main'}>
- <div className={'auth-wrapper'}>
- {
-    notHaveSuperUser && <div className={'nosuperuser-title'}>
-    <Typography variant='h4' >
-      Добро пожаловать в систему
-    </Typography>
-      <Typography>
-        Зарегистрируйте главного администратора
-      </Typography></div>
-  }
-    <div className={"auth-container"}>
-      <form onSubmit={(event) => onSubmit(event)}>
-        <TextField value={email}
-          type='email'
-          required
-          size='small'
-          fullWidth
-          placeholder='Email'
-          margin='normal'
-          onChange={(event) => setEmail(event.target.value)} />
-        <TextField
-          value={password}
-          type='password'
-          required
-          size='small'
-          fullWidth
-          placeholder='Пароль'
-          margin='normal'
-          onChange={(event) => setPassword(event?.target.value)} />
-        <div>
-          <TextField
-            value={name}
-            type='text'
+    <div className={'auth-wrapper'}>
+      {
+        notHaveSuperUser && <div className={'nosuperuser-title'}>
+          <Typography variant='h4' >
+            Добро пожаловать в систему
+          </Typography>
+          <Typography>
+            Зарегистрируйте главного администратора
+          </Typography></div>
+      }
+      <div className={"auth-container"}>
+        <form onSubmit={(event) => onSubmit(event)}>
+          <TextField value={email}
+            type='email'
             required
             size='small'
             fullWidth
-            placeholder='ФИО'
+            placeholder='Email'
             margin='normal'
-            onChange={(event) => setName(event?.target.value)} />
-         <FormControl variant="standard" fullWidth>
-               <InputLabel id="demo-simple-select-standard-label">Специальность</InputLabel>
-               <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  value={speciality}
-                  onChange={(e) => setSpeciality(e.target.value)}
-                  label="Специальность"
-               >
-                  {specialities.map(speciality => <MenuItem value={speciality}>{speciality}</MenuItem>)}
-               </Select>
+            onChange={(event) => setEmail(event.target.value)} />
+          <TextField
+            value={password}
+            type='password'
+            required
+            size='small'
+            fullWidth
+            placeholder='Пароль'
+            margin='normal'
+            onChange={(event) => setPassword(event?.target.value)} />
+          <div>
+            <TextField
+              value={name}
+              type='text'
+              required
+              size='small'
+              fullWidth
+              placeholder='ФИО'
+              margin='normal'
+              onChange={(event) => setName(event?.target.value)} />
+            <FormControl variant="standard" fullWidth>
+              <InputLabel id="demo-simple-select-standard-label">Специальность</InputLabel>
+              <Select
+                labelId="demo-simple-select-standard-label"
+                id="demo-simple-select-standard"
+                value={speciality}
+                onChange={(e) => setSpeciality(e.target.value)}
+                label="Специальность"
+              >
+                {specialities.map(speciality => <MenuItem value={speciality}>{speciality}</MenuItem>)}
+              </Select>
             </FormControl>
-          <TextField
-            value={phone}
-            type='text'
-            required
-            size='small'
-            fullWidth
-            placeholder='Телефон'
-            margin='normal'
-            onChange={(event) => setPhone(event?.target.value)} />
-          <Typography align='left' >Роль</Typography>
-          {notHaveSuperUser ? <Typography align='left' >Главный администратор </Typography> : <Select
-            onChange={(event) => setRole(event.target.value)}
-            autoWidth
-            required
-            value={notHaveSuperUser ? 'admin' : role}
-            variant='standard'
-            className={'select'}
-          >
-            <MenuItem value={'admin'}>Администратор</MenuItem>
-            <MenuItem value={'doctor'}>Врач</MenuItem>
-          </Select>}
-          {renderRegisterButton()}
-        </div>
-      </form>
+            <TextField
+              value={phone}
+              type='text'
+              required
+              size='small'
+              fullWidth
+              placeholder='Телефон'
+              margin='normal'
+              onChange={(event) => setPhone(event?.target.value)} />
+            <Typography align='left' >Роль</Typography>
+            {notHaveSuperUser ? <Typography align='left' >Главный администратор </Typography> : <Select
+              onChange={(event) => setRole(event.target.value)}
+              autoWidth
+              required
+              value={notHaveSuperUser ? 'admin' : role}
+              variant='standard'
+              className={'select'}
+            >
+              <MenuItem value={'admin'}>Администратор</MenuItem>
+              <MenuItem value={'doctor'}>Врач</MenuItem>
+            </Select>}
+            {renderRegisterButton()}
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
   </div >
 }

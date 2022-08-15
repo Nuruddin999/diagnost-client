@@ -4,7 +4,7 @@ import { TYPES } from '../actions/user';
 import {Types as CommonTypes} from '../common/actions/common'
 import { fetchListItem } from '../common/sagas/common';
 import { addApplication, fetchApplication, fetchOneApplication, removeOneApplication, updateOneApplication } from './application';
-import { checkUserAuth, loginUser, logoutUser, registerUser, changeIsDeletedPlace, fetchUser, removeUser } from './user';
+import { checkUserAuth, loginUser, logoutUser, registerUser, changeIsDeletedPlace, fetchUser, removeUser, updateUserRights } from './user';
 export default function* runSagas(){
     yield all([
         takeLatest(TYPES.userLoginType, loginUser),
@@ -14,6 +14,7 @@ export default function* runSagas(){
         takeLatest(TYPES.changeIsDeletedPlaceType, changeIsDeletedPlace),
         takeLatest(TYPES.getByLetter, fetchUser),
         takeLatest(TYPES.userDel, removeUser),
+        takeLatest(TYPES.userUpdateRights, updateUserRights),
         takeLatest(Types.applicationAdd, addApplication),
         takeLatest(Types.applicationGet, fetchApplication),
         takeLatest(Types.applicationGetOne, fetchOneApplication),

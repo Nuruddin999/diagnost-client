@@ -1,14 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 
+export type Right = {
+  entity: string,
+  create: boolean,
+  read: boolean,
+  update: boolean,
+  delete: boolean
+}
 export interface User {
-  id:string,
+  id: string,
   phone: string;
   role: string,
   name: string,
   email: string,
   speciality: string,
-  isDeletedPlace?: boolean
+  isDeletedPlace?: boolean,
+  rights?: Array<Right>
 }
 interface UserState {
   user: User,
@@ -17,25 +25,27 @@ interface UserState {
   isLoading: boolean,
   reqStatus: string,
   hasSuperUser?: boolean,
-  count: number
+  count: number,
 }
 const initialState: UserState = {
   user: {
-    id:'0',
+    id: '0',
     phone: '',
     role: 'doctor',
     name: '',
     email: '',
     speciality: '',
+    rights: [],
     isDeletedPlace: false
   },
   useritem: {
-    id:'0',
+    id: '0',
     phone: '',
     role: 'doctor',
     name: '',
     email: '',
     speciality: '',
+    rights: [{ entity: 'applications', create: false, update: false, read: true, delete: false }, { entity: 'users', create: false, update: false, read: false, delete: false }, { entity: 'checkupPlanPlace', create: false, update: false, read: false, delete: false }],
     isDeletedPlace: false
   },
   users: [],
@@ -51,9 +61,10 @@ export const userSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    saveUser: (state, action: PayloadAction<{id: string, email:string, phone:string, role:string, name:string, speciality:string, isDeletedPlace:boolean,  isLoading: boolean, reqStatus: string}>) => {
-      const {name,phone,role,email,speciality, id, isDeletedPlace } = action.payload
-      state.user = {id,phone, role, name, speciality, email, isDeletedPlace }
+    saveUser: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string }>) => {
+      const { name, phone, role, email, speciality, id, isDeletedPlace, rights } = action.payload
+      state.user = { id, phone, role, name, speciality, email, isDeletedPlace }
+      state.user.rights = rights
       state.isLoading = action.payload.isLoading
       state.reqStatus = action.payload.reqStatus
     },
@@ -66,21 +77,25 @@ export const userSlice = createSlice({
     saveSuperUser: (state, action: PayloadAction<boolean>) => {
       state.hasSuperUser = action.payload
     },
-    saveUsers: (state, action: PayloadAction<{users:Array<User>, count: number}>) => {
+    saveUsers: (state, action: PayloadAction<{ users: Array<User>, count: number }>) => {
       state.users = action.payload.users
       state.count = action.payload.count
     },
-    saveUserItem: (state, action: PayloadAction<{id: string, email:string, phone:string, role:string, name:string, speciality:string, isDeletedPlace:boolean,  isLoading: boolean, reqStatus: string}>) => {
-      const {name,phone,role,email,speciality, id, isDeletedPlace } = action.payload
-      state.useritem = {id,phone, role, name, speciality, email, isDeletedPlace }
+    saveUserItem: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string }>) => {
+      const { name, phone, role, email, speciality, id, isDeletedPlace, rights } = action.payload
+      state.useritem = { id, phone, role, name, speciality, email, rights, isDeletedPlace }
       state.isLoading = action.payload.isLoading
       state.reqStatus = action.payload.reqStatus
+    },
+    saveRightsInUserItem: (state, action: PayloadAction<{ rights?: Array<Right> }>) => {
+      const { rights } = action.payload
+      state.useritem.rights = rights
     },
 
   },
 });
 
-export const { saveUser, changeReqStatus, changeLoadStatus, saveSuperUser, saveUsers, saveUserItem } = userSlice.actions;
+export const { saveUser, changeReqStatus, changeLoadStatus, saveSuperUser, saveUsers, saveUserItem, saveRightsInUserItem } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

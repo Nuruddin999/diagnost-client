@@ -10,7 +10,6 @@ import { specialities } from "../../../constants";
 import NoResult from "../../no-result/no-result";
 
 const ConsiliumDoctorsForm = (): React.ReactElement => {
-   console.log('render ConsiliumDoctorsForm')
    const dispatch = useDispatch()
    const consiliumDoctorsProp = useSelector((state: RootState) => state.applicationItem.consiliumDoctors)
    const [fio, setFio] = useState('')

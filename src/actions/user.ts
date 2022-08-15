@@ -1,68 +1,76 @@
 import { createAction } from "@reduxjs/toolkit";
 export const TYPES = {
-    userLoginType:'user/login',
-    userRegisterType:'user/register',
-    userCheckType:'user/check',
-    userLogOut:'user/logout',
-    userCheckIsAdmin:'user/checkIsSuperAdmn',
-    userGetOne: 'user/getone',
-    changeIsDeletedPlaceType:'user/changeIsDeletedPlaceType',
-    getByLetter:'user/getByLetter',
-    userDel: 'user/deleteone',
+  userLoginType: 'user/login',
+  userRegisterType: 'user/register',
+  userCheckType: 'user/check',
+  userLogOut: 'user/logout',
+  userCheckIsAdmin: 'user/checkIsSuperAdmn',
+  userGetOne: 'user/getone',
+  changeIsDeletedPlaceType: 'user/changeIsDeletedPlaceType',
+  getByLetter: 'user/getByLetter',
+  userDel: 'user/deleteone',
+  userUpdateRights: 'user/updateRights'
 }
 export type registeredUser = {
-    email: string,
-    password: string,
-    name: string,
-    phone: string,
-    speciality: string,
-    role: string
+  email: string,
+  password: string,
+  name: string,
+  phone: string,
+  speciality: string,
+  role: string
 }
 
 export const login = createAction(TYPES.userLoginType, function prepare(email: string, password: string) {
-    return {
-        payload: {
-            email,
-            password
-        },
-    }
+  return {
+    payload: {
+      email,
+      password
+    },
+  }
 })
 
 export const changeIsDeletedPlaceAction = createAction(TYPES.changeIsDeletedPlaceType, function prepare(email: string) {
-    return {
-        payload: {
-            email,
-        },
-    }
+  return {
+    payload: {
+      email,
+    },
+  }
 })
 
 
-export const registerUser = createAction(TYPES.userRegisterType, function prepare(body:registeredUser) {
-    return {
-        payload: {
-           ...body
-        },
-    }
+export const registerUser = createAction(TYPES.userRegisterType, function prepare(body: registeredUser) {
+  return {
+    payload: {
+      ...body
+    },
+  }
 })
 
+export const updateRightsAction = createAction(TYPES.userUpdateRights, function prepare(entity: string, field: string, value: string, userId: string) {
+  return {
+    payload: {
+      entity, field, value, userId
+    },
+  }
+})
 export const getUserByLetter = createAction(TYPES.getByLetter, function prepare(page: number,
-    limit: number,
-    email: string,
-    name: string,
-    speciality: string,
-    phone: string) {
-    return {
-        payload: {
-            page, limit, email, name, speciality, phone
-        },
-    }
+  limit: number,
+  email: string,
+  name: string,
+  speciality: string,
+  phone: string) {
+  return {
+    payload: {
+      page, limit, email, name, speciality, phone
+    },
+  }
 })
 export const deleteUser = createAction(TYPES.userDel, function prepare(id: string) {
-    return {
-        payload: {
-            id
-        },
-    }
+  return {
+    payload: {
+      id
+    },
+  }
 })
 export const checkUser = createAction(TYPES.userCheckType)
 export const logOutUser = createAction(TYPES.userLogOut)

@@ -11,7 +11,6 @@ import { getListItemById } from "../api/api"
       const { id, callback, itemurl } = getApplication.payload
       const response = yield call(getListItemById, id, itemurl)
       if (response) {
-          console.log('responser user', {...response})
         yield put(callback({ ...response }))
       }
     } catch (e: any) {

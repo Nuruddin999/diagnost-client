@@ -25,4 +25,9 @@
             }
         }
     }
+    .rights-section {
+        width: 600px;
+        display: grid;
+        grid-template-columns: auto auto auto auto auto;
+    }
 }
