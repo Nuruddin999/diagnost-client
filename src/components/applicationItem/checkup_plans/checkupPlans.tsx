@@ -111,7 +111,7 @@ const CheckupPlanForm = (): React.ReactElement => {
             </IconButton>}
           </div>
         }
-        {checkupPlanPlace?.delete  ? <TextField
+        {!isDeletedPlace ? <TextField
           value={place}
           variant='outlined'
           size='small'
