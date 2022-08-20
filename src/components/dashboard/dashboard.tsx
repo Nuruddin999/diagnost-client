@@ -23,9 +23,8 @@ import { selectApplicationUserRights } from "../../common/selectors/user";
 
 const Dashboard = (): React.ReactElement => {
   const { user, hasSuperUser } = useSelector((state: RootState) => state.user)
-  const { name, role } = user
+  const { name } = user
   const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
-  console.log('rights in dashboard', rights)
   const dispatch = useDispatch()
   const logOut = () => dispatch(logOutUser())
   useEffect(() => {

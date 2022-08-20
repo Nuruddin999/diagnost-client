@@ -176,8 +176,6 @@ export function* updateUserRights(updateRight: { type: 'user/updateRights', payl
         [field]: value
       } : entityName)
       yield put(saveRightsInUserItem({ rights: changedRights }))
-      console.log('applicationUser.id ', applicationUser.id )
-      console.log('User.id ', userId )
       if(applicationUser.id === userId) {
         yield put(saveRightsInApplicationUser({ rights: changedRights}))
       }
