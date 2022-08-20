@@ -102,10 +102,13 @@ export const userSlice = createSlice({
     saveEmail: (state, action: PayloadAction<string>) => {
       state.useritem.email = action.payload
     },
+    saveIsDeletedPlaceInUser: (state, action: PayloadAction<boolean>) => {
+      state.user.isDeletedPlace = action.payload
+    },
   },
 });
 
-export const { saveUser, changeReqStatus, changeLoadStatus, saveSuperUser, saveUsers, saveUserItem, saveRightsInUserItem, saveRightsInApplicationUser, saveEmail, savePhone } = userSlice.actions;
+export const { saveUser, changeReqStatus, changeLoadStatus, saveSuperUser, saveUsers, saveUserItem, saveRightsInUserItem, saveRightsInApplicationUser, saveEmail, savePhone, saveIsDeletedPlaceInUser } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

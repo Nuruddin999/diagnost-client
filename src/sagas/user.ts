@@ -3,7 +3,7 @@ import { getUserByLetter } from "../actions/user"
 import { checkAuth, loginApi, logOut, registerApi, checkHasSuperAdmin, changeIsDeletedApi, getAllUsersApi, deleteUserApi, updateRightApi } from "../api/user"
 import { RootState } from "../app/store"
 import { initialRights } from "../constants"
-import { changeLoadStatus, changeReqStatus, Right, saveRightsInApplicationUser, saveRightsInUserItem, saveSuperUser, saveUser, saveUsers, User } from "../reducers/userSlice"
+import { changeLoadStatus, changeReqStatus, Right, saveIsDeletedPlaceInUser, saveRightsInApplicationUser, saveRightsInUserItem, saveSuperUser, saveUser, saveUsers, User } from "../reducers/userSlice"
 
 type loginUserResponse = {
   accessToken: string,
@@ -122,11 +122,10 @@ export function* logoutUser() {
 
 export function* changeIsDeletedPlace(body: { type: 'user/changeIsDeletedPlaceType', payload: { email: string } }) {
   try {
-    yield put(changeLoadStatus(true))
     const response: loginUserResponse = yield call(changeIsDeletedApi, body.payload.email)
     const { user } = response
     if (response) {
-      yield put(saveUser({ ...user, isLoading: false, reqStatus: 'ok', }))
+      yield put(saveIsDeletedPlaceInUser(user.isDeletedPlace))
     }
   } catch (e: any) {
     if (e.response) {
