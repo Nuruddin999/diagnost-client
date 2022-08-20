@@ -23,8 +23,10 @@ export const Auth = (): React.ReactElement => {
    * @param {boolean} isSuccess Является ли запрос на регистрацию успешным.
    */
   const fillRegistrationForm = (isSuccess: boolean) => {
-    setEmail('')
-    setPassword('')
+    if(isSuccess) {
+      setEmail('')
+      setPassword('')
+    }
     dispatch(changeReqStatus('no'))
     dispatch(changeLoadStatus(false))
   }
