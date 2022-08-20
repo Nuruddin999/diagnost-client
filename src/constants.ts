@@ -5,3 +5,5 @@ export const entitiesForRights = {
     users: 'Пользователи',
     checkupPlanPlace: 'План обследования , место:'
 }
+
+export const initialRights =  [{ entity: 'applications', create: false, update: false, read: true, delete: false }, { entity: 'users', create: false, update: false, read: false, delete: false }, { entity: 'checkupPlanPlace', create: false, update: false, read: false, delete: false }]

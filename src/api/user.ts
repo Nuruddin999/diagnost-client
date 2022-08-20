@@ -61,3 +61,4 @@ export const updateRightApi = async (entity: string, field: string, value: boole
   return response.data
 }
 
+

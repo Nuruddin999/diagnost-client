@@ -12,9 +12,6 @@ import '../common/style.auth.scss'
 export const Auth = (): React.ReactElement => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isRegistration, setRegistration] = useState(false)
-  const [isAlert, showAllert] = useState(false)
-  const [isRedirect, setRedirect] = useState(false)
   const { isLoading, user, reqStatus } = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch()
   const onSubmit = (event: React.SyntheticEvent) => {
@@ -30,7 +27,6 @@ export const Auth = (): React.ReactElement => {
     setPassword('')
     dispatch(changeReqStatus('no'))
     dispatch(changeLoadStatus(false))
-    isSuccess && setRegistration(false)
   }
   useEffect(() => {
     if (reqStatus === 'ok') {
@@ -64,9 +60,9 @@ export const Auth = (): React.ReactElement => {
         { reqStatus !== 'ok' && reqStatus !== 'no' && <Typography className='error-reg' align='center'>
           {reqStatus}
         </Typography>}
-        {<Button className='login-button' fullWidth variant='contained' disableElevation type='submit'>
+        <Button className='login-button' fullWidth variant='contained' disableElevation type='submit'>
           <Loader title='Войти' isLoading={isLoading} />
-        </Button>}
+        </Button>
       </form>
       {user.role !== '' && <Redirect to='/' />}
     </div>

@@ -9,12 +9,14 @@ import './style.checkupplans.scss'
 import NoResult from "../../no-result/no-result";
 import CloseIcon from '@mui/icons-material/Close';
 import { changeIsDeletedPlaceAction } from "../../../actions/user";
+import { selectApplicationUserRights } from "../../../common/selectors/user";
 
 
 const CheckupPlanForm = (): React.ReactElement => {
   const dispatch = useDispatch()
   const checkupPlansProp = useSelector((state: RootState) => state.applicationItem.checkupPlans)
-  const { role, email, isDeletedPlace } = useSelector((state: RootState) => state.user.user)
+  const {  email, isDeletedPlace } = useSelector((state: RootState) => state.user.user)
+  const { applications, checkupPlanPlace } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
   const [kind, setKind] = useState('')
   const [place, setPlace] = useState('')
   const [target, setTarget] = useState('')
@@ -65,7 +67,7 @@ const CheckupPlanForm = (): React.ReactElement => {
             size='small'
             fullWidth
             placeholder='Вид обследования'
-            onChange={(e) => dispatch(changeCheckupPlan({ index, checkupPlan: { kind: e.target.value, place: checkupPlan.place, target: checkupPlan.target } }))}
+            onChange={(e) => applications?.update && dispatch(changeCheckupPlan({ index, checkupPlan: { kind: e.target.value, place: checkupPlan.place, target: checkupPlan.target } }))}
           /></td>
           {!isDeletedPlace && <td>
             <TextField
@@ -74,7 +76,7 @@ const CheckupPlanForm = (): React.ReactElement => {
               size='small'
               fullWidth
               placeholder='Место'
-              onChange={(e) => dispatch(changeCheckupPlan({ index, checkupPlan: { kind: checkupPlan.kind, place: e.target.value, target: checkupPlan.target } }))}
+              onChange={(e) =>  applications?.update && dispatch(changeCheckupPlan({ index, checkupPlan: { kind: checkupPlan.kind, place: e.target.value, target: checkupPlan.target } }))}
             />
           </td>}
           <td>    <TextField
@@ -83,9 +85,9 @@ const CheckupPlanForm = (): React.ReactElement => {
             size='small'
             fullWidth
             placeholder='Цель проведения обследования'
-            onChange={(e) => dispatch(changeCheckupPlan({ index, checkupPlan: { kind: checkupPlan.kind, place: checkupPlan.place, target: e.target.value } }))}
+            onChange={(e) => applications?.update && dispatch(changeCheckupPlan({ index, checkupPlan: { kind: checkupPlan.kind, place: checkupPlan.place, target: e.target.value } }))}
           /></td>
-          <td><IconButton className='delete-button' onClick={() => deletePlan(index)}>
+          <td><IconButton disabled={!applications?.update} className='delete-button' onClick={() => deletePlan(index)}>
             <DeleteOutlineIcon />
           </IconButton></td>
         </tr>)}
@@ -102,14 +104,14 @@ const CheckupPlanForm = (): React.ReactElement => {
         onChange={(e) => setKind(e.target.value)}
       />
       <div className='place'>
-        {role !== 'doctor' &&
+        {checkupPlanPlace?.delete  &&
           <div>
             {!isDeletedPlace && <IconButton size='small' className='hide-place' onClick={sendBroadcastMessage}>
               <CloseIcon />
             </IconButton>}
           </div>
         }
-        {!isDeletedPlace ? <TextField
+        {checkupPlanPlace?.delete  ? <TextField
           value={place}
           variant='outlined'
           size='small'
@@ -125,7 +127,7 @@ const CheckupPlanForm = (): React.ReactElement => {
         fullWidth
         placeholder='Цель проведения обследования'
         onChange={(e) => setTarget(e.target.value)}
-      /> <IconButton onClick={addConsliliumDoctor} >
+      /> <IconButton disabled={!applications?.update} onClick={addConsliliumDoctor} >
         <AddCircleIcon className='add-in-table-svg ' />
       </IconButton>
     </div>

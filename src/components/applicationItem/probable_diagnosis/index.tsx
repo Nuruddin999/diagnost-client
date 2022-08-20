@@ -4,10 +4,13 @@ import { TextField } from "@mui/material";
 import { RootState } from "../../../app/store";
 import './style.probdiagnosis.scss'
 import { changeMostProblDiagnosis, changeSecondaryDiagnosis } from "../../../reducers/applicationItemSlice";
+import { selectApplicationUserRights } from "../../../common/selectors/user";
 
 const MostProbDiagnosis = (): React.ReactElement => {
   const mostProblDiagnosis = useSelector((state: RootState) => state.applicationItem.mostProblDiagnosis)
   const secondaryDiagnosis = useSelector((state: RootState) => state.applicationItem.secondaryDiagnosis)
+  const { applications } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
+
   const dispatch = useDispatch()
   return <>
     <div className="most-probbl-diagnosis">
@@ -25,7 +28,7 @@ const MostProbDiagnosis = (): React.ReactElement => {
         multiline
         maxRows={6}
         value={mostProblDiagnosis}
-        onChange={(e) => dispatch(changeMostProblDiagnosis(e.target.value))}
+        onChange={(e) => applications?.update && dispatch(changeMostProblDiagnosis(e.target.value))}
       />
     </div>
     <div className="most-probbl-diagnosis">
@@ -39,7 +42,7 @@ const MostProbDiagnosis = (): React.ReactElement => {
         multiline
         maxRows={4}
         value={secondaryDiagnosis}
-        onChange={(e) => dispatch(changeSecondaryDiagnosis(e.target.value))}
+        onChange={(e) => applications?.update && dispatch(changeSecondaryDiagnosis(e.target.value))}
       />
     </div>
   </>

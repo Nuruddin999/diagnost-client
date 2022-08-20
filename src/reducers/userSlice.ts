@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { initialRights } from '../constants';
 
 
 export type Right = {
@@ -45,7 +46,7 @@ const initialState: UserState = {
     name: '',
     email: '',
     speciality: '',
-    rights: [{ entity: 'applications', create: false, update: false, read: true, delete: false }, { entity: 'users', create: false, update: false, read: false, delete: false }, { entity: 'checkupPlanPlace', create: false, update: false, read: false, delete: false }],
+    rights:initialRights,
     isDeletedPlace: false
   },
   users: [],
@@ -63,8 +64,8 @@ export const userSlice = createSlice({
   reducers: {
     saveUser: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string }>) => {
       const { name, phone, role, email, speciality, id, isDeletedPlace, rights } = action.payload
-      state.user = { id, phone, role, name, speciality, email, isDeletedPlace }
-      state.user.rights = rights
+      state.user = { id: String(id), phone, role, name, speciality, email, isDeletedPlace }
+      state.user.rights = [...rights]
       state.isLoading = action.payload.isLoading
       state.reqStatus = action.payload.reqStatus
     },
@@ -91,11 +92,20 @@ export const userSlice = createSlice({
       const { rights } = action.payload
       state.useritem.rights = rights
     },
-
+    saveRightsInApplicationUser: (state, action: PayloadAction<{ rights?: Array<Right> }>) => {
+      const { rights } = action.payload
+      state.user.rights = rights
+    },
+    savePhone: (state, action: PayloadAction<string>) => {
+      state.useritem.phone = action.payload
+    },
+    saveEmail: (state, action: PayloadAction<string>) => {
+      state.useritem.email = action.payload
+    },
   },
 });
 
-export const { saveUser, changeReqStatus, changeLoadStatus, saveSuperUser, saveUsers, saveUserItem, saveRightsInUserItem } = userSlice.actions;
+export const { saveUser, changeReqStatus, changeLoadStatus, saveSuperUser, saveUsers, saveUserItem, saveRightsInUserItem, saveRightsInApplicationUser, saveEmail, savePhone } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

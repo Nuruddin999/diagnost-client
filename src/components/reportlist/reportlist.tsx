@@ -12,14 +12,16 @@ import { useHistory } from "react-router-dom";
 import { openModal } from "../../reducers/ui";
 import isObject from "lodash/isObject";
 import { debounce } from "lodash";
+import { selectApplicationUserRights } from "../../common/selectors/user";
 
 const ReportList = (): React.ReactElement => {
   const dispatch = useDispatch()
   const history = useHistory()
   const applications = useSelector((state: RootState) => state.application.applications)
-    const role = useSelector((state: RootState) => state.user.user.role)
+  const role = useSelector((state: RootState) => state.user.user.role)
   const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
   const count = useSelector((state: RootState) => state.application.count)
+  const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
   const [page, setPage] = React.useState(1);
   const [patientName, setPatientName] = React.useState('');
   const [patientRequest, setPatientRequest] = React.useState('');
@@ -46,7 +48,7 @@ const ReportList = (): React.ReactElement => {
     debounce(changeHandler, 300)
     , []);
 
-  const isNotRenderDelete = (el: any) => role === 'doctor' && el !== 'Удалить'
+  const isNotRenderDelete = (el: any) => !rights.processedRights.applications?.delete && el === 'Удалить'
   useEffect(() => {
     dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
   }, [page])
@@ -64,15 +66,15 @@ const ReportList = (): React.ReactElement => {
   }
   return <div className='add-appl-container'>
     {isModalOpened && <AddModal />}
-    <div className='add-button-wrapper'>
-      <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
+     <div className='add-button-wrapper'>
+     {rights.processedRights.applications?.create &&  <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
         <Typography>Новое задание</Typography>
-      </Button>
+      </Button> }
     </div>
     <div className="appl-table">
       <table>
         <tr>
-          {tableData.map(el => (role !== 'doctor' || isNotRenderDelete(el)) && (<th>
+          {tableData.map(el => (el !== 'Удалить' || rights.processedRights.applications?.delete) && (<th>
             <div>
               <span>
                 {isObject(el) ? el.title : el}
@@ -99,7 +101,7 @@ const ReportList = (): React.ReactElement => {
             <td>{appl.manager}</td>
             <td>{new Date(appl.creationDate).toLocaleString()}</td>
             <td>{appl.execDate}</td>
-            {(role !== 'doctor') && <td><IconButton className='delete-button' onClick={(e: any) => {
+            {(rights.processedRights.applications?.delete) && <td><IconButton className='delete-button' onClick={(e: any) => {
               e.stopPropagation()
               appl.id && deleteAppl(appl.id)
             }}>

@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Button, TextField, Select, MenuItem, Typography, FormControl, InputLabel } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
 import { registerUser } from "../../actions/user";
 import { RootState } from "../../app/store";
 import { changeLoadStatus, changeReqStatus } from "../../reducers/userSlice";
 import { Loader } from "../loader/loader";
 import './style.auth.scss'
-import { typography } from "@mui/system";
 import { specialities } from "../../constants";
 
 export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean }): React.ReactElement => {

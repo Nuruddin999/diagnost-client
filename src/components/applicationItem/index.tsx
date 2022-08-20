@@ -30,7 +30,7 @@ const ApplicationItem = (): React.ReactElement => {
     dispatch(updateApplication())
   }
   useEffect(() => {
-    dispatch(getListItemAction('4', 'users', saveUser))
+    dispatch(getListItemAction(id, 'applications', saveApplicationItem))
   }, [])
   useEffect(() => {
     if (status === 'success') {
@@ -61,8 +61,9 @@ const ApplicationItem = (): React.ReactElement => {
       Сохранить
     </Button>
     <a href={`/flpdf/${id}`} target='_blank' rel="noreferrer"><IconButton size='medium'>
-      <PictureAsPdfIcon  className='only-for-inner-warning' />
+        <PictureAsPdfIcon className='only-for-inner-warning' />
       </IconButton></a>
+
   </div>
 }
 export default ApplicationItem

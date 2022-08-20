@@ -5,6 +5,7 @@ import { RootState } from "../../../app/store";
 import './style.comments.scss'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { changeComment,  saveComment } from "../../../reducers/applicationItemSlice";
+import { selectApplicationUserRights } from "../../../common/selectors/user";
 
 /**
  * Компонент пояснений.
@@ -12,14 +13,11 @@ import { changeComment,  saveComment } from "../../../reducers/applicationItemSl
  */
 const Comments = (): React.ReactElement => {
   const comments = useSelector((state: RootState) => state.applicationItem.comments)
-  const [oneComment, setComment] = useState('')
+  const { processedRights } = useSelector((state: RootState) => selectApplicationUserRights(state))
   const dispatch = useDispatch()
   /**
    * Сохраняем пояснение в стэйт
    */
-  const addComment = () => {
-    dispatch(saveComment(oneComment))
-  }
   return <>
     <h4>Пояснения:</h4>
     <div className="comments-section">
@@ -33,7 +31,7 @@ const Comments = (): React.ReactElement => {
           multiline
           maxRows={4}
           value={commentEl.comment}
-          onChange={(e) => dispatch(changeComment({ index, comment: e.target.value }))}
+          onChange={(e) => processedRights.applications?.update &&  dispatch(changeComment({ index, comment: e.target.value }))}
           margin='normal'
         />
       </div>)}

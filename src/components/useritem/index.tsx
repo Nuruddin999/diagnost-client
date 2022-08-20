@@ -6,35 +6,28 @@ import './style.applicationitem.scss'
 import { successUpdate } from "../../reducers/applicationItemSlice";
 import { RootState } from "../../app/store";
 import { getListItemAction } from "../../common/actions/common";
-import { Right, saveUserItem } from "../../reducers/userSlice";
+import { Right, saveEmail, savePhone, saveUserItem } from "../../reducers/userSlice";
 import { entitiesForRights } from "../../constants";
 import { updateRightsAction } from "../../actions/user";
-
-const UserItem = (): React.ReactElement => {
+import { selectApplicationUserRights, selectsUserItemRights } from "../../common/selectors/user";
+ type userItem = {
+   isProfile?: boolean
+ }
+const UserItem = ({isProfile} : userItem): React.ReactElement => {
   const { id } = useParams<{ id: string }>()
   const status = useSelector((state: RootState) => state.applicationItem.status)
-  const { name,  email, speciality, phone } = useSelector((state: RootState) => state.user.useritem)
-  const rights: Right[] = useSelector((state: RootState)=>{
-    const processedRights: Right[] = []
-    state.user.useritem.rights?.forEach(item => {
-      if(item.entity === 'applications') {
-        processedRights[0]=item
-      }
-      else if(item.entity === 'users') {
-        processedRights[1] = item
-      }
-      else {
-        processedRights[2] = item
-      }
-    })
-    return processedRights
-  })
+  const { name,  email, speciality, phone, role } = useSelector((state: RootState) => state.user.useritem)
+  const { id: userApplId} = useSelector((state: RootState) => state.user.user)
+  const idUrl = id ? id : userApplId
+  const rights: Right[] = useSelector((state: RootState) => selectsUserItemRights(state))
+  const applUserRights = useSelector((state: RootState) => selectApplicationUserRights(state))
+  const {users} = applUserRights.processedRights
   const dispatch = useDispatch()
   const handleChange = (entity: string, field: string, value: any) => {
    dispatch(updateRightsAction(entity, field, value, id))
   }
   useEffect(() => {
-    dispatch(getListItemAction(id, 'users', saveUserItem))
+    dispatch(getListItemAction(idUrl, 'users', saveUserItem))
   }, [])
   useEffect(() => {
     if (status === 'success') {
@@ -44,36 +37,40 @@ const UserItem = (): React.ReactElement => {
 
   return <div className="user-item">
     <div className='user-info-block'>
-      <div className='user-image'>
-        <img width='200px' height='200px' src='https://img.freepik.com/premium-photo/view-destroyed-post-apocalyptic-city-3d-illustration_291814-1477.jpg?w=2000' />
-      </div>
-      <div className="user-info-wrapper">
         <div className="user-info">
           <Typography>
             Имя
           </Typography>
-          <TextField size='small' value={name} className='user-info-name' />
+          <Typography children={name} className='user-info-name' />
+        </div>
+        <div className="user-info">
+          <Typography>
+            Роль
+          </Typography>
+          <Typography  children={role} className='user-info-name' />
         </div>
         <div className="user-info">
           <Typography>
             Специальность
           </Typography>
-          <TextField size='small' value={speciality} className='user-info-name' />
+          <Typography  children={speciality} className='user-info-name' />
         </div>
         <div className="user-info">
           <Typography>
             Телефон
           </Typography>
-          <TextField size='small' value={phone} className='user-info-name' />
+          <TextField size='small' disabled={!users?.update} value={phone} className='user-info-name' onChange={(e)=>dispatch(savePhone(e.target.value))} />
         </div>
         <div className="user-info">
           <Typography>
             email
           </Typography>
-          <TextField size='small' value={email} className='user-info-name' />
+          <TextField size='small' disabled={!users?.update} value={email} className='user-info-name' onChange={(e)=>dispatch(saveEmail(e.target.value))}/>
         </div>
-      </div>
     </div>
+    <Typography variant='h4' gutterBottom className='rights-title'>
+      Права
+    </Typography>
     <div className='rights-section'>
       <Typography>
       </Typography>
@@ -89,14 +86,14 @@ const UserItem = (): React.ReactElement => {
       <Typography>
         Удаление
       </Typography>
-      {rights?.map((right) => <>
-        <Typography>
+      {rights?.map((right) =>  <>
+        <Typography align='left'>
           {entitiesForRights[right.entity as keyof typeof entitiesForRights]}
         </Typography>
-        <Checkbox checked={right.create} onChange={(e) => handleChange(right.entity, 'create', e.target.checked)} />
-        <Checkbox checked={right.read} onChange={(e) => handleChange(right.entity, 'read', e.target.checked)} />
-        <Checkbox checked={right.update} onChange={(e) => handleChange(right.entity, 'update', e.target.checked)} />
-        <Checkbox checked={right.delete} onChange={(e) => handleChange(right.entity, 'delete', e.target.checked)} />
+        <Checkbox checked={right.create} disabled={isProfile || right.entity === 'checkupPlanPlace' || !users?.update}  onChange={(e) => handleChange(right.entity, 'create', e.target.checked)} />
+        <Checkbox checked={right.read}  disabled={ isProfile || right.entity === 'checkupPlanPlace' || !users?.update} onChange={(e) => handleChange(right.entity, 'read', e.target.checked)} />
+        <Checkbox checked={right.update}   disabled={isProfile ||  right.entity === 'checkupPlanPlace' || !users?.update } onChange={(e) => handleChange(right.entity, 'update', e.target.checked)} />
+        <Checkbox checked={right.delete}   disabled={isProfile || !users?.update }   onChange={(e) => handleChange(right.entity, 'delete', e.target.checked)} />
       </>)}
     </div>
   </div>

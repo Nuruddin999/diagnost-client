@@ -46,7 +46,7 @@ export const registerUser = createAction(TYPES.userRegisterType, function prepar
   }
 })
 
-export const updateRightsAction = createAction(TYPES.userUpdateRights, function prepare(entity: string, field: string, value: string, userId: string) {
+export const updateRightsAction = createAction(TYPES.userUpdateRights, function prepare(entity: string, field: string, value: boolean, userId: string) {
   return {
     payload: {
       entity, field, value, userId

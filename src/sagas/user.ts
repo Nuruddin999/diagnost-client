@@ -2,7 +2,8 @@ import { call, put, select } from "redux-saga/effects"
 import { getUserByLetter } from "../actions/user"
 import { checkAuth, loginApi, logOut, registerApi, checkHasSuperAdmin, changeIsDeletedApi, getAllUsersApi, deleteUserApi, updateRightApi } from "../api/user"
 import { RootState } from "../app/store"
-import { changeLoadStatus, changeReqStatus, Right, saveRightsInUserItem, saveSuperUser, saveUser, saveUsers, User } from "../reducers/userSlice"
+import { initialRights } from "../constants"
+import { changeLoadStatus, changeReqStatus, Right, saveRightsInApplicationUser, saveRightsInUserItem, saveSuperUser, saveUser, saveUsers, User } from "../reducers/userSlice"
 
 type loginUserResponse = {
   accessToken: string,
@@ -35,7 +36,7 @@ export function* loginUser(login: { type: 'user/login', payload: { email: string
     if (response) {
       localStorage.setItem('dtokenn', accessToken)
       localStorage.setItem('refreshToken', refreshToken)
-      yield put(saveUser({ ...user, isLoading: false, reqStatus: 'ok', isDeletedPlace: false }))
+      yield put(saveUser({ ...user, rights: user.rights.length > 0 ? user.rights : initialRights, isLoading: false, reqStatus: 'ok', isDeletedPlace: false }))
     }
   } catch (e: any) {
     if (e.response) {
@@ -86,7 +87,7 @@ export function* checkUserAuth() {
     if (response) {
       localStorage.setItem('dtokenn', accessToken)
       localStorage.setItem('refreshToken', refreshToken)
-      yield put(saveUser({ ...user, isLoading: false, reqStatus: 'ok' }))
+      yield put(saveUser({ ...user, rights: user.rights.length > 0 ? user.rights : initialRights, isLoading: false, reqStatus: 'ok' }))
     }
   } catch (e: any) {
     if (e.response) {
@@ -106,7 +107,7 @@ export function* logoutUser() {
     if (response) {
       localStorage.removeItem('dtokenn')
       localStorage.removeItem('refreshToken')
-      yield put(saveUser({ id: '0', email: '', role: '', name: '', isLoading: false, reqStatus: 'ok', rights: [], phone: '', speciality: '', isDeletedPlace: false }))
+      yield put(saveUser({ id: '0', email: '', role: '', name: 'empty', isLoading: false, reqStatus: 'no', rights: initialRights, phone: '', speciality: '', isDeletedPlace: false }))
       yield put(changeLoadStatus(false))
     }
   } catch (e: any) {
@@ -143,7 +144,6 @@ export function* changeIsDeletedPlace(body: { type: 'user/changeIsDeletedPlaceTy
  */
 export function* fetchUser(getUser: { type: 'user/getByLetter', payload: { page: number, limit: number, email: string, name: string, speciality: string, phone: string } }) {
   try {
-    //  yield put(changeLoadStatus(true))
     const { page, limit, email, name, speciality, phone } = getUser.payload
     const response: allUsersResponse = yield call(getAllUsersApi, page, limit, email, name, speciality, phone)
     if (response) {
@@ -170,11 +170,17 @@ export function* updateUserRights(updateRight: { type: 'user/updateRights', payl
     const response: allUsersResponse = yield call(updateRightApi, entity, field, value, userId)
     if (response) {
       const rights: Array<Right> = yield select((state: RootState) => state.user.useritem.rights)
+      const applicationUser: User = yield select((state: RootState) => state.user.user)
       const changedRights = rights.map((entityName) => entity === entityName.entity ? {
         ...entityName,
         [field]: value
       } : entityName)
       yield put(saveRightsInUserItem({ rights: changedRights }))
+      console.log('applicationUser.id ', applicationUser.id )
+      console.log('User.id ', userId )
+      if(applicationUser.id === userId) {
+        yield put(saveRightsInApplicationUser({ rights: changedRights}))
+      }
     }
   } catch (e: any) {
     if (e.response) {

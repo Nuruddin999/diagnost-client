@@ -7,10 +7,13 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { changeDiagnostic, saveDiagnostic, deleteDiagnostic } from "../../../reducers/applicationItemSlice";
 import './style.diagnostic.scss'
 import NoResult from "../../no-result/no-result";
+import { selectApplicationUserRights } from "../../../common/selectors/user";
 
 const DiagnosticForm = (): React.ReactElement => {
    const dispatch = useDispatch()
    const diagnosticProp = useSelector((state: RootState) => state.applicationItem.diagnostic)
+   const { processedRights } = useSelector((state: RootState) => selectApplicationUserRights(state))
+   const { applications } = processedRights
    const [diagnosis, setDiagnosis] = useState('')
    const addDiagnosis = () => {
       dispatch(saveDiagnostic(diagnosis))
@@ -47,9 +50,9 @@ const DiagnosticForm = (): React.ReactElement => {
                   size='small'
                   fullWidth
                   placeholder='диагноз'
-                  onChange={(e) => dispatch(changeDiagnostic({ index, diagnosis: e.target.value }))}
+                  onChange={(e) => applications?.update && dispatch(changeDiagnostic({ index, diagnosis: e.target.value }))}
                /></td>
-               <td><IconButton className='delete-button' onClick={() => removeDiagnostic(index)}>
+               <td><IconButton disabled={!applications?.update} className='delete-button' onClick={() => removeDiagnostic(index)}>
                   <DeleteOutlineIcon />
                </IconButton></td>
             </tr>)}
@@ -65,7 +68,7 @@ const DiagnosticForm = (): React.ReactElement => {
          placeholder='Диагноз'
          onChange={(e) => setDiagnosis(e.target.value)}
       />
-      <IconButton onClick={addDiagnosis} >
+      <IconButton  disabled={!applications?.update} onClick={addDiagnosis} >
          <AddCircleIcon  className='add-in-table-svg ' />
       </IconButton>
       </div>

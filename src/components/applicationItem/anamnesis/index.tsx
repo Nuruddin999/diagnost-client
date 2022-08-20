@@ -6,6 +6,7 @@ import { TextField, Typography } from "@mui/material";
 import { RootState } from "../../../app/store";
 import './style.anamnesis.scss'
 import { changeComplaints, changeAnamnesis, changeDiagnosticData } from "../../../reducers/applicationItemSlice";
+import { selectApplicationUserRights } from "../../../common/selectors/user";
 
 
 const Anamnesis = (): React.ReactElement => {
@@ -13,6 +14,7 @@ const Anamnesis = (): React.ReactElement => {
   const complaints = useSelector((state: RootState) => state.applicationItem.complaint)
   const anamnesis = useSelector((state: RootState) => state.applicationItem.anamnesis)
   const diagnosticData = useSelector((state: RootState) => state.applicationItem.diagnosticData)
+  const { applications } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
   const dispatch = useDispatch()
   return <div className="anamnesis">
     <div className='complaints'>
@@ -26,7 +28,7 @@ const Anamnesis = (): React.ReactElement => {
         variant='standard'
         value={complaints}
         className='text-section'
-        onChange={(e) => dispatch(changeComplaints(e.target.value))}
+        onChange={(e) => applications?.update && dispatch(changeComplaints(e.target.value))}
       />
     </div>
     <div className='complaints'>
@@ -44,7 +46,7 @@ const Anamnesis = (): React.ReactElement => {
         variant='standard'
         className='text-section'
         value={anamnesis}
-        onChange={(e) => dispatch(changeAnamnesis(e.target.value))}
+        onChange={(e) => applications?.update &&  dispatch(changeAnamnesis(e.target.value))}
       />
     </div>
     <div className='complaints'>
@@ -58,7 +60,7 @@ const Anamnesis = (): React.ReactElement => {
         variant='standard'
         className='text-section'
         value={diagnosticData}
-        onChange={(e) => dispatch(changeDiagnosticData(e.target.value))} />
+        onChange={(e) => applications?.update &&  dispatch(changeDiagnosticData(e.target.value))} />
     </div>
   </div>
 }

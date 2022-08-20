@@ -14,11 +14,13 @@ import isObject from "lodash/isObject";
 import { debounce } from "lodash";
 
 import { getUserByLetter } from "../../actions/user";
+import { selectApplicationUserRights } from "../../common/selectors/user";
 
 const UsersList = (): React.ReactElement => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const { users } = useSelector((state: RootState) => state.user)
+  const { users, user } = useSelector((state: RootState) => state.user)
+  const { users: applUserRights } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
   const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
   const count = useSelector((state: RootState) => state.user.count)
   const [page, setPage] = React.useState(1);
@@ -33,12 +35,12 @@ const UsersList = (): React.ReactElement => {
   const deleteAppl = (value: string) => {
     dispatch(deleteUser(value));
   };
-  const tableData = ['№', { title: 'ФИО', field: name, onChange: setUserName }, { title: 'Роль', field: role, onChange: setUserRole },  { title: 'Должность', field: speciality, onChange: setUserPosition }, { title: 'Email', field: email, onChange: setUserEmail }, { title: 'Контакты', field: phone, onChange: setUserPhone }, 'Удалить']
+  const tableData = ['№', { title: 'ФИО', field: name, onChange: setUserName }, { title: 'Роль', field: role, onChange: setUserRole }, { title: 'Должность', field: speciality, onChange: setUserPosition }, { title: 'Email', field: email, onChange: setUserEmail }, { title: 'Контакты', field: phone, onChange: setUserPhone }, 'Удалить']
   const roles = {
     doctor: 'Врач',
     admin: 'Админ',
     superadmin: 'Главный админ',
-    coordinator:'Координатор'
+    coordinator: 'Координатор'
   }
   const changeHandler = (e: any, field: string, callback: (title: string) => void) => {
     if (e.target.value.length > 2) {
@@ -70,46 +72,48 @@ const UsersList = (): React.ReactElement => {
   return <div className='add-appl-container'>
     {isModalOpened && <AddModal />}
     <div className='add-button-wrapper'>
-      <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
+      {applUserRights?.create && <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
         <Typography>Новое пользователь</Typography>
-      </Button>
+      </Button>}
     </div>
     <div className="appl-table">
       <table>
-        <tr>
-          {tableData.map(el => (<th>
-            <div>
+        <thead>
+          <tr>
+            {tableData.map(el => (<th>
               <div>
-                <span>
-                  {isObject(el) ? el.title : el}
-                </span>
+                <div>
+                  <span>
+                    {isObject(el) ? el.title : el}
+                  </span>
+                </div>
+                {isObject(el) &&
+                  <TextField
+                    onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
+                    type="text"
+                    size="small"
+                    placeholder="Поиск"
+                  />
+                }
               </div>
-              {isObject(el) &&
-                <TextField
-                  onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
-                  type="text"
-                  size="small"
-                  placeholder="Поиск"
-                />
-              }
-            </div>
-          </th>))}
-        </tr>
+            </th>))}
+          </tr>
+        </thead>
         <tbody>
-          {users.length > 0 && users.map((userItem, index) => <tr onClick={() => goToApplItem(userItem.id)}>
+          {applUserRights?.read && users.length > 0 ? users.map((userItem, index) => user.id !== String(userItem.id) && <tr onClick={() => goToApplItem(userItem.id)}>
             <td>{index + 1}</td>
             <td>{userItem.name}</td>
             <td>{roles[userItem.role as keyof typeof roles]}</td>
             <td>{userItem.speciality}</td>
             <td>{userItem.email}</td>
             <td>{userItem.phone}</td>
-            <td><IconButton className='delete-button' onClick={(e: any) => {
+            <td><IconButton disabled={!applUserRights?.delete} className='delete-button' onClick={(e: any) => {
               e.stopPropagation()
               userItem.id && deleteAppl(userItem.id)
             }}>
               <DeleteOutlineIcon />
             </IconButton></td>
-          </tr>)}
+          </tr>) : <Typography> Недостаточно прав</Typography>}
         </tbody>
       </table>
     </div>
@@ -125,6 +129,5 @@ const UsersList = (): React.ReactElement => {
       />
     </div>
   </div>
-
 }
 export default UsersList

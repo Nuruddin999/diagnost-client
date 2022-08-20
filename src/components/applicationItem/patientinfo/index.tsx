@@ -7,10 +7,12 @@ import { DatePicker, LocalizationProvider } from "@mui/lab";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import { changePatientBirthDate, changePatientName } from "../../../reducers/applicationItemSlice";
+import { selectApplicationUserRights } from "../../../common/selectors/user";
 
 const PatientInfo = (): React.ReactElement => {
   const patientBirthDate = useSelector((state: RootState) => state.applicationItem.patientBirthDate)
   const patientName = useSelector((state: RootState) => state.applicationItem.patientName)
+  const { applications } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
   const dispatch = useDispatch()
   return <div className="patient-info">
     <TextField
@@ -18,7 +20,7 @@ const PatientInfo = (): React.ReactElement => {
       size='small'
       value={patientName}
       fullWidth
-      onChange={(e) => dispatch(changePatientName(e.target.value))}
+      onChange={(e) => applications?.update && dispatch(changePatientName(e.target.value))}
     />
     <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
       <div>
@@ -27,7 +29,7 @@ const PatientInfo = (): React.ReactElement => {
           value={patientBirthDate}
           toolbarPlaceholder='19.06.87'
           label='Дата рождения'
-          onChange={(newValue: any) => dispatch(changePatientBirthDate(newValue))}
+          onChange={(newValue: any) =>  applications?.update && dispatch(changePatientBirthDate(newValue))}
           renderInput={(params: any) => <TextField {...params} size='small' />}
         />
       </div>
