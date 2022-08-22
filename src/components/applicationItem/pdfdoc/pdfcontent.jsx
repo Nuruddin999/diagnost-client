@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   hdrimg: {
-    width: '170px'
+    width: '150px'
   },
   title: {
     fontSize: 14,
@@ -225,12 +225,14 @@ const styles = StyleSheet.create({
   finalDateAndFio: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center'
   },
   finalDateAndFioText: {
     textDecoration: 'underline'
-  }
+  },
+  exeDateText: { width: '150px', marginHorizontal: '10px' },
+  managerAndSpeciality: { display: 'flex', flexDirection: 'column', width: '150px', alignItems: 'center', marginHorizontal: '10px', flexWrap: 'wrap' }
 
 });
 
@@ -244,6 +246,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
     }
     list.push(consdoc)
   }
+
   const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments, execDate, manager, managerSpeciality } = applItem
   const currentYear = new Date().getFullYear()
   const yearsOld = new Date(patientBirthDate).getFullYear()
@@ -371,11 +374,11 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           </View>
           {execDate && manager ?
             <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }} wrap={false}>
-              <Text style={{ width: '100px' }}>{execDate.substring(0, 10)}</Text>
+              <Text style={styles.exeDateText}>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
               <Image src={sign} style={styles.hdrimg} />
               <Image src={sell} style={styles.hdrimg} />
-              <View style={{ display: 'flex', flexDirection: 'column', width: '300px', alignItems:'center' }}>
-                {managerSpeciality ? <Text>{managerSpeciality}</Text> : null}
+              <View style={styles.managerAndSpeciality}>
+                {managerSpeciality ? <Text >{managerSpeciality}</Text> : null}
                 <Text>{manager}</Text>
               </View>
             </View> : null}

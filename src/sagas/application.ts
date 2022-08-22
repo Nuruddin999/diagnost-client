@@ -131,10 +131,9 @@ export function* fetchOneApplication(getApplication: { type: 'application/getone
 export function* updateOneApplication(updateApplication: { type: 'application/update' }) {
 
   try {
-    //  yield put(changeLoadStatus(true))
     const application: applicationInitialState = yield select((state: RootState) => state.applicationItem)
     const consiliumDoctorsFiltered = application.consiliumDoctors.map(doctor => ({ name: doctor.name, speciality: doctor.speciality }))
-    const response: applicationItemResponse = yield call(updateOneApplicationApi, { ...application, consiliumDoctors: consiliumDoctorsFiltered, execDate: new Date().toLocaleString() })
+    const response: applicationItemResponse = yield call(updateOneApplicationApi, { ...application, consiliumDoctors: consiliumDoctorsFiltered, execDate: new Date().toString() })
     if (response) {
       yield put(successUpdate('success'))
     }

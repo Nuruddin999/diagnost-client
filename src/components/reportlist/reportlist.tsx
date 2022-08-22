@@ -18,7 +18,6 @@ const ReportList = (): React.ReactElement => {
   const dispatch = useDispatch()
   const history = useHistory()
   const applications = useSelector((state: RootState) => state.application.applications)
-  const role = useSelector((state: RootState) => state.user.user.role)
   const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
   const count = useSelector((state: RootState) => state.application.count)
   const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
@@ -99,7 +98,7 @@ const ReportList = (): React.ReactElement => {
             <td>{appl.fundRequest}</td>
             <td>{appl.manager}</td>
             <td>{new Date(appl.creationDate).toLocaleString()}</td>
-            <td>{appl.execDate}</td>
+            <td>{appl.execDate && new Date(appl.execDate).toLocaleString()}</td>
             {(rights.processedRights.applications?.delete) && <td><IconButton className='delete-button' onClick={(e: any) => {
               e.stopPropagation()
               appl.id && deleteAppl(appl.id)

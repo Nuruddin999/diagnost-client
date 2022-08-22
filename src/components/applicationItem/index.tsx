@@ -26,7 +26,6 @@ const ApplicationItem = (): React.ReactElement => {
    * Обновляем заключение.
    */
   const handleClick = () => {
-
     dispatch(updateApplication())
   }
   useEffect(() => {
