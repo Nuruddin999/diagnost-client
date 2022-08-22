@@ -6,7 +6,7 @@ import uiSlice  from '../reducers/ui';
 import userSlice from '../reducers/userSlice';
 import runSagas from '../sagas';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   user: userSlice,
   application:applicationSlice,
   applicationItem:applicationItemSlice,

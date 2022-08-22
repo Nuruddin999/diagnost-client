@@ -40,7 +40,7 @@ export const Auth = (): React.ReactElement => {
   }, [reqStatus])
   return <div className={'auth-wrapper'}>
     <div className={"auth-container"}>
-      <form onSubmit={(event) => onSubmit(event)}>
+      <form onSubmit={(event) => onSubmit(event)} data-testid='loginform'>
         <TextField value={email}
           type='email'
           required

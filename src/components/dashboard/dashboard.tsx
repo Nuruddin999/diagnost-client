@@ -30,7 +30,7 @@ const Dashboard = (): React.ReactElement => {
   useEffect(() => {
     dispatch(checkUser())
   }, [])
-  return !hasSuperUser ? <Registration notHaveSuperUser /> : name === '' ? <CircularProgress /> : <div className="dashboard">
+  return !hasSuperUser ? <Registration notHaveSuperUser /> : name === '' ? <CircularProgress /> : <div className="dashboard" data-testid='dashboard'>
     <div className="dasheader">
       <div className='user-block'>
         <Link to='/main/aboutme'>

@@ -10,6 +10,7 @@ export type applicationInitialState = {
   patientRequest: string,
   fundName: string,
   manager: string,
+  managerSpeciality: string,
   creationDate: string,
   execDate: string,
   consiliumDoctors: Array<consiliumDoctor>,
@@ -43,6 +44,7 @@ const initialState: applicationInitialState = {
   patientRequest: '',
   fundName: '',
   manager: '',
+  managerSpeciality: '',
   creationDate: '',
   execDate: '',
   anamnesis: '',
@@ -79,6 +81,7 @@ export const applicationItemSlice = createSlice({
       state.comments = action.payload.Comments.length > 0 ? action.payload.Comments : state.comments
       state.execDate = action.payload.execDate
       state.manager = action.payload.manager
+      state.managerSpeciality = action.payload.managerSpeciality
     },
     saveConsiliumDoctors: (state, action: PayloadAction<consiliumDoctor>) => {
       state.consiliumDoctors = [...state.consiliumDoctors, { name: action.payload.name, speciality: action.payload.speciality }]

@@ -73,7 +73,7 @@ const UsersList = (): React.ReactElement => {
     {isModalOpened && <AddModal />}
     <div className='add-button-wrapper'>
       {applUserRights?.create && <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
-        <Typography>Новое пользователь</Typography>
+        <Typography>Новый пользователь</Typography>
       </Button>}
     </div>
     <div className="appl-table">

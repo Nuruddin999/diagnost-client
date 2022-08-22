@@ -32,8 +32,9 @@ const AddModal = (): React.ReactElement => {
       patientRequest,
       fundName,
       fundRequest,
-      manager: `${speciality}  ${manager}`,
-      creationDate: new Date().toLocaleString(),
+      manager: `${manager}`,
+      managerSpeciality:`${speciality}`,
+      creationDate: new Date().toString(),
       execDate: '',
     }))
   }

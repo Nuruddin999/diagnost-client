@@ -14,6 +14,7 @@ export type applicationForAdd = {
     fundName: string,
     fundRequest: string,
     manager: string,
+    managerSpeciality:string
     creationDate: string,
     execDate: string
 }

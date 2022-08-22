@@ -48,7 +48,6 @@ const ReportList = (): React.ReactElement => {
     debounce(changeHandler, 300)
     , []);
 
-  const isNotRenderDelete = (el: any) => !rights.processedRights.applications?.delete && el === 'Удалить'
   useEffect(() => {
     dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
   }, [page])

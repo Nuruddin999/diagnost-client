@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux';
 import { Document, Page, PDFViewer, Text, StyleSheet, View, Font, Image } from '@react-pdf/renderer'
 import './style.pdfdoc.scss'
 import hopedoc from '../../../hopedoc.png'
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   hdrimg: {
-    width: '150px'
+    width: '170px'
   },
   title: {
     fontSize: 14,
@@ -227,9 +226,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center'
   },
   finalDateAndFioText: {
-    padding: '25px',
     textDecoration: 'underline'
   }
 
@@ -245,7 +244,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
     }
     list.push(consdoc)
   }
-  const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments, execDate, manager, } = applItem
+  const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments, execDate, manager, managerSpeciality } = applItem
   const currentYear = new Date().getFullYear()
   const yearsOld = new Date(patientBirthDate).getFullYear()
   const month = new Date(patientBirthDate).getMonth()
@@ -371,14 +370,13 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             </View> : null}
           </View>
           {execDate && manager ?
-            <View wrap={false}>
-              <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }}>
-                <Text>{execDate.substring(0, 10)}</Text>
+            <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }} wrap={false}>
+              <Text style={{ width: '100px' }}>{execDate.substring(0, 10)}</Text>
+              <Image src={sign} style={styles.hdrimg} />
+              <Image src={sell} style={styles.hdrimg} />
+              <View style={{ display: 'flex', flexDirection: 'column', width: '300px', alignItems:'center' }}>
+                {managerSpeciality ? <Text>{managerSpeciality}</Text> : null}
                 <Text>{manager}</Text>
-              </View>
-              <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }}>
-                <Image src={sign} style={styles.hdrimg} />
-                <Image src={sell} style={styles.hdrimg} />
               </View>
             </View> : null}
         </Page>

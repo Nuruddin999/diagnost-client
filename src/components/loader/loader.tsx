@@ -9,7 +9,7 @@ type LoaderProps = {
 }
 export const Loader = (props: LoaderProps): React.ReactElement => {
 
-    return <div className={props.isLoading ? 'btn-loader-container' : 'btn-no-loader'}>
+    return <div data-testid={props.isLoading ? 'loading' : 'loaded'} className={props.isLoading ? 'btn-loader-container' : 'btn-no-loader'}>
         <span className='btn-title'>
             {props.title}
         </span>

@@ -16,6 +16,7 @@ type applicationAddResponse = {
   fundName: string,
   fundRequest: string,
   manager: string,
+  managerSpeciality: string,
   creationDate: string,
   execDate: string,
   updatedAt: string,
