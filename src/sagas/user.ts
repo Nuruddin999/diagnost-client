@@ -27,7 +27,6 @@ type allUsersResponse = {
  * Вход в систему.
  * @param login .
  */
-// 8sYY7pn6X9lI
 export function* loginUser(login: { type: 'user/login', payload: { email: string, password: string } }) {
   try {
     yield put(changeLoadStatus(true))
