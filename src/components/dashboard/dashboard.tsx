@@ -6,7 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import ReportList from "../reportlist/reportlist";
-import { ListItemText, IconButton, Typography, CircularProgress, ListItemIcon, Button } from "@mui/material";
+import { ListItemText, IconButton, Typography, CircularProgress, ListItemIcon, Backdrop } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import './style.dash.scss'
 import { useDispatch, useSelector } from "react-redux";
@@ -25,12 +25,19 @@ const Dashboard = (): React.ReactElement => {
   const { user, hasSuperUser } = useSelector((state: RootState) => state.user)
   const { name } = user
   const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
+  const isCircular = useSelector((state: RootState) => state.ui.isCircular)
   const dispatch = useDispatch()
   const logOut = () => dispatch(logOutUser())
   useEffect(() => {
     dispatch(checkUser())
   }, [])
   return !hasSuperUser ? <Registration notHaveSuperUser /> : name === '' ? <CircularProgress /> : <div className="dashboard" data-testid='dashboard'>
+       <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isCircular}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     <div className="dasheader">
       <div className='user-block'>
         <Link to='/main/aboutme'>

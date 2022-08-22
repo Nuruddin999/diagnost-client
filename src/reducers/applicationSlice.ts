@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { applicationForAdd } from '../actions/application';
 
 
@@ -16,19 +16,11 @@ const initialState: ApplicationState = {
 export const applicationSlice = createSlice({
     name: 'application',
     initialState,
-    // The `reducers` field lets us define reducers and generate associated actions
     reducers: {
         saveApplicationsList: (state, action: PayloadAction<ApplicationState>) => {
             state.applications = action.payload.applications
             state.count = action.payload.count
         },
-        // changeLoadStatus: (state, action: PayloadAction<boolean>) => {
-        //     state.isLoading = action.payload
-        // },
-        // changeReqStatus: (state, action: PayloadAction<string>) => {
-        //     state.reqStatus = action.payload
-        // }
-
     },
 });
 

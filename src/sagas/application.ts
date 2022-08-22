@@ -2,12 +2,11 @@ import { getListItemById } from './../common/api/api';
 import { deleteOneApplicationApi, getApplicationApi,  updateOneApplicationApi } from './../api/application';
 import { applicationForAdd, getApplication } from './../actions/application';
 import { call, delay, put, select } from "redux-saga/effects"
-import { changeReqStatus } from "../reducers/userSlice"
 import { addApplicationApi } from '../api/application';
 import { saveApplicationsList } from '../reducers/applicationSlice';
 import { applicationInitialState, saveApplicationItem, successUpdate } from '../reducers/applicationItemSlice';
 import { RootState } from '../app/store';
-import { openModal, setStatus } from '../reducers/ui';
+import { openModal, setCircular, setStatus } from '../reducers/ui';
 type applicationAddResponse = {
   id: number,
   patientName: string,
@@ -74,10 +73,8 @@ export function* addApplication(addApplication: { type: 'application/add', paylo
     }
   } catch (e: any) {
     if (e.response) {
-      yield put(changeReqStatus(e.response?.data?.message))
     }
     else {
-      yield put(changeReqStatus('Неизвестаня ошибка'))
     }
   }
 }
@@ -97,10 +94,8 @@ export function* fetchApplication(getApplication: { type: 'application/get', pay
     }
   } catch (e: any) {
     if (e.response) {
-      yield put(changeReqStatus(e.response?.data?.message))
     }
     else {
-      yield put(changeReqStatus('Неизвестаня ошибка'))
     }
   }
 }
@@ -117,10 +112,8 @@ export function* fetchOneApplication(getApplication: { type: 'application/getone
     }
   } catch (e: any) {
     if (e.response) {
-      yield put(changeReqStatus(e.response?.data?.message))
     }
     else {
-      yield put(changeReqStatus('Неизвестаня ошибка'))
     }
   }
 }
@@ -133,16 +126,18 @@ export function* updateOneApplication(updateApplication: { type: 'application/up
   try {
     const application: applicationInitialState = yield select((state: RootState) => state.applicationItem)
     const consiliumDoctorsFiltered = application.consiliumDoctors.map(doctor => ({ name: doctor.name, speciality: doctor.speciality }))
+    yield put(setCircular(true))
     const response: applicationItemResponse = yield call(updateOneApplicationApi, { ...application, consiliumDoctors: consiliumDoctorsFiltered, execDate: new Date().toString() })
     if (response) {
+      yield put(setCircular(false))
       yield put(successUpdate('success'))
     }
   } catch (e: any) {
     if (e.response) {
-      yield put(changeReqStatus(e.response?.data?.message))
+      yield put(setCircular(false))
     }
     else {
-      yield put(changeReqStatus('Неизвестаня ошибка'))
+      yield put(setCircular(false))
     }
   }
 }
@@ -162,10 +157,8 @@ export function* removeOneApplication(delApplication: { type: 'application/delet
     }
   } catch (e: any) {
     if (e.response) {
-      yield put(changeReqStatus(e.response?.data?.message))
     }
     else {
-      yield put(changeReqStatus('Неизвестаня ошибка'))
     }
   }
 }

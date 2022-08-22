@@ -1,32 +1,37 @@
-import {  createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UiState {
-    status: string,
-    isModalOpened: boolean,
+  status: string,
+  isModalOpened: boolean,
+  isCircular: boolean,
 
 }
 
 const initialState: UiState = {
-    status:'none',
-    isModalOpened: false
+  status: 'none',
+  isModalOpened: false,
+  isCircular: false
 };
 
 
 export const uiSlice = createSlice({
-    name: 'ui',
-    initialState,
-    // The `reducers` field lets us define reducers and generate associated actions
-    reducers: {
-        setStatus: (state, action: PayloadAction<string>) => {
-            state.status = action.payload
-        },
-        openModal: (state, action: PayloadAction<boolean>) => {
-            state.isModalOpened = !state.isModalOpened
-        },
+  name: 'ui',
+  initialState,
+  // The `reducers` field lets us define reducers and generate associated actions
+  reducers: {
+    setStatus: (state, action: PayloadAction<string>) => {
+      state.status = action.payload
     },
+    openModal: (state, action: PayloadAction<boolean>) => {
+      state.isModalOpened = !state.isModalOpened
+    },
+    setCircular: (state, action: PayloadAction<boolean>) => {
+      state.isCircular = action.payload
+    },
+  },
 });
 
-export const { setStatus, openModal } = uiSlice.actions;
+export const { setStatus, openModal, setCircular } = uiSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
