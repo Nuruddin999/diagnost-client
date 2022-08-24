@@ -38,10 +38,17 @@
             gap: 16px;
             width: 100%;
             text-align: left;
-            padding: 15px;
+            padding-top: 15px;
             .manager-field {
                 border: 1px solid gray;
-                padding: 10px
+                padding: 10px;
+                .manager-field-icon{
+display: flex;
+align-items: center;
+svg {
+  margin-left: 15px;
+}
+                }
             }
         }
         .add-button {

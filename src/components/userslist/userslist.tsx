@@ -15,6 +15,7 @@ import { debounce } from "lodash";
 
 import { getUserByLetter } from "../../actions/user";
 import { selectApplicationUserRights } from "../../common/selectors/user";
+import { useUsers } from "../../common/hooks/useUsers";
 
 const UsersList = (): React.ReactElement => {
   const dispatch = useDispatch()
@@ -54,13 +55,7 @@ const UsersList = (): React.ReactElement => {
     debounce(changeHandler, 300)
     , []);
 
-  useEffect(() => {
-    dispatch(getUserByLetter(page, 10, email, name, speciality, phone))
-  }, [page])
-
-  useEffect(() => {
-    dispatch(getUserByLetter(page, 10, email, name, speciality, phone))
-  }, [email, name, speciality, phone])
+  useUsers(page, email, name, speciality, phone)
 
   /**
    * Переход на отдельное заключение

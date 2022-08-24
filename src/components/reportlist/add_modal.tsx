@@ -1,4 +1,4 @@
-import { Button, Typography, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { Button, Typography, TextField, } from "@mui/material";
 import React, { useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { DatePicker, LocalizationProvider } from "@mui/lab"
@@ -11,12 +11,15 @@ import './style.addmodal.scss'
 import { openModal } from "../../reducers/ui";
 import { Loader } from "../loader/loader";
 import { RootState } from "../../app/store";
-import { specialities } from "../../constants";
+import UsersDropDown from "../userslist copy/usersdropdown";
+import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
+
 
 const AddModal = (): React.ReactElement => {
-  const status = useSelector((state:RootState)=>state.ui.status)
+  const status = useSelector((state: RootState) => state.ui.status)
   const dispatch = useDispatch()
   const [patientName, setPatientFIO] = useState('')
+  const [open, setOpen] = useState(false)
   const [patientBirthDate, setBirthDate] = useState(new Date())
   const [patientRequest, setPatientRequest] = useState('')
   const [fundName, setFundName] = useState('')
@@ -26,17 +29,19 @@ const AddModal = (): React.ReactElement => {
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
-    dispatch(addApplication({
-      patientName,
-      patientBirthDate: patientBirthDate.toString(),
-      patientRequest,
-      fundName,
-      fundRequest,
-      manager: `${manager}`,
-      managerSpeciality:`${speciality}`,
-      creationDate: new Date().toString(),
-      execDate: '',
-    }))
+    if (manager && speciality) {
+      dispatch(addApplication({
+        patientName,
+        patientBirthDate: patientBirthDate.toString(),
+        patientRequest,
+        fundName,
+        fundRequest,
+        manager: `${manager}`,
+        managerSpeciality: `${speciality}`,
+        creationDate: new Date().toString(),
+        execDate: '',
+      }))
+    }
   }
   return <div className='add-modal-container'>
     <div className="add-form-wrapper">
@@ -84,31 +89,29 @@ const AddModal = (): React.ReactElement => {
             onChange={(event: any) => setFundRequest(event.target.value)}
             required
           />
-          <div className="manager-field">
-            <Typography children='Ответственный'/>
-          <TextField
-            placeholder='ФИО'
-            size='small'
-            value={manager}
-            onChange={(event: any) => setManager(event.target.value)}
-            required
-          />
-                <FormControl variant="standard" fullWidth>
-               <InputLabel id="demo-simple-select-standard-label">Специальность</InputLabel>
-               <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  value={speciality}
-                  onChange={(e) => setSpeciality(e.target.value)}
-                  label="Специальность"
-               >
-                  {specialities.map(speciality => <MenuItem value={speciality}>{speciality}</MenuItem>)}
-               </Select>
-            </FormControl>
+          <div className="manager-field" aria-required>
+          <Typography
+                children={'Выберете ответственного'}
+                align='center'
+                margin={1}
+                color='secondary'
+              />
+            <div className="manager-field-icon">
+              <div>
+              <Typography
+                children={manager ? manager : 'Ответственный'}
+              />
+                <Typography
+              children={speciality ? speciality : 'Специальность'}
+            />
+            </div>
+              <ArrowDropDownCircleIcon onClick={() => setOpen(state => !state)} />
+            </div>
+            {open && <UsersDropDown setManager={setManager} setSpeciality={setSpeciality} onClose={setOpen} />}
           </div>
         </div>
         <Button size='small' variant='contained' className='add-button' type='submit'>
-        <Loader title='Добавить задание' isLoading={status === 'pending'} />
+          <Loader title='Добавить задание' isLoading={status === 'pending'} />
         </Button>
       </form>
     </div>

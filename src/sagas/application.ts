@@ -142,11 +142,12 @@ export function* updateOneApplication(updateApplication: { type: 'application/up
   }
 }
 
-/**
-* Удаление  заключения.
-* @param {Object} getApplication .
-*/
-export function* removeOneApplication(delApplication: { type: 'application/deleteone', payload: { id: string } }) {
+
+  /**
+  * Удаление  заключения.
+  * @param {Object} getApplication .
+  */
+  export function* removeOneApplication(delApplication: { type: 'application/deleteone', payload: { id: string } }) {
 
   try {
     const { id } = delApplication.payload
