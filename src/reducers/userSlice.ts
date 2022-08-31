@@ -17,6 +17,8 @@ export interface User {
   email: string,
   speciality: string,
   isDeletedPlace?: boolean,
+  urlSignPath?: string,
+  signFileName?: string,
   rights?: Array<Right>
 }
 interface UserState {
@@ -46,7 +48,7 @@ const initialState: UserState = {
     name: '',
     email: '',
     speciality: '',
-    rights:initialRights,
+    rights: initialRights,
     isDeletedPlace: false
   },
   users: [],
@@ -62,9 +64,9 @@ export const userSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    saveUser: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string }>) => {
-      const { name, phone, role, email, speciality, id, isDeletedPlace, rights } = action.payload
-      state.user = { id: String(id), phone, role, name, speciality, email, isDeletedPlace }
+    saveUser: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string, urlSignPath?: string, signFileName?: string, }>) => {
+      const { name, phone, role, email, speciality, id, isDeletedPlace, rights, signFileName, urlSignPath } = action.payload
+      state.user = { id: String(id), phone, role, name, speciality, email, isDeletedPlace, signFileName, urlSignPath }
       state.user.rights = [...rights]
       state.isLoading = action.payload.isLoading
       state.reqStatus = action.payload.reqStatus
@@ -82,9 +84,9 @@ export const userSlice = createSlice({
       state.users = action.payload.users
       state.count = action.payload.count
     },
-    saveUserItem: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string }>) => {
-      const { name, phone, role, email, speciality, id, isDeletedPlace, rights } = action.payload
-      state.useritem = { id, phone, role, name, speciality, email, rights, isDeletedPlace }
+    saveUserItem: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string, urlSignPath?: string, signFileName?: string }>) => {
+      const { name, phone, role, email, speciality, id, isDeletedPlace, rights, signFileName, urlSignPath} = action.payload
+      state.useritem = { id, phone, role, name, speciality, email, rights, isDeletedPlace, signFileName, urlSignPath }
       state.isLoading = action.payload.isLoading
       state.reqStatus = action.payload.reqStatus
     },
@@ -105,10 +107,15 @@ export const userSlice = createSlice({
     saveIsDeletedPlaceInUser: (state, action: PayloadAction<boolean>) => {
       state.user.isDeletedPlace = action.payload
     },
+    saveUserItemSignFileInfo: (state, action: PayloadAction<{ urlSignPath: string, signFileName: string }>) => {
+      const { urlSignPath, signFileName } = action.payload
+      state.useritem.urlSignPath = urlSignPath
+      state.useritem.signFileName = signFileName
+    },
   },
 });
 
-export const { saveUser, changeReqStatus, changeLoadStatus, saveSuperUser, saveUsers, saveUserItem, saveRightsInUserItem, saveRightsInApplicationUser, saveEmail, savePhone, saveIsDeletedPlaceInUser } = userSlice.actions;
+export const { saveUser, changeReqStatus, changeLoadStatus, saveSuperUser, saveUsers, saveUserItem, saveRightsInUserItem, saveRightsInApplicationUser, saveEmail, savePhone, saveIsDeletedPlaceInUser, saveUserItemSignFileInfo } = userSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

@@ -16,7 +16,7 @@ export type applicationForAdd = {
     manager: string,
     managerSpeciality:string
     creationDate: string,
-    execDate: string
+    execDate: string,
 }
 
 export const addApplication = createAction(Types.applicationAdd, function prepare(application: applicationForAdd) {

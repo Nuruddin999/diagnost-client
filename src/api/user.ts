@@ -1,5 +1,6 @@
 import { registeredUser } from '../actions/user';
 import { diagnostApi } from './index';
+
 export const loginApi = async (email: string, password: string) => {
   const response = await diagnostApi.post('/login', {
     email, password
@@ -58,6 +59,30 @@ export const updateRightApi = async (entity: string, field: string, value: boole
   const response = await diagnostApi.post('/rightupd', {
     entity, field, value, userId
   }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
+  return response.data
+}
+
+export const upLoadFileApi = async (files: Array<any>, id: string, onUploadProgress: any) => {
+  let formData = new FormData();
+  formData.append("file", files[0]);
+  formData.append("userid", id);
+  const response = await diagnostApi.post('/upload', formData, {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`,
+      "Content-Type": "multipart/form-data",
+    },
+    onUploadProgress
+  })
+  return response.data
+}
+
+
+export const getFilesList = async (id:string) => {
+  const response = await diagnostApi.get(`/files/${id}`,  {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`,
+    },
+  })
   return response.data
 }
 

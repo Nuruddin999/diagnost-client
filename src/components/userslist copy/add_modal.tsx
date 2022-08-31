@@ -4,7 +4,7 @@ import './style.reportlist.scss'
 import { useDispatch } from "react-redux";
 import './style.addmodal.scss'
 import { openModal } from "../../reducers/ui";
-import { Registration } from "../common/registration";
+import { Registration } from "../../common/components/registration/registration";
 
 const AddModal = (): React.ReactElement => {
   const dispatch = useDispatch()

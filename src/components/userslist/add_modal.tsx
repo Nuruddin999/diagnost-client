@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import './style.reportlist.scss'
 import { useDispatch, useSelector } from "react-redux";
-import { addApplication } from "../../actions/application";
 import './style.addmodal.scss'
 import { openModal } from "../../reducers/ui";
 import { RootState } from "../../app/store";
-import { Registration } from "../common/registration";
+import { Registration } from "../../common/components/registration/registration";
 
 const AddModal = (): React.ReactElement => {
   const status = useSelector((state: RootState) => state.ui.status)

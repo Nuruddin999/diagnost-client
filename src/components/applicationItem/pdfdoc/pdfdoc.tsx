@@ -4,7 +4,6 @@ import { RootState } from '../../../app/store';
 import { StyleSheet, Font } from '@react-pdf/renderer'
 import './style.pdfdoc.scss'
 import { useParams } from "react-router-dom";
-import { getOneApplication } from '../../../actions/application';
 import MyDocContent from "./pdfcontent";
 import { checkUser } from "../../../actions/user";
 import { getListItemAction } from "../../../common/actions/common";
@@ -20,7 +19,7 @@ Font.register({
 function MyDoc() {
   const { id } = useParams<{ id: string }>()
   const applItem = useSelector((state: RootState) => state.applicationItem)
-  const { isDeletedPlace } = useSelector((state: RootState) => state.user.user)
+  const { isDeletedPlace, signFileName, urlSignPath } = useSelector((state: RootState) => state.user.user)
   const [status, setStatus] = useState(isDeletedPlace)
   const bc = new BroadcastChannel('pdf_channel');
   const dispatch = useDispatch()
@@ -39,7 +38,7 @@ function MyDoc() {
   }, [bc, status]);
 
   return (
-  <MyDocContent applItem={applItem} isDeletedPlace={isDeletedPlace} status={status}/>
+  <MyDocContent applItem={applItem} isDeletedPlace={isDeletedPlace} status={status} signFile={{signFileName, urlSignPath}}/>
   );
 }
 

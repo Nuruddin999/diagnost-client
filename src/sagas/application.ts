@@ -1,12 +1,12 @@
 import { getListItemById } from './../common/api/api';
-import { deleteOneApplicationApi, getApplicationApi,  updateOneApplicationApi } from './../api/application';
+import { deleteOneApplicationApi, getApplicationApi, updateOneApplicationApi } from './../api/application';
 import { applicationForAdd, getApplication } from './../actions/application';
-import { call, delay, put, select } from "redux-saga/effects"
+import { call,  put, select } from "redux-saga/effects"
 import { addApplicationApi } from '../api/application';
 import { saveApplicationsList } from '../reducers/applicationSlice';
 import { applicationInitialState, saveApplicationItem, successUpdate } from '../reducers/applicationItemSlice';
 import { RootState } from '../app/store';
-import { openModal, setCircular, setStatus } from '../reducers/ui';
+import { setCircular, setStatus } from '../reducers/ui';
 type applicationAddResponse = {
   id: number,
   patientName: string,
@@ -67,9 +67,6 @@ export function* addApplication(addApplication: { type: 'application/add', paylo
     const response: getAllApplicationsResponse = yield call(addApplicationApi, addApplication.payload)
     if (response) {
       yield put(getApplication(1, 10, '', '', '', '', ''))
-      yield delay(2000)
-      yield put(setStatus('ok'))
-      yield put(openModal(false))
     }
   } catch (e: any) {
     if (e.response) {
@@ -106,7 +103,7 @@ export function* fetchApplication(getApplication: { type: 'application/get', pay
 export function* fetchOneApplication(getApplication: { type: 'application/getone', payload: { id: string } }) {
   try {
     const { id } = getApplication.payload
-    const response: applicationItemResponse = yield call(getListItemById, id,'applications')
+    const response: applicationItemResponse = yield call(getListItemById, id, 'applications')
     if (response) {
       yield put(saveApplicationItem({ ...response }))
     }
@@ -143,18 +140,18 @@ export function* updateOneApplication(updateApplication: { type: 'application/up
 }
 
 
-  /**
-  * Удаление  заключения.
-  * @param {Object} getApplication .
-  */
-  export function* removeOneApplication(delApplication: { type: 'application/deleteone', payload: { id: string } }) {
+/**
+* Удаление  заключения.
+* @param {Object} getApplication .
+*/
+export function* removeOneApplication(delApplication: { type: 'application/deleteone', payload: { id: string } }) {
 
   try {
     const { id } = delApplication.payload
     const response: {} = yield call(deleteOneApplicationApi, id)
     if (response) {
       yield put(successUpdate('success'))
-      yield put(getApplication(1, 10, '', '' , '', '', ''))
+      yield put(getApplication(1, 10, '', '', '', '', ''))
     }
   } catch (e: any) {
     if (e.response) {

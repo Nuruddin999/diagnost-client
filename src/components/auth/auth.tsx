@@ -1,13 +1,12 @@
-import { Button, TextField, Select, MenuItem, InputLabel, OutlinedInput, Typography, Alert, Modal } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { clearTimeout } from "timers";
-import { login, registerUser } from "../../actions/user";
 import { RootState } from "../../app/store";
 import { changeLoadStatus, changeReqStatus } from "../../reducers/userSlice";
 import { Loader } from "../loader/loader";
-import '../common/style.auth.scss'
+import '../../common/components/registration/style.auth.scss'
+import { login } from "../../actions/user";
 
 export const Auth = (): React.ReactElement => {
   const [email, setEmail] = useState('')

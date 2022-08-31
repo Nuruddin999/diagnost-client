@@ -15,7 +15,7 @@ import { checkUser, logOutUser } from "../../actions/user";
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ApplicationItem from "../applicationItem";
-import { Registration } from "../common/registration";
+import { Registration } from "../../common/components/registration/registration";
 import UsersList from "../userslist/userslist";
 import UserItem from "../useritem";
 import { selectApplicationUserRights } from "../../common/selectors/user";

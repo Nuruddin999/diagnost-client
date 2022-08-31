@@ -9,7 +9,8 @@ export const TYPES = {
   changeIsDeletedPlaceType: 'user/changeIsDeletedPlaceType',
   getByLetter: 'user/getByLetter',
   userDel: 'user/deleteone',
-  userUpdateRights: 'user/updateRights'
+  userUpdateRights: 'user/updateRights',
+  userUpdateSignFile:'user/signupdate'
 }
 export type registeredUser = {
   email: string,
@@ -17,7 +18,8 @@ export type registeredUser = {
   name: string,
   phone: string,
   speciality: string,
-  role: string
+  role: string,
+  files:any[] | null
 }
 
 export const login = createAction(TYPES.userLoginType, function prepare(email: string, password: string) {
@@ -72,6 +74,16 @@ export const deleteUser = createAction(TYPES.userDel, function prepare(id: strin
     },
   }
 })
+
+export const userSignFileUpdate = createAction(TYPES.userUpdateSignFile, function prepare(id: string, files:Array<File>) {
+  return {
+    payload: {
+      id,
+      files
+    },
+  }
+})
+
 export const checkUser = createAction(TYPES.userCheckType)
 export const logOutUser = createAction(TYPES.userLogOut)
 export const checkIsSuperAdmin = createAction(TYPES.userCheckIsAdmin)

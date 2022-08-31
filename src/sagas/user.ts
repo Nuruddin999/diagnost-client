@@ -1,9 +1,10 @@
 import { call, put, select } from "redux-saga/effects"
 import { getUserByLetter } from "../actions/user"
-import { checkAuth, loginApi, logOut, registerApi, checkHasSuperAdmin, changeIsDeletedApi, getAllUsersApi, deleteUserApi, updateRightApi } from "../api/user"
+import { checkAuth, loginApi, logOut, registerApi, checkHasSuperAdmin, changeIsDeletedApi, getAllUsersApi, deleteUserApi, updateRightApi, upLoadFileApi, getFilesList } from "../api/user"
 import { RootState } from "../app/store"
 import { initialRights } from "../constants"
-import { changeLoadStatus, changeReqStatus, Right, saveIsDeletedPlaceInUser, saveRightsInApplicationUser, saveRightsInUserItem, saveSuperUser, saveUser, saveUsers, User } from "../reducers/userSlice"
+import { setFileUploadStatus, setProgress } from "../reducers/ui"
+import { changeLoadStatus, changeReqStatus, Right, saveIsDeletedPlaceInUser, saveRightsInApplicationUser, saveRightsInUserItem, saveSuperUser, saveUser, saveUserItemSignFileInfo, saveUsers, User } from "../reducers/userSlice"
 
 type loginUserResponse = {
   accessToken: string,
@@ -16,6 +17,8 @@ type loginUserResponse = {
     speciality: string,
     role: string,
     rights: Array<Right>,
+    urlSignPath?: string,
+    signFileName?: string,
     isDeletedPlace: boolean
   }
 }
@@ -46,22 +49,35 @@ export function* loginUser(login: { type: 'user/login', payload: { email: string
     }
   }
 }
+function* calculateProgress(loaded: number, total: number) {
+  const progress: number = yield put(setProgress(Math.round((100 * loaded) / total)))
+  console.log('progress', progress)
+  return progress
+}
 /**
  * Регистрация нов пользователя.
  * @param body .
  */
-export function* registerUser(body: { type: 'user/register', payload: { email: string, password: string, name: string, speciality: string, phone: string, role: string } }) {
+export function* registerUser(body: { type: 'user/register', payload: { email: string, password: string, name: string, speciality: string, phone: string, role: string, files?: Array<any> } }) {
   try {
     yield put(changeLoadStatus(true))
-    const response: { user: string } = yield call(registerApi, body.payload)
+    const response: { user: string } = yield call(registerApi, { ...body.payload, files: null })
     if (response) {
-      yield put(changeLoadStatus(false))
-      yield put(changeReqStatus('ok'))
-      const hasSuperUser: boolean = yield select((state: RootState) => state.user.hasSuperUser)
-      if (!hasSuperUser) {
-        yield put(saveSuperUser(true))
+      if (body.payload.files) {
+        const fileUploadResponse: string = yield call(upLoadFileApi, body.payload.files, response.user, (event: any) => {
+          setProgress(Math.round((100 * event.loaded) / event.total));
+        })
+        if (fileUploadResponse) {
+     yield call(getFilesList, response.user)
+          yield put(changeLoadStatus(false))
+          yield put(changeReqStatus('ok'))
+          const hasSuperUser: boolean = yield select((state: RootState) => state.user.hasSuperUser)
+          if (!hasSuperUser) {
+            yield put(saveSuperUser(true))
+          }
+          yield put(getUserByLetter(1, 10, '', '', '', ''))
+        }
       }
-      yield put(getUserByLetter(1, 10, '', '', '', ''))
     }
   } catch (e: any) {
     if (e.response) {
@@ -174,8 +190,8 @@ export function* updateUserRights(updateRight: { type: 'user/updateRights', payl
         [field]: value
       } : entityName)
       yield put(saveRightsInUserItem({ rights: changedRights }))
-      if(applicationUser.id === userId) {
-        yield put(saveRightsInApplicationUser({ rights: changedRights}))
+      if (applicationUser.id === userId) {
+        yield put(saveRightsInApplicationUser({ rights: changedRights }))
       }
     }
   } catch (e: any) {
@@ -192,7 +208,6 @@ export function* updateUserRights(updateRight: { type: 'user/updateRights', payl
 * @param {Object} delUser .
 */
 export function* removeUser(delUser: { type: 'user/deleteone', payload: { id: string } }) {
-
   try {
     const { id } = delUser.payload
     const response: {} = yield call(deleteUserApi, id)
@@ -208,4 +223,25 @@ export function* removeUser(delUser: { type: 'user/deleteone', payload: { id: st
       yield put(changeReqStatus('Неизвестаня ошибка'))
     }
   }
+}
+
+/*обноаление картинки подписини у пользователя *
+* @param {Object} delUser .
+*/
+export function* updateUserSignFile(updateUserSignFile: { type: 'user/signupdate', payload: { id: string, files: Array<File> } }) {
+  try {
+    const { id, files } = updateUserSignFile.payload
+    const response: { urlSignPath: string, signFileName: string } = yield call(upLoadFileApi, files, id, () => { })
+    if (response) {
+      yield put(setFileUploadStatus('success'))
+      yield put(saveUserItemSignFileInfo({ urlSignPath: response.urlSignPath, signFileName: response.signFileName}))
+  }
+  } catch (e: any) {
+  if (e.response) {
+    yield put(changeReqStatus(e.response?.data?.message))
+  }
+  else {
+    yield put(changeReqStatus('Неизвестаня ошибка'))
+  }
+}
 }

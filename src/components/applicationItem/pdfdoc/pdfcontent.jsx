@@ -1,8 +1,7 @@
 import { Document, Page, PDFViewer, Text, StyleSheet, View, Font, Image } from '@react-pdf/renderer'
 import './style.pdfdoc.scss'
 import hopedoc from '../../../hopedoc.png'
-import sign from '../../../sign.jpeg'
-import sell from '../../../sell.jpeg'
+import sell from '../../../sign.jpeg'
 import TimesNewRomanFont from '../../../TimesNewRomanPSMT.ttf'
 import TimesNewRomanBoldFont from '../../../TimesNewRomanPS-BoldMT.ttf'
 
@@ -236,7 +235,7 @@ const styles = StyleSheet.create({
 
 });
 
-function MyDocContent({ applItem, isDeletedPlace, status }) {
+function MyDocContent({ applItem, isDeletedPlace, status, signFile }) {
   let list = []
 
   for (let index = 0; index < 50; index++) {
@@ -375,7 +374,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           {execDate && manager ?
             <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }} wrap={false}>
               <Text style={styles.exeDateText}>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
-              <Image src={sign} style={styles.hdrimg} />
+            { signFile.urlSignPath ? <Image src={signFile.urlSignPath} style={styles.hdrimg} /> : null }
               <Image src={sell} style={styles.hdrimg} />
               <View style={styles.managerAndSpeciality}>
                 {managerSpeciality ? <Text >{managerSpeciality}</Text> : null}

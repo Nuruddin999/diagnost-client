@@ -4,13 +4,17 @@ export interface UiState {
   status: string,
   isModalOpened: boolean,
   isCircular: boolean,
+  fileProgress: number,
+  fileUploadStatus: string
 
 }
 
 const initialState: UiState = {
   status: 'none',
   isModalOpened: false,
-  isCircular: false
+  isCircular: false,
+  fileProgress: 0,
+  fileUploadStatus: 'none',
 };
 
 
@@ -28,10 +32,16 @@ export const uiSlice = createSlice({
     setCircular: (state, action: PayloadAction<boolean>) => {
       state.isCircular = action.payload
     },
+    setProgress: (state, action: PayloadAction<number>) => {
+      state.fileProgress = action.payload
+    },
+    setFileUploadStatus: (state, action: PayloadAction<string>) => {
+      state.fileUploadStatus = action.payload
+    },
   },
 });
 
-export const { setStatus, openModal, setCircular } = uiSlice.actions;
+export const { setStatus, openModal, setCircular, setProgress, setFileUploadStatus } = uiSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
