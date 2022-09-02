@@ -11,7 +11,7 @@ import './style.addmodal.scss'
 import { openModal } from "../../reducers/ui";
 import { Loader } from "../loader/loader";
 import { RootState } from "../../app/store";
-import UsersDropDown from "../userslist copy/usersdropdown";
+import UsersDropDown from "../usersdropdown/usersdropdown";
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 
 
@@ -24,20 +24,24 @@ const AddModal = (): React.ReactElement => {
   const [patientRequest, setPatientRequest] = useState('')
   const [fundName, setFundName] = useState('')
   const [fundRequest, setFundRequest] = useState('')
-  const [manager, setManager] = useState('')
+  const [manager, setManager] = useState({
+    name:'',
+    id: ''
+  })
   const [speciality, setSpeciality] = useState('')
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
-    if (manager && speciality) {
+    if (manager.name && speciality) {
       dispatch(addApplication({
         patientName,
         patientBirthDate: patientBirthDate.toString(),
         patientRequest,
         fundName,
         fundRequest,
-        manager: `${manager}`,
+        manager: `${manager.name}`,
         managerSpeciality: `${speciality}`,
+        managerId: manager.id,
         creationDate: new Date().toString(),
         execDate: '',
       }))
@@ -99,7 +103,7 @@ const AddModal = (): React.ReactElement => {
             <div className="manager-field-icon">
               <div>
               <Typography
-                children={manager ? manager : 'Ответственный'}
+                children={manager.name ? manager.name : 'Ответственный'}
               />
                 <Typography
               children={speciality ? speciality : 'Специальность'}

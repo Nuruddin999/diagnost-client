@@ -11,6 +11,7 @@ export type applicationInitialState = {
   fundName: string,
   manager: string,
   managerSpeciality: string,
+  managerSignUrlPath: string,
   creationDate: string,
   execDate: string,
   consiliumDoctors: Array<consiliumDoctor>,
@@ -45,6 +46,7 @@ const initialState: applicationInitialState = {
   fundName: '',
   manager: '',
   managerSpeciality: '',
+  managerSignUrlPath: '',
   creationDate: '',
   execDate: '',
   anamnesis: '',
@@ -82,6 +84,7 @@ export const applicationItemSlice = createSlice({
       state.execDate = action.payload.execDate
       state.manager = action.payload.manager
       state.managerSpeciality = action.payload.managerSpeciality
+      state.managerSignUrlPath = action.payload.managerSignUrlPath
     },
     saveConsiliumDoctors: (state, action: PayloadAction<consiliumDoctor>) => {
       state.consiliumDoctors = [...state.consiliumDoctors, { name: action.payload.name, speciality: action.payload.speciality }]

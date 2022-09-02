@@ -38,7 +38,7 @@ function MyDoc() {
   }, [bc, status]);
 
   return (
-  <MyDocContent applItem={applItem} isDeletedPlace={isDeletedPlace} status={status} signFile={{signFileName, urlSignPath}}/>
+  <MyDocContent applItem={applItem} isDeletedPlace={isDeletedPlace} status={status}/>
   );
 }
 

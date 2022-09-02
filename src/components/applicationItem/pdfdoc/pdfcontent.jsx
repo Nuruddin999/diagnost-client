@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
 
 });
 
-function MyDocContent({ applItem, isDeletedPlace, status, signFile }) {
+function MyDocContent({ applItem, isDeletedPlace, status}) {
   let list = []
 
   for (let index = 0; index < 50; index++) {
@@ -246,7 +246,7 @@ function MyDocContent({ applItem, isDeletedPlace, status, signFile }) {
     list.push(consdoc)
   }
 
-  const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments, execDate, manager, managerSpeciality } = applItem
+  const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments, execDate, manager, managerSpeciality, managerSignUrlPath } = applItem
   const currentYear = new Date().getFullYear()
   const yearsOld = new Date(patientBirthDate).getFullYear()
   const month = new Date(patientBirthDate).getMonth()
@@ -374,7 +374,7 @@ function MyDocContent({ applItem, isDeletedPlace, status, signFile }) {
           {execDate && manager ?
             <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }} wrap={false}>
               <Text style={styles.exeDateText}>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
-            { signFile.urlSignPath ? <Image src={signFile.urlSignPath} style={styles.hdrimg} /> : null }
+            { managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg} /> : null }
               <Image src={sell} style={styles.hdrimg} />
               <View style={styles.managerAndSpeciality}>
                 {managerSpeciality ? <Text >{managerSpeciality}</Text> : null}

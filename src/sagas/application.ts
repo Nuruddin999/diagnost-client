@@ -16,6 +16,7 @@ type applicationAddResponse = {
   fundRequest: string,
   manager: string,
   managerSpeciality: string,
+  managerId: string,
   creationDate: string,
   execDate: string,
   updatedAt: string,
@@ -42,6 +43,7 @@ type applicationItemFields = {
   anamnesis: string,
   complaint: string,
   patientName: string,
+  managerSignUrlPath: string,
   diagnosticData: string,
   patientBirthDate: string,
   CheckupPlans: Array<{
@@ -66,6 +68,7 @@ export function* addApplication(addApplication: { type: 'application/add', paylo
     yield put(setStatus('pending'))
     const response: getAllApplicationsResponse = yield call(addApplicationApi, addApplication.payload)
     if (response) {
+      yield put(setStatus('success'))
       yield put(getApplication(1, 10, '', '', '', '', ''))
     }
   } catch (e: any) {
