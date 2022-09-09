@@ -2,29 +2,40 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface UiState {
   status: string,
+  userItemStatus:string,
   isModalOpened: boolean,
+  addUserStatus:string,
   isCircular: boolean,
   fileProgress: number,
-  fileUploadStatus: string
+  fileUploadStatus: string,
+  errorMessage: string
 
 }
 
 const initialState: UiState = {
   status: 'none',
+  userItemStatus:'none',
+  addUserStatus:'none',
   isModalOpened: false,
   isCircular: false,
   fileProgress: 0,
   fileUploadStatus: 'none',
+  errorMessage:''
 };
 
 
 export const uiSlice = createSlice({
   name: 'ui',
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     setStatus: (state, action: PayloadAction<string>) => {
       state.status = action.payload
+    },
+    setUserItemStatus: (state, action: PayloadAction<string>) => {
+      state.userItemStatus = action.payload
+    },
+    setAddUserStatus: (state, action: PayloadAction<string>) => {
+      state.addUserStatus = action.payload
     },
     openModal: (state, action: PayloadAction<boolean>) => {
       state.isModalOpened = !state.isModalOpened
@@ -38,14 +49,12 @@ export const uiSlice = createSlice({
     setFileUploadStatus: (state, action: PayloadAction<string>) => {
       state.fileUploadStatus = action.payload
     },
+    setError:(state, action: PayloadAction<string>) => {
+      state.errorMessage = action.payload
+    },
   },
 });
 
-export const { setStatus, openModal, setCircular, setProgress, setFileUploadStatus } = uiSlice.actions;
+export const { setStatus, openModal, setCircular, setProgress, setFileUploadStatus, setError,setUserItemStatus, setAddUserStatus } = uiSlice.actions;
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-// We can also write thunks by hand, which may contain both sync and async logic.
-// Here's an example of conditionally dispatching actions based on current state.
 export default uiSlice.reducer;

@@ -1,9 +1,10 @@
-import { call, put, select } from "redux-saga/effects"
+import { updatePrimaryApi } from './../api/user';
+import { call, put, select, all } from "redux-saga/effects"
 import { getUserByLetter } from "../actions/user"
 import { checkAuth, loginApi, logOut, registerApi, checkHasSuperAdmin, changeIsDeletedApi, getAllUsersApi, deleteUserApi, updateRightApi, upLoadFileApi, getFilesList } from "../api/user"
 import { RootState } from "../app/store"
 import { initialRights } from "../constants"
-import { setFileUploadStatus, setProgress } from "../reducers/ui"
+import { setFileUploadStatus, setProgress, setCircular, setError, setStatus, setAddUserStatus, setUserItemStatus } from "../reducers/ui"
 import { changeLoadStatus, changeReqStatus, Right, saveIsDeletedPlaceInUser, saveRightsInApplicationUser, saveRightsInUserItem, saveSuperUser, saveUser, saveUserItemSignFileInfo, saveUsers, User } from "../reducers/userSlice"
 
 type loginUserResponse = {
@@ -32,21 +33,22 @@ type allUsersResponse = {
  */
 export function* loginUser(login: { type: 'user/login', payload: { email: string, password: string } }) {
   try {
-    yield put(changeLoadStatus(true))
+    yield put(setCircular(true))
     const response: loginUserResponse = yield call(loginApi, login.payload.email, login.payload.password)
     const { accessToken, refreshToken, user } = response
     if (response) {
       localStorage.setItem('dtokenn', accessToken)
       localStorage.setItem('refreshToken', refreshToken)
-      yield put(saveUser({ ...user, rights: user.rights.length > 0 ? user.rights : initialRights, isLoading: false, reqStatus: 'ok', isDeletedPlace: false }))
+      yield all(
+        [put(setCircular(false)),
+        put(saveUser({ ...user, rights: user.rights.length > 0 ? user.rights : initialRights, isLoading: false, reqStatus: 'ok', isDeletedPlace: false })),
+        ])
     }
   } catch (e: any) {
-    if (e.response) {
-      yield put(changeReqStatus(e.response?.data?.message))
-    }
-    else {
-      yield put(changeReqStatus('Неизвестаня ошибка'))
-    }
+    yield all(
+      [put(setStatus('no')),
+      put(setError(e.response ? e.response?.data?.message : 'Произошла ошибка, попробуйте позже')),
+      ])
   }
 }
 function* calculateProgress(loaded: number, total: number) {
@@ -58,34 +60,27 @@ function* calculateProgress(loaded: number, total: number) {
  * Регистрация нов пользователя.
  * @param body .
  */
-export function* registerUser(body: { type: 'user/register', payload: { email: string, password: string, name: string, speciality: string, phone: string, role: string, files?: Array<any> } }) {
+export function* registerUser(body: { type: 'user/register', payload: { email: string, password: string, name: string, speciality: string, phone: string, role: string, files: Array<any> } }) {
   try {
-    yield put(changeLoadStatus(true))
+    yield put(setAddUserStatus('pending'))
     const response: { user: string } = yield call(registerApi, { ...body.payload, files: null })
     if (response) {
-      if (body.payload.files) {
-        const fileUploadResponse: string = yield call(upLoadFileApi, body.payload.files, response.user, (event: any) => {
-          setProgress(Math.round((100 * event.loaded) / event.total));
-        })
-        if (fileUploadResponse) {
-     yield call(getFilesList, response.user)
-          yield put(changeLoadStatus(false))
-          yield put(changeReqStatus('ok'))
-          const hasSuperUser: boolean = yield select((state: RootState) => state.user.hasSuperUser)
-          if (!hasSuperUser) {
-            yield put(saveSuperUser(true))
-          }
-          yield put(getUserByLetter(1, 10, '', '', '', ''))
+      const fileUploadResponse: string = yield call(upLoadFileApi, body.payload.files, response.user)
+      if (fileUploadResponse) {
+        yield call(getFilesList, response.user)
+        yield put(setAddUserStatus('ok'))
+        const hasSuperUser: boolean = yield select((state: RootState) => state.user.hasSuperUser)
+        if (!hasSuperUser) {
+          yield put(saveSuperUser(true))
         }
+        yield put(getUserByLetter(1, 10, '', '', '', ''))
       }
     }
   } catch (e: any) {
-    if (e.response) {
-      yield put(changeReqStatus(e.response?.data?.message))
-    }
-    else {
-      yield put(changeReqStatus('Неизвестаня ошибка'))
-    }
+    yield all(
+      [put(setAddUserStatus('no')),
+      put(setError(e.response ? e.response?.data?.message : 'Произошла ошибка, попробуйте позже')),
+      ])
   }
 
 }
@@ -158,20 +153,18 @@ export function* changeIsDeletedPlace(body: { type: 'user/changeIsDeletedPlaceTy
  */
 export function* fetchUser(getUser: { type: 'user/getByLetter', payload: { page: number, limit: number, email: string, name: string, speciality: string, phone: string } }) {
   try {
+    yield put(setStatus('pending'))
     const { page, limit, email, name, speciality, phone } = getUser.payload
     const response: allUsersResponse = yield call(getAllUsersApi, page, limit, email, name, speciality, phone)
     if (response) {
       const { rows, count } = response
-
-      yield put(saveUsers({ users: rows, count }))
+      yield all([put(setStatus('ok')), put(saveUsers({ users: rows, count }))])
     }
   } catch (e: any) {
-    if (e.response) {
-      yield put(changeReqStatus(e.response?.data?.message))
-    }
-    else {
-      yield put(changeReqStatus('Неизвестаня ошибка'))
-    }
+    yield all(
+      [put(setStatus('no')),
+      put(setError('Произошла ошибка, попробуйте позже')),
+      ])
   }
 }
 /**
@@ -195,12 +188,23 @@ export function* updateUserRights(updateRight: { type: 'user/updateRights', payl
       }
     }
   } catch (e: any) {
-    if (e.response) {
-      yield put(changeReqStatus(e.response?.data?.message))
+    yield put(setError('Произошла ошибка, попробуйте позже'))
+  }
+}
+/**
+ * Сага обновления специальности и телефона пользователя.
+ * @param addApplication
+ */
+ export function* updateUserPrimary(updatePrimary: { type: 'user/updateRights', payload: { email: string, speciality: string, phone: string } }) {
+  try {
+    yield put(setUserItemStatus('pending'))
+    const { email, speciality, phone } = updatePrimary.payload
+    const response: allUsersResponse = yield call(updatePrimaryApi, email, speciality, phone)
+    if (response) {
+      yield put(setUserItemStatus('ok'))
     }
-    else {
-      yield put(changeReqStatus('Неизвестаня ошибка'))
-    }
+  } catch (e: any) {
+    yield put(setUserItemStatus('Произошла ошибка, попробуйте позже'))
   }
 }
 /**
@@ -230,18 +234,13 @@ export function* removeUser(delUser: { type: 'user/deleteone', payload: { id: st
 */
 export function* updateUserSignFile(updateUserSignFile: { type: 'user/signupdate', payload: { id: string, files: Array<File> } }) {
   try {
+    yield put(setFileUploadStatus('pending'))
     const { id, files } = updateUserSignFile.payload
     const response: { urlSignPath: string, signFileName: string } = yield call(upLoadFileApi, files, id, () => { })
     if (response) {
-      yield put(setFileUploadStatus('success'))
-      yield put(saveUserItemSignFileInfo({ urlSignPath: response.urlSignPath, signFileName: response.signFileName}))
-  }
+      yield all([put(setFileUploadStatus('success')), put(saveUserItemSignFileInfo({ urlSignPath: response.urlSignPath, signFileName: response.signFileName }))])
+    }
   } catch (e: any) {
-  if (e.response) {
-    yield put(changeReqStatus(e.response?.data?.message))
+    yield all([put(setFileUploadStatus('error')), put(setError("Произошла ошибка, попробуйте позже"))])
   }
-  else {
-    yield put(changeReqStatus('Неизвестаня ошибка'))
-  }
-}
 }

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Typography, Pagination, TextField } from "@mui/material";
+import { Button, Typography, Pagination, TextField, CircularProgress } from "@mui/material";
 import React, { useEffect, useCallback } from "react";
 import './style.reportlist.scss'
 import { useDispatch, useSelector } from "react-redux";
@@ -12,17 +12,19 @@ import { useHistory } from "react-router-dom";
 import { openModal } from "../../reducers/ui";
 import isObject from "lodash/isObject";
 import { debounce } from "lodash";
-
+import classNames from "classnames";
 import { getUserByLetter } from "../../actions/user";
 import { selectApplicationUserRights } from "../../common/selectors/user";
 import { useUsers } from "../../common/hooks/useUsers";
+import UserItemScreen from "../useritem/userItemScreen";
+import { CommonButton } from "../../common/components/button";
 
 const UsersList = (): React.ReactElement => {
   const dispatch = useDispatch()
   const history = useHistory()
   const { users, user } = useSelector((state: RootState) => state.user)
   const { users: applUserRights } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
-  const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
+  const { isModalOpened, status, errorMessage } = useSelector((state: RootState) => state.ui)
   const count = useSelector((state: RootState) => state.user.count)
   const [page, setPage] = React.useState(1);
   const [name, setUserName] = React.useState('');
@@ -30,6 +32,7 @@ const UsersList = (): React.ReactElement => {
   const [phone, setUserPhone] = React.useState('');
   const [role, setUserRole] = React.useState('');
   const [email, setUserEmail] = React.useState('');
+  const [currentUserId, setCurrentUserId] = React.useState('');
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
@@ -67,62 +70,66 @@ const UsersList = (): React.ReactElement => {
   return <div className='add-appl-container'>
     {isModalOpened && <AddModal />}
     <div className='add-button-wrapper'>
-      {applUserRights?.create && <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
-        <Typography>Новый пользователь</Typography>
-      </Button>}
+      {applUserRights?.create && <CommonButton title='Новый пользователь' onClick={() => dispatch(openModal(true))} />}
     </div>
-    <div className="appl-table">
-      <table>
-        <thead>
-          <tr>
-            {tableData.map(el => (<th>
-              <div>
-                <div>
-                  <span>
-                    {isObject(el) ? el.title : el}
-                  </span>
-                </div>
-                {isObject(el) &&
-                  <TextField
-                    onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
-                    type="text"
-                    size="small"
-                    placeholder="Поиск"
-                  />
-                }
-              </div>
-            </th>))}
-          </tr>
-        </thead>
-        <tbody>
-          {applUserRights?.read && users.length > 0 ? users.map((userItem, index) => user.id !== String(userItem.id) && <tr onClick={() => goToApplItem(userItem.id)}>
-            <td>{index + 1}</td>
-            <td>{userItem.name}</td>
-            <td>{roles[userItem.role as keyof typeof roles]}</td>
-            <td>{userItem.speciality}</td>
-            <td>{userItem.email}</td>
-            <td>{userItem.phone}</td>
-            <td><IconButton disabled={!applUserRights?.delete} className='delete-button' onClick={(e: any) => {
-              e.stopPropagation()
-              userItem.id && deleteAppl(userItem.id)
-            }}>
-              <DeleteOutlineIcon />
-            </IconButton></td>
-          </tr>) : <Typography> Недостаточно прав</Typography>}
-        </tbody>
-      </table>
+    <div>
+      <div className="appl-table">
+        <div>
+          <table>
+            <thead>
+              <tr>
+                {tableData.map(el => (<th>
+                  <div>
+                    <div>
+                      <span>
+                        {isObject(el) ? el.title : el}
+                      </span>
+                    </div>
+                    {isObject(el) &&
+                      <TextField
+                        onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
+                        type="text"
+                        size="small"
+                        placeholder="Поиск"
+                      />
+                    }
+                  </div>
+                </th>))}
+              </tr>
+            </thead>
+            <tbody>
+              {status === 'ok' ? users.map((userItem, index) => user.id !== String(userItem.id) && <tr onClick={() => setCurrentUserId(userItem.id)}>
+                <td>{index + 1}</td>
+                <td>{userItem.name}</td>
+                <td>{roles[userItem.role as keyof typeof roles]}</td>
+                <td>{userItem.speciality}</td>
+                <td>{userItem.email}</td>
+                <td>{userItem.phone}</td>
+                <td><IconButton disabled={!applUserRights?.delete} className='delete-button' onClick={(e: any) => {
+                  e.stopPropagation()
+                  userItem.id && deleteAppl(userItem.id)
+                }}>
+                  <DeleteOutlineIcon />
+                </IconButton></td>
+              </tr>) : <Typography> Недостаточно прав</Typography>}
+            </tbody>
+          </table>
+          {status === 'pending' && <div className='userlist-loader'> <CircularProgress /> </div>}
+          <div className="pagination">
+            {count > 10 && <Pagination
+              count={(count / 10) + 1}
+              variant="outlined"
+              shape="rounded"
+              onChange={handleChange}
+              size='large'
+              color="primary"
+              boundaryCount={10}
+            />}
+          </div>
+        </div>
+      </div>
     </div>
-    <div className="pagination">
-      <Pagination
-        count={(count / 10) + 1}
-        variant="outlined"
-        shape="rounded"
-        onChange={handleChange}
-        size='large'
-        color="primary"
-        boundaryCount={10}
-      />
-    </div>
+    <div className={classNames('user-item-block', currentUserId ? 'user-item-block-open' : 'user-item-block-closed')}><UserItemScreen id={currentUserId} onClose={setCurrentUserId} /></div>
   </div>
 }
 export default UsersList

@@ -10,7 +10,8 @@ export const TYPES = {
   getByLetter: 'user/getByLetter',
   userDel: 'user/deleteone',
   userUpdateRights: 'user/updateRights',
-  userUpdateSignFile:'user/signupdate'
+  userUpdateSignFile:'user/signupdate',
+  userUpdatePrimary:'user/updateprimary'
 }
 export type registeredUser = {
   email: string,
@@ -52,6 +53,13 @@ export const updateRightsAction = createAction(TYPES.userUpdateRights, function 
   return {
     payload: {
       entity, field, value, userId
+    },
+  }
+})
+export const updatePrimaryData = createAction(TYPES.userUpdatePrimary, function prepare(email: string, speciality: string, phone: string) {
+  return {
+    payload: {
+      email, speciality, phone
     },
   }
 })

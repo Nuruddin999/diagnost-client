@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Button, TextField, Select, MenuItem, Typography, FormControl, InputLabel, IconButton } from "@mui/material";
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { Button, TextField, Select, MenuItem, Typography, FormControl, InputLabel } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../../actions/user";
 import { RootState } from "../../../app/store";
-import { changeLoadStatus, changeReqStatus } from "../../../reducers/userSlice";
 import { Loader } from "../../../components/loader/loader";
 import './style.auth.scss'
 import { specialities } from "../../../constants";
-import CircularStatic from "./LoadProgress";
 import { FileUpload } from "../fileupload/fileUpload";
+import { setAddUserStatus, setError} from "../../../reducers/ui";
+import { isEmpty } from "lodash";
+import Specialities from "../specialities/specialities";
 
 export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean }): React.ReactElement => {
   const [email, setEmail] = useState('')
@@ -19,53 +19,63 @@ export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean 
   const [phone, setPhone] = useState('')
   const [role, setRole] = useState('')
   const [files, setFiles] = useState<Array<File>>([])
-  const { isLoading, reqStatus } = useSelector((state: RootState) => state.user)
-  const { fileProgress } = useSelector((state: RootState) => state.ui)
+  const { addUserStatus, errorMessage } = useSelector((state: RootState) => state.ui)
   const dispatch = useDispatch()
+  const errorDispatching =(error: string )=>{
+    dispatch(setAddUserStatus('no'))
+    dispatch(setError(error))
+  }
   const onSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
+    if (!speciality) {
+      errorDispatching('Введите специальность')
+      return
+    }
+    else if (isEmpty(files)) {
+      errorDispatching('Загрузите фото подписи')
+      return
+    }
     dispatch(registerUser({ email, password, name, speciality, phone, role: notHaveSuperUser ? 'superadmin' : role, files }))
   }
   /**
    * Действия после успешной регистрации.
    * @param {boolean} isSuccess Является ли запрос на регистрацию успешным.
    */
-  const fillRegistrationForm = (isSuccess: boolean) => {
+  const fillRegistrationForm = () => {
     setEmail('')
     setPassword('')
     setName('')
     setSpeciality('')
     setPhone('')
     setRole('')
-    dispatch(changeReqStatus('no'))
-    dispatch(changeLoadStatus(false))
+    dispatch(setAddUserStatus('none'))
   }
   const renderRegisterButton = () => {
-    if (reqStatus === 'ok') {
+    if (addUserStatus === 'ok') {
       return <Typography className='success-reg' align='center'>
         Пользователь успешно зарегистрирован
       </Typography>
     }
-    else if (reqStatus === 'no') {
-      return <Button className='login-button' fullWidth variant='contained' disableElevation type='submit'>
-        <Loader title='Зарегистрировать' isLoading={isLoading} />
-      </Button>
+    else if (addUserStatus === 'no') {
+      return <Typography className='error-reg' align='center'>
+      {errorMessage}
+    </Typography>
     }
     else {
-      return <Typography className='error-reg' align='center'>
-        {reqStatus}
-      </Typography>
+      return <Button className='login-button' fullWidth variant='contained' disableElevation type='submit'>
+      <Loader title='Зарегистрировать' isLoading={addUserStatus === 'pending'} />
+    </Button>
     }
 
   }
   useEffect(() => {
-    if (reqStatus === 'ok') {
-      setTimeout(() => fillRegistrationForm(true), 1500)
+    if (addUserStatus === 'ok') {
+      setTimeout(() => fillRegistrationForm(), 1500)
     }
-    else if (reqStatus !== 'no') {
-      setTimeout(() => fillRegistrationForm(false), 2000)
+    else if (addUserStatus === 'no') {
+      setTimeout(() => dispatch(setAddUserStatus('')), 2000)
     }
-  }, [reqStatus])
+  }, [addUserStatus])
   return <div className={'registration-main'}>
     <div className={'auth-wrapper'}>
       {
@@ -106,18 +116,7 @@ export const Registration = ({ notHaveSuperUser }: { notHaveSuperUser?: boolean 
               placeholder='ФИО'
               margin='normal'
               onChange={(event) => setName(event?.target.value)} />
-            <FormControl variant="standard" fullWidth>
-              <InputLabel id="demo-simple-select-standard-label">Специальность</InputLabel>
-              <Select
-                labelId="demo-simple-select-standard-label"
-                id="demo-simple-select-standard"
-                value={speciality}
-                onChange={(e) => setSpeciality(e.target.value)}
-                label="Специальность"
-              >
-                {specialities.map(speciality => <MenuItem value={speciality}>{speciality}</MenuItem>)}
-              </Select>
-            </FormControl>
+      <Specialities  speciality={speciality} setSpeciality={setSpeciality}/>
             <TextField
               value={phone}
               type='text'

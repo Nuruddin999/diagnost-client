@@ -61,8 +61,14 @@ export const updateRightApi = async (entity: string, field: string, value: boole
   }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
   return response.data
 }
+export const updatePrimaryApi = async (email: string, speciality: string, phone: string) => {
+  const response = await diagnostApi.post('/usrupd', {
+    email, speciality, phone
+  }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
+  return response.data
+}
 
-export const upLoadFileApi = async (files: Array<any>, id: string, onUploadProgress: any) => {
+export const upLoadFileApi = async (files: Array<any>, id: string, onUploadProgress?: any) => {
   let formData = new FormData();
   formData.append("file", files[0]);
   formData.append("userid", id);

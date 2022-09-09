@@ -1,5 +1,5 @@
-import { call, put } from "redux-saga/effects"
-import { changeReqStatus } from "../../reducers/userSlice"
+import { all, call, put } from "redux-saga/effects"
+import { setError, setUserItemStatus } from "../../reducers/ui"
 import { getListItemById } from "../api/api"
 
 /**
@@ -8,18 +8,14 @@ import { getListItemById } from "../api/api"
  */
  export function* fetchListItem(getApplication: { type: 'listitem/getlistitem', payload: { id: string, itemurl:string, callback: any } }): any {
     try {
+      yield put(setUserItemStatus('pending'))
       const { id, callback, itemurl } = getApplication.payload
       const response = yield call(getListItemById, id, itemurl)
       if (response) {
-        yield put(callback({ ...response }))
+        yield all([yield put(setUserItemStatus('ok')),put(callback({ ...response }))])
       }
     } catch (e: any) {
-      if (e.response) {
-        yield put(changeReqStatus(e.response?.data?.message))
-      }
-      else {
-        yield put(changeReqStatus('Неизвестаня ошибка'))
-      }
+      yield all([yield put(setUserItemStatus('no')),put(setError('Произошла ошибка, попробуйте позже'))])
     }
   }
 

@@ -7,36 +7,25 @@ import { changeLoadStatus, changeReqStatus } from "../../reducers/userSlice";
 import { Loader } from "../loader/loader";
 import '../../common/components/registration/style.auth.scss'
 import { login } from "../../actions/user";
+import { setError } from "../../reducers/ui";
 
 export const Auth = (): React.ReactElement => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { isLoading, user, reqStatus } = useSelector((state: RootState) => state.user)
+  const { user } = useSelector((state: RootState) => state.user)
+  const { isCircular, errorMessage } = useSelector((state: RootState) => state.ui)
   const dispatch = useDispatch()
   const onSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     dispatch(login(email, password))
   }
-  /**
-   * Действия после успешной регистрации.
-   * @param {boolean} isSuccess Является ли запрос на регистрацию успешным.
-   */
-  const fillRegistrationForm = (isSuccess: boolean) => {
-    if(isSuccess) {
-      setEmail('')
-      setPassword('')
-    }
-    dispatch(changeReqStatus('no'))
-    dispatch(changeLoadStatus(false))
-  }
+
   useEffect(() => {
-    if (reqStatus === 'ok') {
-      setTimeout(() => fillRegistrationForm(true), 1500)
+    if (errorMessage) {
+      setTimeout(() => dispatch(setError('')), 1500)
     }
-    else if (reqStatus !== 'no') {
-      setTimeout(() => fillRegistrationForm(false), 2000)
-    }
-  }, [reqStatus])
+  }, [errorMessage])
+  
   return <div className={'auth-wrapper'}>
     <div className={"auth-container"}>
       <form onSubmit={(event) => onSubmit(event)} data-testid='loginform'>
@@ -58,11 +47,11 @@ export const Auth = (): React.ReactElement => {
           margin='normal'
           onChange={(event) => setPassword(event?.target.value)} />
 
-        { reqStatus !== 'ok' && reqStatus !== 'no' && <Typography className='error-reg' align='center'>
-          {reqStatus}
+        { errorMessage && <Typography className='error-reg' align='center'>
+          {errorMessage}
         </Typography>}
         <Button className='login-button' fullWidth variant='contained' disableElevation type='submit'>
-          <Loader title='Войти' isLoading={isLoading} />
+          <Loader title='Войти' isLoading={isCircular} />
         </Button>
       </form>
       {user.role !== '' && <Redirect to='/' />}

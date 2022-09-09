@@ -92,7 +92,7 @@ const Dashboard = (): React.ReactElement => {
             {rights.processedRights.users?.create ? <Registration /> : <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
           </Route>
           <Route path='/main/users'>
-            {rights.isUsersOneRight ? <UsersList /> : <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
+            {rights.processedRights.users?.read  ? <UsersList /> : <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
           </Route>
           <Route path='/main/aboutme'>
             <UserItem isProfile/>

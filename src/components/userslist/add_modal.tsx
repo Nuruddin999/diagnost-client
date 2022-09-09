@@ -8,7 +8,6 @@ import { RootState } from "../../app/store";
 import { Registration } from "../../common/components/registration/registration";
 
 const AddModal = (): React.ReactElement => {
-  const status = useSelector((state: RootState) => state.ui.status)
   const dispatch = useDispatch()
   return <div className='add-modal-container'>
     <div className="add-form-wrapper">

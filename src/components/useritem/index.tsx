@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Checkbox, TextField, Typography, Button } from "@mui/material";
+import { Checkbox, TextField, Typography, Button, CircularProgress } from "@mui/material";
 import './style.applicationitem.scss'
 import { RootState } from "../../app/store";
 import { getListItemAction } from "../../common/actions/common";
@@ -11,14 +11,13 @@ import { updateRightsAction, userSignFileUpdate } from "../../actions/user";
 import { selectApplicationUserRights, selectsUserItemRights } from "../../common/selectors/user";
 import { FileUpload } from "../../common/components/fileupload/fileUpload";
 import { isEmpty } from "lodash";
-import { setFileUploadStatus } from "../../reducers/ui";
+import { setError, setFileUploadStatus } from "../../reducers/ui";
 type userItem = {
   isProfile?: boolean
 }
 const UserItem = ({ isProfile }: userItem): React.ReactElement => {
   const { id } = useParams<{ id: string }>()
-  const status = useSelector((state: RootState) => state.applicationItem.status)
-  const fileUploadStatus = useSelector((state: RootState) => state.ui.fileUploadStatus)
+  const {fileUploadStatus, status, errorMessage} = useSelector((state: RootState) => state.ui)
   const { name, email, speciality, phone, role, urlSignPath, signFileName } = useSelector((state: RootState) => state.user.useritem)
   const { id: userApplId } = useSelector((state: RootState) => state.user.user)
   const idUrl = id ? id : userApplId
@@ -37,13 +36,19 @@ const UserItem = ({ isProfile }: userItem): React.ReactElement => {
     dispatch(getListItemAction(idUrl, 'users', saveUserItem))
   }, [])
   useEffect(() => {
-    if (fileUploadStatus === 'success') {
+    if (fileUploadStatus === 'success' || 'error') {
       setFiles([])
-      setTimeout(() => dispatch(setFileUploadStatus('no')), 500)
+      setTimeout(() => dispatch(setFileUploadStatus('no')), 1500)
     }
   }, [fileUploadStatus])
+  useEffect(() => {
+    if (errorMessage) {
+      setTimeout(() => dispatch(setError('')), 1500)
+    }
+  }, [errorMessage])
 
-  return <div className="user-item">
+  return  status === 'pending' ? <div className="user-item-loader"><CircularProgress /></div> : <div  className="user-item-wrapper">
+{ status === 'ok' ? <div className="user-item">
     <div className='user-info-block'>
       <div className="user-info">
         <Typography>
@@ -84,6 +89,8 @@ const UserItem = ({ isProfile }: userItem): React.ReactElement => {
     {users?.update && <div className={'upload-section'}>
       <FileUpload files={files} setFiles={setFiles} />
       <Button onClick={updateFile} disabled={isEmpty(files)}>Загрузить</Button>
+      {fileUploadStatus === 'pending' && <CircularProgress size={20} />}
+      {fileUploadStatus === 'error' &&  <Typography>{errorMessage}</Typography>}
     </div>}
     <Typography variant='h6' gutterBottom className='rights-title'>
       Права
@@ -112,7 +119,12 @@ const UserItem = ({ isProfile }: userItem): React.ReactElement => {
         <Checkbox checked={right.update} disabled={isProfile || right.entity === 'checkupPlanPlace' || !users?.update} onChange={(e) => handleChange(right.entity, 'update', e.target.checked)} />
         <Checkbox checked={right.delete} disabled={isProfile || !users?.update} onChange={(e) => handleChange(right.entity, 'delete', e.target.checked)} />
       </>)}
+      {errorMessage &&  <Typography color='secondary'>
+        {errorMessage}
+      </Typography> }
     </div>
+  </div> : <div className="user-item-loader"><Typography>{errorMessage}</Typography></div> }
+
   </div>
 }
 export default UserItem
