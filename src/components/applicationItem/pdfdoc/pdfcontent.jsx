@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
     fontSize: '11px',
     margin: '10px auto',
     paddingBottom: '10px',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    alignItems:'center'
   },
   hdrimg: {
     width: '150px'

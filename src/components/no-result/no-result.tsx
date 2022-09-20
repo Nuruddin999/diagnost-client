@@ -1,5 +1,5 @@
-import { Button, Typography, Pagination, Stack } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import { Typography} from "@mui/material";
+import React from "react";
 import './style.noresult.scss'
 import DoNotDisturbAltIcon from '@mui/icons-material/DoNotDisturbAlt';
 

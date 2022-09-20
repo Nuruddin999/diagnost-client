@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { RootState } from "../../app/store";
-import { changeLoadStatus, changeReqStatus } from "../../reducers/userSlice";
 import { Loader } from "../loader/loader";
 import '../../common/components/registration/style.auth.scss'
 import { login } from "../../actions/user";
@@ -25,7 +24,7 @@ export const Auth = (): React.ReactElement => {
       setTimeout(() => dispatch(setError('')), 1500)
     }
   }, [errorMessage])
-  
+
   return <div className={'auth-wrapper'}>
     <div className={"auth-container"}>
       <form onSubmit={(event) => onSubmit(event)} data-testid='loginform'>
@@ -54,7 +53,7 @@ export const Auth = (): React.ReactElement => {
           <Loader title='Войти' isLoading={isCircular} />
         </Button>
       </form>
-      {user.role !== '' && <Redirect to='/' />}
+      {user.role !== '' && <Redirect to='/main/table' />}
     </div>
   </div>
 }

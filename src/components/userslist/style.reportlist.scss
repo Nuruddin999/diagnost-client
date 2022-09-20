@@ -1,5 +1,5 @@
 .add-appl-container {
-  height: 100%;
+  height: calc(100% - 40px);
   width: 100%;
   .add-button-wrapper {
     display: flex;

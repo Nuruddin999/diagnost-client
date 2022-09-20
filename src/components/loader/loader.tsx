@@ -1,12 +1,11 @@
-import { Button, TextField } from "@mui/material";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { login } from "../../actions/user";
+import React from "react";
 import './style.loader.scss'
+
 type LoaderProps = {
     title: string,
     isLoading: boolean
 }
+
 export const Loader = (props: LoaderProps): React.ReactElement => {
 
     return <div data-testid={props.isLoading ? 'loading' : 'loaded'} className={props.isLoading ? 'btn-loader-container' : 'btn-no-loader'}>

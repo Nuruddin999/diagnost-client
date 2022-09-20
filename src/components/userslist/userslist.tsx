@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Typography, Pagination, TextField, CircularProgress } from "@mui/material";
-import React, { useEffect, useCallback } from "react";
+import {  Pagination, TextField, CircularProgress } from "@mui/material";
+import React, { useCallback } from "react";
 import './style.reportlist.scss'
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser } from "../../actions/user";
@@ -8,23 +8,21 @@ import { RootState } from "../../app/store";
 import AddModal from "./add_modal";
 import { IconButton } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { useHistory } from "react-router-dom";
 import { openModal } from "../../reducers/ui";
 import isObject from "lodash/isObject";
 import { debounce } from "lodash";
 import classNames from "classnames";
-import { getUserByLetter } from "../../actions/user";
 import { selectApplicationUserRights } from "../../common/selectors/user";
 import { useUsers } from "../../common/hooks/useUsers";
 import UserItemScreen from "../useritem/userItemScreen";
 import { CommonButton } from "../../common/components/button";
+import BlockIcon from '@mui/icons-material/Block';
 
 const UsersList = (): React.ReactElement => {
   const dispatch = useDispatch()
-  const history = useHistory()
   const { users, user } = useSelector((state: RootState) => state.user)
   const { users: applUserRights } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
-  const { isModalOpened, status, errorMessage } = useSelector((state: RootState) => state.ui)
+  const { isModalOpened, status } = useSelector((state: RootState) => state.ui)
   const count = useSelector((state: RootState) => state.user.count)
   const [page, setPage] = React.useState(1);
   const [name, setUserName] = React.useState('');
@@ -60,13 +58,7 @@ const UsersList = (): React.ReactElement => {
 
   useUsers(page, email, name, speciality, phone)
 
-  /**
-   * Переход на отдельное заключение
-   * @param {number} id Id заключения.
-   */
-  const goToApplItem = (id: string | undefined) => {
-    history.push(`user/${id}`)
-  }
+
   return <div className='add-appl-container'>
     {isModalOpened && <AddModal />}
     <div className='add-button-wrapper'>
@@ -78,7 +70,7 @@ const UsersList = (): React.ReactElement => {
           <table>
             <thead>
               <tr>
-                {tableData.map(el => (<th>
+                {tableData.map(el => (<th key={isObject(el) ? el.title : el}>
                   <div>
                     <div>
                       <span>
@@ -98,7 +90,7 @@ const UsersList = (): React.ReactElement => {
               </tr>
             </thead>
             <tbody>
-              {status === 'ok' ? users.map((userItem, index) => user.id !== String(userItem.id) && <tr onClick={() => setCurrentUserId(userItem.id)}>
+              {status === 'ok' && users.length > 1 && users.map((userItem, index) => user.id !== String(userItem.id) && <tr   key={userItem.name}  onClick={() => setCurrentUserId(userItem.id)}>
                 <td>{index + 1}</td>
                 <td>{userItem.name}</td>
                 <td>{roles[userItem.role as keyof typeof roles]}</td>
@@ -111,10 +103,11 @@ const UsersList = (): React.ReactElement => {
                 }}>
                   <DeleteOutlineIcon />
                 </IconButton></td>
-              </tr>) : <Typography> Недостаточно прав</Typography>}
+              </tr>)}
             </tbody>
           </table>
           {status === 'pending' && <div className='userlist-loader'> <CircularProgress /> </div>}
+          {status === 'ok' && users.length === 1 && <div><BlockIcon sx={{fontSize:'40px',marginTop:'20px'}} /> </div>}
           <div className="pagination">
             {count > 10 && <Pagination
               count={(count / 10) + 1}

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Typography, Pagination, TextField } from "@mui/material";
+import { Button, Typography, Pagination, TextField, CircularProgress } from "@mui/material";
 import React, { useEffect, useCallback } from "react";
 import './style.reportlist.scss'
 import { useDispatch, useSelector } from "react-redux";
@@ -9,16 +9,17 @@ import AddModal from "./add_modal";
 import { IconButton } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useHistory } from "react-router-dom";
-import { openModal } from "../../reducers/ui";
+import { openModal, setStatus } from "../../reducers/ui";
 import isObject from "lodash/isObject";
-import { debounce } from "lodash";
+import { debounce, isEmpty } from "lodash";
 import { selectApplicationUserRights } from "../../common/selectors/user";
+import BlockIcon from '@mui/icons-material/Block';
 
 const ReportList = (): React.ReactElement => {
   const dispatch = useDispatch()
   const history = useHistory()
   const applications = useSelector((state: RootState) => state.application.applications)
-  const isModalOpened = useSelector((state: RootState) => state.ui.isModalOpened)
+  const { isModalOpened, status, errorMessage } = useSelector((state: RootState) => state.ui)
   const count = useSelector((state: RootState) => state.application.count)
   const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
   const [page, setPage] = React.useState(1);
@@ -55,6 +56,12 @@ const ReportList = (): React.ReactElement => {
     dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
   }, [manager, patientName, patientRequest, fundName, fundRequest])
 
+  useEffect(() => {
+    if(status === 'no') {
+      setTimeout(()=> dispatch(setStatus('')),1500)
+    }
+  }, [status])
+
   /**
    * Переход на отдельное заключение
    * @param {number} id Id заключения.
@@ -64,15 +71,16 @@ const ReportList = (): React.ReactElement => {
   }
   return <div className='add-appl-container'>
     {isModalOpened && <AddModal />}
-     <div className='add-button-wrapper'>
-     {rights.processedRights.applications?.create &&  <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
-        <Typography>Новое задание</Typography>
-      </Button> }
+    <div className='add-button-wrapper'>
+      {rights.processedRights.applications?.create && <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
+        <Typography>Новое заключение</Typography>
+      </Button>}
     </div>
     <div className="appl-table">
-      <table>
+    <table>
+      <thead>
         <tr>
-          {tableData.map(el => (el !== 'Удалить' || rights.processedRights.applications?.delete) && (<th>
+          {tableData.map(el => (el !== 'Удалить' || rights.processedRights.applications?.delete) && (<th key={isObject(el) ? el.title : el}>
             <div>
               <span>
                 {isObject(el) ? el.title : el}
@@ -88,8 +96,9 @@ const ReportList = (): React.ReactElement => {
             </div>
           </th>))}
         </tr>
+        </thead>
         <tbody>
-          {applications.length > 0 && applications.map((appl, index) => <tr onClick={() => goToApplItem(appl.id)}>
+          {status === 'ok' && applications.length > 0 && applications.map((appl, index) => <tr onClick={() => goToApplItem(appl.id)} key={appl.patientName}>
             <td>{index + 1}</td>
             <td>{appl.patientName}</td>
             <td>{new Date(appl.patientBirthDate).toLocaleString()}</td>
@@ -109,7 +118,10 @@ const ReportList = (): React.ReactElement => {
         </tbody>
       </table>
     </div>
-    <div className="pagination">
+    {status === 'ok' && isEmpty(applications) &&  <div><BlockIcon sx={{fontSize:'40px',marginTop:'20px'}} /> </div>}
+    {status === 'pending' && <div><CircularProgress /></div>}
+    {status === 'no' && <Typography sx={{color:'red'}}>{errorMessage}</Typography>}
+   { count>10 && <div className="pagination">
       <Pagination
         count={(count / 10) + 1}
         variant="outlined"
@@ -119,7 +131,7 @@ const ReportList = (): React.ReactElement => {
         color="primary"
         boundaryCount={10}
       />
-    </div>
+    </div>}
   </div>
 
 }

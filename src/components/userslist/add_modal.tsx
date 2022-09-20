@@ -1,10 +1,9 @@
 import React from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import './style.reportlist.scss'
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import './style.addmodal.scss'
 import { openModal } from "../../reducers/ui";
-import { RootState } from "../../app/store";
 import { Registration } from "../../common/components/registration/registration";
 
 const AddModal = (): React.ReactElement => {

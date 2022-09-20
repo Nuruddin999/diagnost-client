@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
-import { StyleSheet, Font } from '@react-pdf/renderer'
+import { Font } from '@react-pdf/renderer'
 import './style.pdfdoc.scss'
 import { useParams } from "react-router-dom";
 import MyDocContent from "./pdfcontent";
@@ -19,7 +19,7 @@ Font.register({
 function MyDoc() {
   const { id } = useParams<{ id: string }>()
   const applItem = useSelector((state: RootState) => state.applicationItem)
-  const { isDeletedPlace, signFileName, urlSignPath } = useSelector((state: RootState) => state.user.user)
+  const { isDeletedPlace } = useSelector((state: RootState) => state.user.user)
   const [status, setStatus] = useState(isDeletedPlace)
   const bc = new BroadcastChannel('pdf_channel');
   const dispatch = useDispatch()

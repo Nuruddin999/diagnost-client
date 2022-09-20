@@ -16,7 +16,7 @@ const Specialities = ({speciality, setSpeciality}: SpecialitiesProps): React.Rea
                   onChange={(e) => setSpeciality(e.target.value)}
                   label="Специальность"
                >
-                  {specialities.map(speciality => <MenuItem value={speciality}>{speciality}</MenuItem>)}
+                  {specialities.map(speciality => <MenuItem key={speciality} value={speciality}>{speciality}</MenuItem>)}
                </Select>
             </FormControl>
 

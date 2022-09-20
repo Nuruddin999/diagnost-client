@@ -20,7 +20,12 @@ const sagaMiddleware = createSagaMiddleware()
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(sagaMiddleware),
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore these action types
+        ignoredActions: ['listitem/getlistitem'],
+      },
+    }).concat(sagaMiddleware),
 });
 
 sagaMiddleware.run(runSagas)

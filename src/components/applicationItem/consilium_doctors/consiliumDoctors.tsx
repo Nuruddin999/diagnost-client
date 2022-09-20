@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
-import { FormControl, IconButton, InputLabel, TextField, Typography, Select, MenuItem } from "@mui/material";
+import { IconButton, TextField, Typography} from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { changeConsiliumDoctors, saveConsiliumDoctors, deleteConsiliumDoctors } from "../../../reducers/applicationItemSlice";
+import {  saveConsiliumDoctors, deleteConsiliumDoctors } from "../../../reducers/applicationItemSlice";
 import './style.consiliumdoctors.scss'
-import { specialities } from "../../../constants";
 import NoResult from "../../no-result/no-result";
 import { selectApplicationUserRights } from "../../../common/selectors/user";
 import Specialities from "../../../common/components/specialities/specialities";
@@ -50,7 +49,7 @@ const ConsiliumDoctorsForm = (): React.ReactElement => {
         </tr>
       </thead>
       <tbody>
-        {consiliumDoctorsProp.length > 0 && consiliumDoctorsProp.map((consDoctor, index) => <tr>
+        {consiliumDoctorsProp.length > 0 && consiliumDoctorsProp.map((consDoctor, index) => <tr key={consDoctor.name}>
           <td>{index + 1}</td>
           <td>    <TextField
             value={consDoctor.name}
@@ -58,7 +57,6 @@ const ConsiliumDoctorsForm = (): React.ReactElement => {
             size='small'
             fullWidth
             placeholder='ФИО'
-            onChange={(e) => applications?.update && dispatch(changeConsiliumDoctors({ index, name: e.target.value, speciality: consDoctor.speciality }))}
           /></td>
           <td>    <TextField
             value={consDoctor.speciality}
@@ -66,7 +64,6 @@ const ConsiliumDoctorsForm = (): React.ReactElement => {
             size='small'
             fullWidth
             placeholder='специальность'
-            onChange={(e) => applications?.update && dispatch(changeConsiliumDoctors({ index, name: consDoctor.name, speciality: e.target.value }))}
           /></td>
           <td><IconButton disabled={!applications?.update} className='delete-button' onClick={() => deleteDoctor(index)}>
             <DeleteOutlineIcon />

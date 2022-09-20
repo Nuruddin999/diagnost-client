@@ -4,7 +4,7 @@ import { Checkbox, TextField, Typography, Button, CircularProgress } from "@mui/
 import './style.applicationitem.scss'
 import { RootState } from "../../app/store";
 import { getListItemAction } from "../../common/actions/common";
-import { Right, saveEmail, savePhone, saveUserItem, saveUserItemSpeciality } from "../../reducers/userSlice";
+import { Right, savePhone, saveUserItem, saveUserItemSpeciality } from "../../reducers/userSlice";
 import { entitiesForRights } from "../../constants";
 import { updatePrimaryData, updateRightsAction, userSignFileUpdate } from "../../actions/user";
 import { selectApplicationUserRights, selectsUserItemRights } from "../../common/selectors/user";
@@ -120,7 +120,7 @@ const UserItemScreen = ({ isProfile, id, onClose }: userItem): React.ReactElemen
         <Typography>
           Удаление
         </Typography>
-        {rights?.map((right) => <>
+        {rights?.map((right) => <React.Fragment  key={right.entity}>
           <Typography align='left'>
             {entitiesForRights[right.entity as keyof typeof entitiesForRights]}
           </Typography>
@@ -128,7 +128,7 @@ const UserItemScreen = ({ isProfile, id, onClose }: userItem): React.ReactElemen
           <Checkbox checked={right.read} disabled={isProfile || right.entity === 'checkupPlanPlace' || !users?.update} onChange={(e) => handleChange(right.entity, 'read', e.target.checked)} />
           <Checkbox checked={right.update} disabled={isProfile || right.entity === 'checkupPlanPlace' || !users?.update} onChange={(e) => handleChange(right.entity, 'update', e.target.checked)} />
           <Checkbox checked={right.delete} disabled={isProfile || !users?.update} onChange={(e) => handleChange(right.entity, 'delete', e.target.checked)} />
-        </>)}
+        </React.Fragment >)}
         {errorMessage && <Typography color='secondary'>
           {errorMessage}
         </Typography>}

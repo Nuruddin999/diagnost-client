@@ -1,12 +1,12 @@
 import { getListItemById } from './../common/api/api';
 import { deleteOneApplicationApi, getApplicationApi, updateOneApplicationApi } from './../api/application';
 import { applicationForAdd, getApplication } from './../actions/application';
-import { call,  put, select } from "redux-saga/effects"
+import { call,  put, select, all } from "redux-saga/effects"
 import { addApplicationApi } from '../api/application';
 import { saveApplicationsList } from '../reducers/applicationSlice';
 import { applicationInitialState, saveApplicationItem, successUpdate } from '../reducers/applicationItemSlice';
 import { RootState } from '../app/store';
-import { setCircular, setStatus } from '../reducers/ui';
+import { setCircular, setError, setStatus } from '../reducers/ui';
 type applicationAddResponse = {
   id: number,
   patientName: string,
@@ -84,19 +84,15 @@ export function* addApplication(addApplication: { type: 'application/add', paylo
  */
 export function* fetchApplication(getApplication: { type: 'application/get', payload: { page: number, limit: number, manager: string, patientName: string, patientRequest: string, fundName: string, fundRequest: string } }) {
   try {
-    //  yield put(changeLoadStatus(true))
+    yield put(setStatus('pending'))
     const { page, limit, patientName, patientRequest, fundName, fundRequest, manager } = getApplication.payload
     const response: getAllApplicationsResponse = yield call(getApplicationApi, page, limit, manager, patientName, patientRequest, fundName, fundRequest)
     if (response) {
       const { rows, count } = response
-
-      yield put(saveApplicationsList({ applications: rows, count }))
+      yield all([put(setStatus('ok')),put(saveApplicationsList({ applications: rows, count }))])
     }
   } catch (e: any) {
-    if (e.response) {
-    }
-    else {
-    }
+    yield all([put(setStatus('no')),put(setError('Произошлав ошибка, повторите попозже'))])
   }
 }
 /**

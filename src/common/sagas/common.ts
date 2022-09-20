@@ -1,3 +1,4 @@
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit"
 import { all, call, put } from "redux-saga/effects"
 import { setError, setUserItemStatus } from "../../reducers/ui"
 import { getListItemById } from "../api/api"
@@ -6,7 +7,7 @@ import { getListItemById } from "../api/api"
  * Получение заключения по Id.
  * @param {Object} getApplication .
  */
- export function* fetchListItem(getApplication: { type: 'listitem/getlistitem', payload: { id: string, itemurl:string, callback: any } }): any {
+ export function* fetchListItem(getApplication: { type: 'listitem/getlistitem', payload: { id: string, itemurl:string, callback: ActionCreatorWithPayload<any,string> } }): any {
     try {
       yield put(setUserItemStatus('pending'))
       const { id, callback, itemurl } = getApplication.payload

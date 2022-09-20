@@ -17,7 +17,7 @@ function App() {
         {/* <Auth /> */}
         <Switch>
           <Route exact path="/">
-            <Redirect to='/main' />
+            <Redirect to='/main/table' />
           </Route>
           <Route path="/auth">
             <Auth />

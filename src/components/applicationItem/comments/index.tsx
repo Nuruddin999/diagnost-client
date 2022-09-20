@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TextField, Typography, IconButton } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import { RootState } from "../../../app/store";
 import './style.comments.scss'
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { changeComment,  saveComment } from "../../../reducers/applicationItemSlice";
+import { changeComment } from "../../../reducers/applicationItemSlice";
 import { selectApplicationUserRights } from "../../../common/selectors/user";
+
 
 /**
  * Компонент пояснений.
@@ -15,13 +15,11 @@ const Comments = (): React.ReactElement => {
   const comments = useSelector((state: RootState) => state.applicationItem.comments)
   const { processedRights } = useSelector((state: RootState) => selectApplicationUserRights(state))
   const dispatch = useDispatch()
-  /**
-   * Сохраняем пояснение в стэйт
-   */
+
   return <>
     <h4>Пояснения:</h4>
     <div className="comments-section">
-      {comments.map((commentEl, index) => <div className='comments-section-wrapper'>
+      {comments.map((commentEl, index) => <div className='comments-section-wrapper' key={index + 1}>
         <Typography>{index + 1}</Typography>
         <TextField
           fullWidth

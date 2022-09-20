@@ -39,7 +39,7 @@ export type applicationInitialState = {
   status?: string
 }
 
-const initialState: applicationInitialState = {
+export const initialState: applicationInitialState = {
   id: 0,
   name: '',
   patientRequest: '',
