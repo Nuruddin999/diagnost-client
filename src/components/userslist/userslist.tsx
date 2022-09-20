@@ -90,7 +90,7 @@ const UsersList = (): React.ReactElement => {
               </tr>
             </thead>
             <tbody>
-              {status === 'ok' && isEmpty(users.filter(el=>el.id !=='2')) && users.filter(el=>el.id !=='2').map((userItem, index) => user.id !== String(userItem.id) && <tr   key={userItem.name}  onClick={() => setCurrentUserId(userItem.id)}>
+              {status === 'ok' && !isEmpty(users.filter(el=>el.id !=='2')) && users.filter(el=>el.id !=='2').map((userItem, index) => user.id !== String(userItem.id) && <tr   key={userItem.name}  onClick={() => setCurrentUserId(userItem.id)}>
                 <td>{index + 1}</td>
                 <td>{userItem.name}</td>
                 <td>{roles[userItem.role as keyof typeof roles]}</td>
@@ -107,7 +107,7 @@ const UsersList = (): React.ReactElement => {
             </tbody>
           </table>
           {status === 'pending' && <div className='userlist-loader'> <CircularProgress /> </div>}
-          {status === 'ok' && users.length === 1 && <div><BlockIcon sx={{fontSize:'40px',marginTop:'20px'}} /> </div>}
+          {status === 'ok' && isEmpty(users.filter(el=>el.id !=='2')) && <div><BlockIcon sx={{fontSize:'40px',marginTop:'20px'}} /> </div>}
           <div className="pagination">
             {count > 10 && <Pagination
               count={(count / 10) + 1}
