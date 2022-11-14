@@ -135,8 +135,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 12,
     width: '100%',
-    textAlign: 'left',
-    flexWrap: 'wrap'
+    textAlign: 'justify'
   },
   complaintTitleAnamnesis: {
     width: '100%',
@@ -172,20 +171,24 @@ const styles = StyleSheet.create({
   },
   probableDiagnosis: {
     ...(probDiagns),
-    borderBottom: '1px solid black'
+    borderBottom: '1px solid black',
+    textAlign: 'justify'
   },
   secondaryDiagnosis: {
     ...(probDiagns),
+    textAlign: 'justify'
   },
   probableDiagnosisText: {
     width: '750px',
-    borderLeft: '1px solid left'
+    borderLeft: '1px solid left',
+    textAlign: 'justify'
   },
   probableDiagnosisNum: {
     ...(examineStyle),
     borderRight: 'initial',
     fontFamily: "Times New Roman Bold",
-    width: '350px'
+    width: '350px',
+    textAlign: 'start'
   },
   tablHeaderTypeExamine: {
     ...(examineStyle),
@@ -215,8 +218,8 @@ const styles = StyleSheet.create({
   },
   commentsSecText: {
     width: '100%',
-    textAlign: 'left',
     borderBottom: '1px solid black',
+    textAlign: 'justify'
   },
   commonSize: {
     width: '80%',
@@ -292,7 +295,7 @@ function MyDocContent({ applItem, isDeletedPlace, status}) {
           <Text style={styles.reasonTitle}>На основании: </Text>
           <Text style={styles.reasonSubTitle}> (указать основания: жалобы, симптомы, синдромы подозрения врача и пр.): </Text>
           <View style={{ ...styles.commonSize, ...styles.anamnesisSection }}>
-            {complaint ? <Text style={styles.complaintTitle}><Text style={styles.complaintTitleFirstWord}>Жалоб: </Text> {complaint}</Text> : null}
+            {complaint ? <Text style={styles.complaintTitle}><Text style={styles.complaintTitleFirstWord}>Жалоб: </Text>{complaint}</Text> : null}
             {anamnesis ? <Text style={styles.complaintTitle}><Text style={styles.complaintTitleFirstWord}>Анамнеза: </Text>{anamnesis}
             </Text> : null}
             {diagnosticData ? <Text style={styles.complaintTitle}><Text style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}</Text> : null}
