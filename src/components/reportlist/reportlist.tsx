@@ -20,6 +20,7 @@ const ReportList = (): React.ReactElement => {
   const history = useHistory()
   const applications = useSelector((state: RootState) => state.application.applications)
   const { isModalOpened, status, errorMessage } = useSelector((state: RootState) => state.ui)
+  const { id } = useSelector((state: RootState) => state.user.user)
   const count = useSelector((state: RootState) => state.application.count)
   const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
   const [page, setPage] = React.useState(1);
@@ -49,11 +50,11 @@ const ReportList = (): React.ReactElement => {
     , []);
 
   useEffect(() => {
-    dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
+    dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest,id))
   }, [page])
 
   useEffect(() => {
-    dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest))
+    dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest,id))
   }, [manager, patientName, patientRequest, fundName, fundRequest])
 
   useEffect(() => {

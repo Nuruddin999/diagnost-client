@@ -17,6 +17,7 @@ import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 
 const AddModal = (): React.ReactElement => {
   const status = useSelector((state: RootState) => state.ui.status)
+  const { id } = useSelector((state: RootState) => state.user.user)
   const dispatch = useDispatch()
   const [patientName, setPatientFIO] = useState('')
   const [open, setOpen] = useState(false)
@@ -25,7 +26,7 @@ const AddModal = (): React.ReactElement => {
   const [fundName, setFundName] = useState('')
   const [fundRequest, setFundRequest] = useState('')
   const [manager, setManager] = useState({
-    name:'',
+    name: '',
     id: ''
   })
   const [speciality, setSpeciality] = useState('')
@@ -44,6 +45,7 @@ const AddModal = (): React.ReactElement => {
         managerId: manager.id,
         creationDate: new Date().toString(),
         execDate: '',
+        creator: id
       }))
     }
   }
@@ -94,21 +96,21 @@ const AddModal = (): React.ReactElement => {
             required
           />
           <div className="manager-field" aria-required>
-          <Typography
-                children={'Выберете ответственного'}
-                align='center'
-                margin={1}
-                color='secondary'
-              />
+            <Typography
+              children={'Выберете ответственного'}
+              align='center'
+              margin={1}
+              color='secondary'
+            />
             <div className="manager-field-icon">
               <div>
-              <Typography
-                children={manager.name ? manager.name : 'Ответственный'}
-              />
                 <Typography
-              children={speciality ? speciality : 'Специальность'}
-            />
-            </div>
+                  children={manager.name ? manager.name : 'Ответственный'}
+                />
+                <Typography
+                  children={speciality ? speciality : 'Специальность'}
+                />
+              </div>
               <ArrowDropDownCircleIcon onClick={() => setOpen(state => !state)} />
             </div>
             {open && <UsersDropDown setManager={setManager} setSpeciality={setSpeciality} onClose={setOpen} />}

@@ -1,7 +1,7 @@
 import { getListItemById } from './../common/api/api';
 import { deleteOneApplicationApi, getApplicationApi, updateOneApplicationApi } from './../api/application';
 import { applicationForAdd, getApplication } from './../actions/application';
-import { call,  put, select, all } from "redux-saga/effects"
+import { call, put, select, all } from "redux-saga/effects"
 import { addApplicationApi } from '../api/application';
 import { saveApplicationsList } from '../reducers/applicationSlice';
 import { applicationInitialState, saveApplicationItem, successUpdate } from '../reducers/applicationItemSlice';
@@ -66,10 +66,11 @@ export type applicationItemResponse = applicationAddResponse & applicationItemFi
 export function* addApplication(addApplication: { type: 'application/add', payload: applicationForAdd }) {
   try {
     yield put(setStatus('pending'))
+    const userId: string = yield select((state: RootState) => state.user.user.id)
     const response: getAllApplicationsResponse = yield call(addApplicationApi, addApplication.payload)
     if (response) {
       yield put(setStatus('success'))
-      yield put(getApplication(1, 10, '', '', '', '', ''))
+      yield put(getApplication(1, 10, '', '', '', '', '', userId))
     }
   } catch (e: any) {
     if (e.response) {
@@ -82,17 +83,17 @@ export function* addApplication(addApplication: { type: 'application/add', paylo
  * Сага получения списка заключений.
  * @param addApplication
  */
-export function* fetchApplication(getApplication: { type: 'application/get', payload: { page: number, limit: number, manager: string, patientName: string, patientRequest: string, fundName: string, fundRequest: string } }) {
+export function* fetchApplication(getApplication: { type: 'application/get', payload: { page: number, limit: number, manager: string, patientName: string, patientRequest: string, fundName: string, fundRequest: string, creator: string } }) {
   try {
     yield put(setStatus('pending'))
-    const { page, limit, patientName, patientRequest, fundName, fundRequest, manager } = getApplication.payload
-    const response: getAllApplicationsResponse = yield call(getApplicationApi, page, limit, manager, patientName, patientRequest, fundName, fundRequest)
+    const { page, limit, patientName, patientRequest, fundName, fundRequest, manager, creator } = getApplication.payload
+    const response: getAllApplicationsResponse = yield call(getApplicationApi, page, creator, limit, manager, patientName, patientRequest, fundName, fundRequest)
     if (response) {
       const { rows, count } = response
-      yield all([put(setStatus('ok')),put(saveApplicationsList({ applications: rows, count }))])
+      yield all([put(setStatus('ok')), put(saveApplicationsList({ applications: rows, count }))])
     }
   } catch (e: any) {
-    yield all([put(setStatus('no')),put(setError('Произошлав ошибка, повторите попозже'))])
+    yield all([put(setStatus('no')), put(setError('Произошлав ошибка, повторите попозже'))])
   }
 }
 /**
@@ -150,7 +151,7 @@ export function* removeOneApplication(delApplication: { type: 'application/delet
     const response: {} = yield call(deleteOneApplicationApi, id)
     if (response) {
       yield put(successUpdate('success'))
-      yield put(getApplication(1, 10, '', '', '', '', ''))
+      yield put(getApplication(1, 10, '', '', '', '', '', ''))
     }
   } catch (e: any) {
     if (e.response) {
