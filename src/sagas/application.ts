@@ -148,10 +148,11 @@ export function* removeOneApplication(delApplication: { type: 'application/delet
 
   try {
     const { id } = delApplication.payload
+    const userId: string = yield select((state: RootState) => state.user.user.id)
     const response: {} = yield call(deleteOneApplicationApi, id)
     if (response) {
       yield put(successUpdate('success'))
-      yield put(getApplication(1, 10, '', '', '', '', '', ''))
+      yield put(getApplication(1, 10, '', '', '', '', '',userId))
     }
   } catch (e: any) {
     if (e.response) {
