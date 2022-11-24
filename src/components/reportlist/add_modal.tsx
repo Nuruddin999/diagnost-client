@@ -17,7 +17,7 @@ import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 
 const AddModal = (): React.ReactElement => {
   const status = useSelector((state: RootState) => state.ui.status)
-  const { id } = useSelector((state: RootState) => state.user.user)
+  const { id, role } = useSelector((state: RootState) => state.user.user)
   const dispatch = useDispatch()
   const [patientName, setPatientFIO] = useState('')
   const [open, setOpen] = useState(false)
@@ -33,21 +33,19 @@ const AddModal = (): React.ReactElement => {
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
-    if (manager.name && speciality) {
       dispatch(addApplication({
         patientName,
         patientBirthDate: patientBirthDate.toString(),
         patientRequest,
         fundName,
         fundRequest,
-        manager: `${manager.name}`,
-        managerSpeciality: `${speciality}`,
-        managerId: manager.id,
+        manager: `${manager.name}` || '',
+        managerSpeciality:  `${speciality}` || '',
+        managerId: manager.id || '',
         creationDate: new Date().toString(),
         execDate: '',
         creator: id
       }))
-    }
   }
   return <div className='add-modal-container'>
     <div className="add-form-wrapper">
@@ -95,7 +93,7 @@ const AddModal = (): React.ReactElement => {
             onChange={(event: any) => setFundRequest(event.target.value)}
             required
           />
-          <div className="manager-field" aria-required>
+          {role !== 'doctor' && <div className="manager-field" aria-required>
             <Typography
               children={'Выберете ответственного'}
               align='center'
@@ -114,7 +112,7 @@ const AddModal = (): React.ReactElement => {
               <ArrowDropDownCircleIcon onClick={() => setOpen(state => !state)} />
             </div>
             {open && <UsersDropDown setManager={setManager} setSpeciality={setSpeciality} onClose={setOpen} />}
-          </div>
+          </div>}
         </div>
         <Button size='small' variant='contained' className='add-button' type='submit'>
           <Loader title='Добавить задание' isLoading={status === 'pending'} />

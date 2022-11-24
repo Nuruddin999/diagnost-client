@@ -20,7 +20,7 @@ const ReportList = (): React.ReactElement => {
   const history = useHistory()
   const applications = useSelector((state: RootState) => state.application.applications)
   const { isModalOpened, status, errorMessage } = useSelector((state: RootState) => state.ui)
-  const { id } = useSelector((state: RootState) => state.user.user)
+  const { id, role } = useSelector((state: RootState) => state.user.user)
   const count = useSelector((state: RootState) => state.application.count)
   const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
   const [page, setPage] = React.useState(1);
@@ -50,13 +50,13 @@ const ReportList = (): React.ReactElement => {
     , []);
 
   useEffect(() => {
-    if(id !== undefined && id !=='') {
+    if (id !== undefined && id !== '') {
       dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest, id))
     }
   }, [page, id])
 
   useEffect(() => {
-    if(id !== undefined && id !==''){
+    if (id !== undefined && id !== '') {
       dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest, id))
     }
   }, [manager, patientName, patientRequest, fundName, fundRequest])
@@ -85,21 +85,31 @@ const ReportList = (): React.ReactElement => {
       <table>
         <thead>
           <tr>
-            {tableData.map(el => (el !== 'Удалить' || rights.processedRights.applications?.delete) && (<th key={isObject(el) ? el.title : el}>
-              <div>
-                <span>
-                  {isObject(el) ? el.title : el}
-                </span>
-                {isObject(el) &&
-                  <TextField
-                    onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
-                    type="text"
-                    size="small"
-                    placeholder="Поиск"
-                  />
+            {tableData.map(el => {
+              if (isObject(el) && el.title === 'Ответственный') {
+                if (role === 'doctor') {
+                  return null
                 }
-              </div>
-            </th>))}
+              }
+             if(el !== 'Удалить' || rights.processedRights.applications?.delete) {
+                return <th key={isObject(el) ? el.title : el}>
+                  <div>
+                  <span>
+                    {isObject(el) ? el.title : el}
+                  </span>
+                  {isObject(el) &&
+                    <TextField
+                      onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
+                      type="text"
+                      size="small"
+                      placeholder="Поиск"
+                    />
+                  }
+                </div>
+                </th>
+              }
+            }
+            )}
           </tr>
         </thead>
         <tbody>
@@ -110,7 +120,7 @@ const ReportList = (): React.ReactElement => {
             <td>{appl.patientRequest}</td>
             <td>{appl.fundName}</td>
             <td>{appl.fundRequest}</td>
-            <td>{appl.manager}</td>
+            {role !=='doctor' &&  <td>{appl.manager}</td>}
             <td>{new Date(appl.creationDate).toLocaleString()}</td>
             <td>{appl.execDate && new Date(appl.execDate).toLocaleString()}</td>
             {(rights.processedRights.applications?.delete) && <td><IconButton className='delete-button' onClick={(e: any) => {
