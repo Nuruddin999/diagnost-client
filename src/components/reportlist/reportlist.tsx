@@ -50,16 +50,20 @@ const ReportList = (): React.ReactElement => {
     , []);
 
   useEffect(() => {
-    dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest,id))
-  }, [page])
+    if(id !== undefined && id !=='') {
+      dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest, id))
+    }
+  }, [page, id])
 
   useEffect(() => {
-    dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest,id))
+    if(id !== undefined && id !==''){
+      dispatch(getApplication(page, 10, manager, patientName, patientRequest, fundName, fundRequest, id))
+    }
   }, [manager, patientName, patientRequest, fundName, fundRequest])
 
   useEffect(() => {
-    if(status === 'no') {
-      setTimeout(()=> dispatch(setStatus('')),1500)
+    if (status === 'no') {
+      setTimeout(() => dispatch(setStatus('')), 1500)
     }
   }, [status])
 
@@ -78,25 +82,25 @@ const ReportList = (): React.ReactElement => {
       </Button>}
     </div>
     <div className="appl-table">
-    <table>
-      <thead>
-        <tr>
-          {tableData.map(el => (el !== 'Удалить' || rights.processedRights.applications?.delete) && (<th key={isObject(el) ? el.title : el}>
-            <div>
-              <span>
-                {isObject(el) ? el.title : el}
-              </span>
-              {isObject(el) &&
-                <TextField
-                  onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
-                  type="text"
-                  size="small"
-                  placeholder="Поиск"
-                />
-              }
-            </div>
-          </th>))}
-        </tr>
+      <table>
+        <thead>
+          <tr>
+            {tableData.map(el => (el !== 'Удалить' || rights.processedRights.applications?.delete) && (<th key={isObject(el) ? el.title : el}>
+              <div>
+                <span>
+                  {isObject(el) ? el.title : el}
+                </span>
+                {isObject(el) &&
+                  <TextField
+                    onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
+                    type="text"
+                    size="small"
+                    placeholder="Поиск"
+                  />
+                }
+              </div>
+            </th>))}
+          </tr>
         </thead>
         <tbody>
           {status === 'ok' && applications.length > 0 && applications.map((appl, index) => <tr onClick={() => goToApplItem(appl.id)} key={appl.patientName}>
@@ -119,10 +123,10 @@ const ReportList = (): React.ReactElement => {
         </tbody>
       </table>
     </div>
-    {status === 'ok' && isEmpty(applications) &&  <div><BlockIcon sx={{fontSize:'40px',marginTop:'20px'}} /> </div>}
+    {status === 'ok' && isEmpty(applications) && <div><BlockIcon sx={{ fontSize: '40px', marginTop: '20px' }} /> </div>}
     {status === 'pending' && <div><CircularProgress /></div>}
-    {status === 'no' && <Typography sx={{color:'red'}}>{errorMessage}</Typography>}
-   { count>10 && <div className="pagination">
+    {status === 'no' && <Typography sx={{ color: 'red' }}>{errorMessage}</Typography>}
+    {count > 10 && <div className="pagination">
       <Pagination
         count={(count / 10) + 1}
         variant="outlined"

@@ -47,6 +47,7 @@ export function* loginUser(login: { type: 'user/login', payload: { email: string
   } catch (e: any) {
     yield all(
       [put(setStatus('no')),
+      put(setCircular(true)),
       put(setError(e.response ? e.response?.data?.message : 'Произошла ошибка, попробуйте позже')),
       ])
   }
@@ -117,7 +118,7 @@ export function* logoutUser() {
     if (response) {
       localStorage.removeItem('dtokenn')
       localStorage.removeItem('refreshToken')
-      yield put(saveUser({ id: '0', email: '', role: '', name: 'empty', isLoading: false, reqStatus: 'no', rights: initialRights, phone: '', speciality: '', isDeletedPlace: false }))
+      yield put(saveUser({ id: '', email: '', role: '', name: 'empty', isLoading: false, reqStatus: 'no', rights: initialRights, phone: '', speciality: '', isDeletedPlace: false }))
       yield put(changeLoadStatus(false))
     }
   } catch (e: any) {

@@ -32,7 +32,7 @@ interface UserState {
 }
 const initialState: UserState = {
   user: {
-    id: '0',
+    id: '',
     phone: '',
     role: 'doctor',
     name: '',

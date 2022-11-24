@@ -6,7 +6,7 @@ import { RootState } from "../../app/store";
 import { Loader } from "../loader/loader";
 import '../../common/components/registration/style.auth.scss'
 import { login } from "../../actions/user";
-import { setError } from "../../reducers/ui";
+import { setError, setStatus } from "../../reducers/ui";
 
 export const Auth = (): React.ReactElement => {
   const [email, setEmail] = useState('')
@@ -21,7 +21,9 @@ export const Auth = (): React.ReactElement => {
 
   useEffect(() => {
     if (errorMessage) {
-      setTimeout(() => dispatch(setError('')), 1500)
+      setTimeout(() =>{ dispatch(setError(''))
+      dispatch(setStatus(''))
+    }, 1500)
     }
   }, [errorMessage])
 
