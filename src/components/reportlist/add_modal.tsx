@@ -17,7 +17,7 @@ import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
 
 const AddModal = (): React.ReactElement => {
   const status = useSelector((state: RootState) => state.ui.status)
-  const { id, role } = useSelector((state: RootState) => state.user.user)
+  const { id, role, name, speciality: userSpeciality } = useSelector((state: RootState) => state.user.user)
   const dispatch = useDispatch()
   const [patientName, setPatientFIO] = useState('')
   const [open, setOpen] = useState(false)
@@ -39,8 +39,8 @@ const AddModal = (): React.ReactElement => {
         patientRequest,
         fundName,
         fundRequest,
-        manager: `${manager.name}` || '',
-        managerSpeciality:  `${speciality}` || '',
+        manager: `${manager.name}` || name,
+        managerSpeciality:  `${speciality}` || userSpeciality,
         managerId: manager.id || '',
         creationDate: new Date().toString(),
         execDate: '',
