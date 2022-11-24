@@ -31,7 +31,8 @@ const ApplicationItem = (): React.ReactElement => {
   }
   useEffect(() => {
     dispatch(getListItemAction(id, 'applications', saveApplicationItem))
-    return () => { dispatch(saveApplicationItem({ ...initialState, fundRequest: '', managerId: '', updatedAt: '', createdAt: '', ConsiliumDoctors:[], Comments:[{ title: 'Куда обратился пациент и с какой помощью', comment: '' }, { title: 'Что было им предоставлено, или наоборот, ничего не было предоставлено, только жалоюы и просьбы', comment: '' }, { title: 'Какая работа была проделана', comment: '' }, { title: 'Почему быоо рекомендовано то, или иное, на основании чего', comment: '' }, { title: 'Заключение: "По результатам проделанной работы считаю просьбу подопечного (ой) обоснованной (или нет) и возможной для одобрения (или нет)"', comment: '' }], Diagnostics:[], CheckupPlans:[] })) }
+    return () => {
+      dispatch(saveApplicationItem({ ...initialState, fundRequest: '', managerId: '', updatedAt: '', createdAt: '', ConsiliumDoctors:[], Comments:[{ title: 'Куда обратился пациент и с какой помощью', comment: '' }, { title: 'Что было им предоставлено, или наоборот, ничего не было предоставлено, только жалоюы и просьбы', comment: '' }, { title: 'Какая работа была проделана', comment: '' }, { title: 'Почему быоо рекомендовано то, или иное, на основании чего', comment: '' }, { title: 'Заключение: "По результатам проделанной работы считаю просьбу подопечного (ой) обоснованной (или нет) и возможной для одобрения (или нет)"', comment: '' }], Diagnostics:[], CheckupPlans:[] })) }
   }, [])
   useEffect(() => {
     if (userItemStatus === 'no') {

@@ -85,6 +85,7 @@ export const applicationItemSlice = createSlice({
       state.manager = action.payload.manager
       state.managerSpeciality = action.payload.managerSpeciality
       state.managerSignUrlPath = action.payload.managerSignUrlPath
+      state.diagnosticData = action.payload.diagnosticData
     },
     saveConsiliumDoctors: (state, action: PayloadAction<consiliumDoctor>) => {
       state.consiliumDoctors = [...state.consiliumDoctors, { name: action.payload.name, speciality: action.payload.speciality }]
