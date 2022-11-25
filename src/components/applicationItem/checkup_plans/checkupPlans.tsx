@@ -23,6 +23,9 @@ const CheckupPlanForm = (): React.ReactElement => {
   const bc = useMemo(() => new BroadcastChannel('pdf_channel'), []);
   const addConsliliumDoctor = () => {
     dispatch(saveCheckupPlan({ kind, place, target }))
+    setKind('')
+    setPlace('')
+    setTarget('')
   }
   const deletePlan = (index: number) => {
     dispatch(deleteCheckupPlan(index))
