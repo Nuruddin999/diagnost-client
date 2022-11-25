@@ -66,11 +66,11 @@ export type applicationItemResponse = applicationAddResponse & applicationItemFi
 export function* addApplication(addApplication: { type: 'application/add', payload: applicationForAdd }) {
   try {
     yield put(setStatus('pending'))
-    const userId: string = yield select((state: RootState) => state.user.user.id)
+    const {id: userId, role} = yield select((state: RootState) => state.user.user)
     const response: getAllApplicationsResponse = yield call(addApplicationApi, addApplication.payload)
     if (response) {
       yield put(setStatus('success'))
-      yield put(getApplication(1, 10, '', '', '', '', '', userId))
+      yield put(getApplication(1, 10, '', '', '', '', '', role === 'doctor' ? userId : 'all'))
     }
   } catch (e: any) {
     if (e.response) {
@@ -149,11 +149,11 @@ export function* removeOneApplication(delApplication: { type: 'application/delet
 
   try {
     const { id } = delApplication.payload
-    const userId: string = yield select((state: RootState) => state.user.user.id)
+    const {id: userId, role} = yield select((state: RootState) => state.user.user)
     const response: {} = yield call(deleteOneApplicationApi, id)
     if (response) {
       yield put(successUpdate('success'))
-      yield put(getApplication(1, 10, '', '', '', '', '',userId))
+      yield put(getApplication(1, 10, '', '', '', '', '',role === 'doctor' ? userId : 'all'))
     }
   } catch (e: any) {
     if (e.response) {
