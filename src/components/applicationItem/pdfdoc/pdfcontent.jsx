@@ -4,6 +4,7 @@ import hopedoc from '../../../hopedoc.png'
 import sell from '../../../sign.jpeg'
 import TimesNewRomanFont from '../../../TimesNewRomanPSMT.ttf'
 import TimesNewRomanBoldFont from '../../../TimesNewRomanPS-BoldMT.ttf'
+import Table from './Table'
 
 Font.register({
   family: "Roboto",
@@ -36,7 +37,7 @@ const trow = {
 }
 const styles = StyleSheet.create({
   body: {
-
+    margin: '8px'
   },
   hdr: {
     flexDirection: 'row',
@@ -45,12 +46,13 @@ const styles = StyleSheet.create({
     margin: '10px auto',
     paddingBottom: '10px',
     justifyContent: 'space-between',
-    alignItems:'center'
+    alignItems: 'center'
   },
   hdrimg: {
     width: '150px'
   },
   title: {
+    margin: '8px',
     fontSize: 14,
     textAlign: 'center',
     fontFamily: "Times New Roman Reg"
@@ -194,18 +196,20 @@ const styles = StyleSheet.create({
     ...(examineStyle),
     height: '100%',
     fontFamily: "Times New Roman Bold",
-    width: '340px'
+    width: '100%',
+    flex: '1'
   },
   tablHeaderPlaceExamine: {
     ...(examineStyle),
     height: '100%',
     fontFamily: "Times New Roman Bold",
-    width: '330px'
+    flex: '1'
   },
   tablHeaderTargetExamine: {
     ...(examineStyle),
     fontFamily: "Times New Roman Bold",
-    width: '330px'
+    flexWrap: 'wrap',
+    flex: '1'
   },
   commentsWrapper: {
     ...(trow),
@@ -239,7 +243,7 @@ const styles = StyleSheet.create({
 
 });
 
-function MyDocContent({ applItem, isDeletedPlace, status}) {
+function MyDocContent({ applItem, isDeletedPlace, status }) {
   let list = []
 
   for (let index = 0; index < 50; index++) {
@@ -295,15 +299,15 @@ function MyDocContent({ applItem, isDeletedPlace, status}) {
           <Text style={styles.reasonTitle}>На основании: </Text>
           <Text style={styles.reasonSubTitle}> (указать основания: жалобы, симптомы, синдромы подозрения врача и пр.): </Text>
           <View style={{ ...styles.commonSize, ...styles.anamnesisSection }}>
-            {complaint ? <Text style={styles.complaintTitle}><Text style={styles.complaintTitleFirstWord}>Жалоб: </Text>{complaint}</Text> : null}
-            {anamnesis ? <Text style={styles.complaintTitle}><Text style={styles.complaintTitleFirstWord}>Анамнеза: </Text>{anamnesis}
+            {complaint ? <Text style={styles.complaintTitle} wrap={false}><Text style={styles.complaintTitleFirstWord}>Жалоб: </Text>{complaint}</Text> : null}
+            {anamnesis ? <Text style={styles.complaintTitle} wrap={false}><Text style={styles.complaintTitleFirstWord}>Анамнеза: </Text>{anamnesis}
             </Text> : null}
-            {diagnosticData ? <Text style={styles.complaintTitle}><Text style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}</Text> : null}
+            {diagnosticData ? <Text style={styles.complaintTitle} wrap={false}><Text style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}</Text> : null}
           </View>
           <View>
             <Text style={{ ...styles.reasonTitle, marginTop: 12 }} wrap={false}>Проведен дистанционный врачебный консилиум в составе:</Text>
-            <Text style={{ ...styles.reasonTitle, fontSize: 10, marginTop: 4 }}>(указать ФИО и специальности врачей, которые участвовали в формировании заключения): </Text>
-            {consiliumDoctors ? <View style={{ ...styles.commonSize, ...styles.tabl, marginTop: 10 }} wrap={false}>
+            <Text style={{ ...styles.reasonTitle, fontSize: 10, marginTop: 4 }} wrap={false}>(указать ФИО и специальности врачей, которые участвовали в формировании заключения): </Text>
+            {consiliumDoctors ? <View style={{ ...styles.commonSize, ...styles.tabl, marginTop: 10 }} >
               <View style={styles.tableRow}>
                 <Text style={{ ...styles.tablHeaderNum, fontFamily: 'Times New Roman Bold' }}>№</Text>
                 <Text style={{ ...styles.tablHeaderFIO, fontFamily: 'Times New Roman Bold' }}>ФИО врача</Text>
@@ -317,18 +321,18 @@ function MyDocContent({ applItem, isDeletedPlace, status}) {
             </View> : null}
           </View>
           <View style={{ marginTop: 14, ...styles.commonSize }}>
-            <Text style={{ fontFamily: 'Times New Roman Bold' }}>С целью проведения дифференциальной диагностики между</Text>
-            <Text style={{ fontFamily: 'Times New Roman Bold', fontSize: 10 }}>(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)</Text>
-            <View style={{ ...styles.tabl, marginTop: 10 }}>
+            <View wrap={false}>
+              <Text style={{ fontFamily: 'Times New Roman Bold' }} >С целью проведения дифференциальной диагностики между</Text>
+              <Text style={{ fontFamily: 'Times New Roman Bold', fontSize: 10 }}>(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)</Text>
               <View style={styles.tableRow}>
                 <Text style={{ ...styles.tablHeaderNum, fontFamily: 'Times New Roman Bold' }}>№</Text>
                 <Text style={{ ...styles.tablHeaderDiagnosis, fontFamily: 'Times New Roman Bold' }}>Диагноз</Text>
               </View>
-              {diagnostic.map((diagnosis, index) => <View style={styles.tableRow} wrap={false}>
-                <Text style={styles.tablHeaderNum}>{index + 1}</Text>
-                <Text style={{ ...styles.tablHeaderDiagnosis, textAlign: 'left' }}>{diagnosis.diagnosis}</Text>
-              </View>)}
             </View>
+            {diagnostic.map((diagnosis, index) => <View style={styles.tableRow} wrap={false}>
+              <Text style={styles.tablHeaderNum} wrap={false}>{index + 1}</Text>
+              <Text style={{ ...styles.tablHeaderDiagnosis, textAlign: 'left' }} wrap={false}>{diagnosis.diagnosis}</Text>
+            </View>)}
           </View>
           <View style={{ marginTop: 14, ...styles.commonSize }}>
             <View style={styles.probableDiagnosis} wrap={false}>
@@ -350,35 +354,27 @@ function MyDocContent({ applItem, isDeletedPlace, status}) {
             </View>
           </View>
           <View style={{ marginTop: 14, ...styles.commonSize }}>
-            {checkupPlans.length > 0 ? <View style={styles.tabl} wrap={false}>
-              <Text style={{ fontFamily: 'Times New Roman Bold' }} wrap={false}>
-                На основании проведенного консилиума рекомендован план лечения (ПЛ):
-              </Text>
-              <View style={{ ...styles.tableRow, alignItems: 'center' }} wrap={false}>
-                <Text style={{ ...styles.tablHeaderNum, fontFamily: 'Times New Roman Bold' }}>№</Text>
-                <Text style={styles.tablHeaderTypeExamine}>Вид обледования</Text>
-                {(!isDeletedPlace || status) && <Text style={styles.tablHeaderPlaceExamine}>Место</Text>}
-                <Text style={styles.tablHeaderTargetExamine}>Цель проведения обследования</Text>
+            <Table headers={['№', 'Вид обследования', 'Место', 'Цель проведения']} dataContent={checkupPlans} contentKeys={['kind', 'place', 'target']} />
+            {comments ? <View style={styles.tabl} wrap={false}>
+              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }} orphans={10}>Пояснения:</Text>
+              <View style={{ ...styles.commentsWrapper, marginTop: 14 }} >
+                <Text style={styles.commentsNum}>1</Text>
+                <Text style={styles.commentsSecText}>{comments[0].comment}</Text>
               </View>
-              {checkupPlans.map((checkUpPlan, index) => <View style={styles.tableRow} wrap={false}>
-                <Text style={styles.tablHeaderNum}>{index + 1}</Text>
-                <Text style={styles.tablHeaderTypeExamine}>{checkUpPlan.kind}</Text>
-                {(!isDeletedPlace || status) && <Text style={styles.tablHeaderPlaceExamine}>{checkUpPlan.place}</Text>}
-                <Text style={styles.tablHeaderTargetExamine}>{checkUpPlan.target}</Text>
-              </View>)}
-            </View> : null}
-            {comments ? <View style={styles.tabl}>
-              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }} wrap={false}>Пояснения:</Text>
-              {comments.map((comment, index) => <View style={{ ...styles.commentsWrapper, marginTop: 14 }} wrap={false}>
+            { comments[1] ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} >
+                <Text style={styles.commentsNum}>2</Text>
+                <Text style={styles.commentsSecText}>{comments[1].comment}</Text>
+              </View> : null}
+              </View> : null}
+              {comments.map((comment, index) => index > 1 ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} wrap={false}>
                 <Text style={styles.commentsNum}>{index + 1}</Text>
                 <Text style={styles.commentsSecText}>{comment.comment}</Text>
-              </View>)}
-            </View> : null}
+              </View>:null )}
           </View>
           {execDate && manager ?
             <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }} wrap={false}>
               <Text style={styles.exeDateText}>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
-            { managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg} /> : null }
+              {managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg} /> : null}
               <Image src={sell} style={styles.hdrimg} />
               <View style={styles.managerAndSpeciality}>
                 {managerSpeciality ? <Text >{managerSpeciality}</Text> : null}

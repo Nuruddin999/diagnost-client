@@ -13,6 +13,7 @@ import { Loader } from "../loader/loader";
 import { RootState } from "../../app/store";
 import UsersDropDown from "../usersdropdown/usersdropdown";
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
+import { mainModule } from "process";
 
 
 const AddModal = (): React.ReactElement => {
@@ -39,9 +40,9 @@ const AddModal = (): React.ReactElement => {
         patientRequest,
         fundName,
         fundRequest,
-        manager: `${manager.name}` || name,
-        managerSpeciality:  `${speciality}` || userSpeciality,
-        managerId: manager.id || '',
+        manager: role === 'doctor' ? name : manager.name,
+        managerSpeciality:   role === 'doctor' ? userSpeciality : speciality,
+        managerId: role === 'doctor' ? id : manager.id,
         creationDate: new Date().toString(),
         execDate: '',
         creator: id
