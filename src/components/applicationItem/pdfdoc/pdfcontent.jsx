@@ -11,6 +11,7 @@ Font.register({
   src:
     "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-medium-webfont.ttf"
 });
+
 Font.register({
   family: "Times New Roman Reg",
   src: TimesNewRomanFont
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
   },
   title: {
     margin: '8px',
+    paddingBottom: '16px',
     fontSize: 14,
     textAlign: 'center',
     fontFamily: "Times New Roman Reg"
@@ -226,7 +228,7 @@ const styles = StyleSheet.create({
     textAlign: 'justify'
   },
   commonSize: {
-    width: '80%',
+    width: '90%',
     marginHorizontal: 'auto'
   },
   finalDateAndFio: {
@@ -304,35 +306,25 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             </Text> : null}
             {diagnosticData ? <Text style={styles.complaintTitle} wrap={false}><Text style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}</Text> : null}
           </View>
-          <View>
-            <Text style={{ ...styles.reasonTitle, marginTop: 12 }} wrap={false}>Проведен дистанционный врачебный консилиум в составе:</Text>
-            <Text style={{ ...styles.reasonTitle, fontSize: 10, marginTop: 4 }} wrap={false}>(указать ФИО и специальности врачей, которые участвовали в формировании заключения): </Text>
-            {consiliumDoctors ? <View style={{ ...styles.commonSize, ...styles.tabl, marginTop: 10 }} >
-              <View style={styles.tableRow}>
-                <Text style={{ ...styles.tablHeaderNum, fontFamily: 'Times New Roman Bold' }}>№</Text>
-                <Text style={{ ...styles.tablHeaderFIO, fontFamily: 'Times New Roman Bold' }}>ФИО врача</Text>
-                <Text style={{ ...styles.tablHeaderFIO, fontFamily: 'Times New Roman Bold' }}>Специальность</Text>
-              </View>
-              {consiliumDoctors.map((consiliumDoctor, index) => <View style={styles.tableRow} wrap={false}>
-                <Text style={styles.tablHeaderNum}>{index + 1}</Text>
-                <Text style={{ ...styles.tablHeaderFIO, textAlign: 'left', fontFamily: 'Times New Roman Bold' }}>{consiliumDoctor.name}</Text>
-                <Text style={{ ...styles.tablHeaderFIO, textAlign: 'left', fontFamily: 'Times New Roman Bold' }}>{consiliumDoctor.speciality}</Text>
-              </View>)}
-            </View> : null}
+          <View style={{ ...styles.commonSize, marginTop: 10 }}>
+            <Table
+              title='Проведен дистанционный врачебный консилиум в составе:'
+              subTitle='(указать ФИО и специальности врачей, которые участвовали в формировании заключения):'
+              headers={['№', 'ФИО врача', 'Специальность']}
+              dataContent={consiliumDoctors}
+              contentKeys={['name', 'speciality']}
+            />
           </View>
           <View style={{ marginTop: 14, ...styles.commonSize }}>
-            <View wrap={false}>
-              <Text style={{ fontFamily: 'Times New Roman Bold' }} >С целью проведения дифференциальной диагностики между</Text>
-              <Text style={{ fontFamily: 'Times New Roman Bold', fontSize: 10 }}>(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)</Text>
-              <View style={styles.tableRow}>
-                <Text style={{ ...styles.tablHeaderNum, fontFamily: 'Times New Roman Bold' }}>№</Text>
-                <Text style={{ ...styles.tablHeaderDiagnosis, fontFamily: 'Times New Roman Bold' }}>Диагноз</Text>
-              </View>
-            </View>
-            {diagnostic.map((diagnosis, index) => <View style={styles.tableRow} wrap={false}>
-              <Text style={styles.tablHeaderNum} wrap={false}>{index + 1}</Text>
-              <Text style={{ ...styles.tablHeaderDiagnosis, textAlign: 'left' }} wrap={false}>{diagnosis.diagnosis}</Text>
-            </View>)}
+            {
+              diagnostic.length > 0 ? <Table
+                title='С целью проведения дифференциальной диагностики между'
+                subTitle='(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)'
+                headers={['№', 'Диагноз']}
+                dataContent={diagnostic}
+                contentKeys={['diagnosis']}
+              /> : null
+            }
           </View>
           <View style={{ marginTop: 14, ...styles.commonSize }}>
             <View style={styles.probableDiagnosis} wrap={false}>
@@ -354,22 +346,27 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             </View>
           </View>
           <View style={{ marginTop: 14, ...styles.commonSize }}>
-            <Table headers={['№', 'Вид обследования', 'Место', 'Цель проведения']} dataContent={checkupPlans} contentKeys={['kind', 'place', 'target']} />
+            <Table
+              headers={['№', 'Вид обследования', 'Место', 'Цель проведения']}
+              dataContent={checkupPlans}
+              contentKeys={['kind', 'place', 'target']}
+              title='На основании проведенного консилиума рекомендован план лечения (ПЛ):'
+            />
             {comments ? <View style={styles.tabl} wrap={false}>
               <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }} orphans={10}>Пояснения:</Text>
               <View style={{ ...styles.commentsWrapper, marginTop: 14 }} >
                 <Text style={styles.commentsNum}>1</Text>
                 <Text style={styles.commentsSecText}>{comments[0].comment}</Text>
               </View>
-            { comments[1] ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} >
+              {comments[1] ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} >
                 <Text style={styles.commentsNum}>2</Text>
                 <Text style={styles.commentsSecText}>{comments[1].comment}</Text>
               </View> : null}
-              </View> : null}
-              {comments.map((comment, index) => index > 1 ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} wrap={false}>
-                <Text style={styles.commentsNum}>{index + 1}</Text>
-                <Text style={styles.commentsSecText}>{comment.comment}</Text>
-              </View>:null )}
+            </View> : null}
+            {comments.map((comment, index) => index > 1 ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} wrap={false}>
+              <Text style={styles.commentsNum}>{index + 1}</Text>
+              <Text style={styles.commentsSecText}>{comment.comment}</Text>
+            </View> : null)}
           </View>
           {execDate && manager ?
             <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }} wrap={false}>

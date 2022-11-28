@@ -69,6 +69,8 @@ const CheckupPlanForm = (): React.ReactElement => {
             variant='standard'
             size='small'
             fullWidth
+            maxRows={5}
+            multiline
             placeholder='Вид обследования'
             onChange={(e) => applications?.update && dispatch(changeCheckupPlan({ index, checkupPlan: { kind: e.target.value, place: checkupPlan.place, target: checkupPlan.target } }))}
           /></td>
@@ -78,6 +80,8 @@ const CheckupPlanForm = (): React.ReactElement => {
               variant='standard'
               size='small'
               fullWidth
+              maxRows={5}
+              multiline
               placeholder='Место'
               onChange={(e) =>  applications?.update && dispatch(changeCheckupPlan({ index, checkupPlan: { kind: checkupPlan.kind, place: e.target.value, target: checkupPlan.target } }))}
             />
@@ -87,6 +91,8 @@ const CheckupPlanForm = (): React.ReactElement => {
             variant='standard'
             size='small'
             fullWidth
+            maxRows={5}
+            multiline
             placeholder='Цель проведения обследования'
             onChange={(e) => applications?.update && dispatch(changeCheckupPlan({ index, checkupPlan: { kind: checkupPlan.kind, place: checkupPlan.place, target: e.target.value } }))}
           /></td>
@@ -128,6 +134,8 @@ const CheckupPlanForm = (): React.ReactElement => {
         variant='outlined'
         size='small'
         fullWidth
+        maxRows={5}
+        multiline
         placeholder='Цель проведения обследования'
         onChange={(e) => setTarget(e.target.value)}
       /> <IconButton disabled={!applications?.update} onClick={addConsliliumDoctor} >
