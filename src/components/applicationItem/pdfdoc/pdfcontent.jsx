@@ -257,10 +257,11 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
   }
 
   const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments, execDate, manager, managerSpeciality, managerSignUrlPath } = applItem
+  console.log(new Date(patientBirthDate).toLocaleString())
   const currentYear = new Date().getFullYear()
   const yearsOld = new Date(patientBirthDate).getFullYear()
-  const month = new Date(patientBirthDate).getMonth()
-  const date = new Date(patientBirthDate).getDate()
+  const month = new Date(patientBirthDate).getMonth()+1
+  const date = new Date(patientBirthDate).getDate().toLocaleString()
   const age = currentYear - yearsOld
   return (
     <PDFViewer>
@@ -291,7 +292,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             </View> : <View></View>}
             {patientBirthDate ? <View style={styles.birth}>
               <Text>
-                {`${date}.${month}.${yearsOld} г.р. (${age} лет)`}
+                {`${date  > 9 ? date : '0'+ date}.${month  > 9 ? month : '0'+ month }.${yearsOld} г.р. (${age} лет)`}
               </Text>
               <Text style={styles.birthText}>
                 Дата рождения

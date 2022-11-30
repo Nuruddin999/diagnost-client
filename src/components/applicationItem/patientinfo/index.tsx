@@ -31,6 +31,7 @@ const PatientInfo = (): React.ReactElement => {
           label='Дата рождения'
           onChange={(newValue: any) =>  applications?.update && dispatch(changePatientBirthDate(newValue))}
           renderInput={(params: any) => <TextField {...params} size='small' />}
+          inputFormat="dd-MM-yyyy"
         />
       </div>
     </LocalizationProvider>
