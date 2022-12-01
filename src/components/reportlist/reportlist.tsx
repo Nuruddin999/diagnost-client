@@ -114,7 +114,7 @@ const ReportList = (): React.ReactElement => {
         </thead>
         <tbody>
           {status === 'ok' && applications.length > 0 && applications.map((appl, index) => <tr onClick={() => goToApplItem(appl.id)} key={appl.patientName}>
-            <td>{index + 1}</td>
+            <td>{(page*10 - 10) + 1 + index}</td>
             <td>{appl.patientName}</td>
             <td>{new Date(appl.patientBirthDate).toLocaleString()}</td>
             <td>{appl.patientRequest}</td>
