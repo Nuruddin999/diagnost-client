@@ -263,6 +263,10 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
   const month = new Date(patientBirthDate).getMonth()+1
   const date = new Date(patientBirthDate).getDate().toLocaleString()
   const age = currentYear - yearsOld
+  const currentMonth = new Date().getMonth()
+  const yearsInMonth = new Date(patientBirthDate).getMonth()
+  const birthInMonthDifference = currentMonth - yearsInMonth
+  const ageInMonth = age * 12 + birthInMonthDifference
   return (
     <PDFViewer>
       <Document>
@@ -292,7 +296,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             </View> : <View></View>}
             {patientBirthDate ? <View style={styles.birth}>
               <Text>
-                {`${date  > 9 ? date : '0'+ date}.${month  > 9 ? month : '0'+ month }.${yearsOld} г.р. (${age} лет)`}
+                {`${date  > 9 ? date : '0'+ date}.${month  > 9 ? month : '0'+ month }.${yearsOld} г.р. (${age > 0 ? age + 'лет' : ageInMonth + 'мес'})`}
               </Text>
               <Text style={styles.birthText}>
                 Дата рождения
