@@ -19,6 +19,8 @@ const ConsiliumDoctorsForm = (): React.ReactElement => {
   const [speciality, setSpeciality] = useState('')
   const addConsliliumDoctor = () => {
     dispatch(saveConsiliumDoctors({ name: fio, speciality }))
+    setFio('')
+    setSpeciality('')
   }
   const deleteDoctor = (index: number) => {
     dispatch(deleteConsiliumDoctors(index))
