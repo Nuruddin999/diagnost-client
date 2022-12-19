@@ -16,6 +16,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "12.1.2",
     "@testing-library/user-event": "^7.2.1",
+    "@types/hyphen": "^1.6.5",
     "@types/jest": "^24.9.1",
     "@types/lodash": "^4.14.182",
     "@types/node": "^12.20.47",

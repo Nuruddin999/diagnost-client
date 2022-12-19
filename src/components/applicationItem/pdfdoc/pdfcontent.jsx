@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     fontFamily: "Times New Roman Bold",
     marginTop: 12,
+    marginBottom: 12,
   },
   subtitle: {
     fontSize: 9,
@@ -257,7 +258,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
   }
 
   const { mostProblDiagnosis, secondaryDiagnosis, patientBirthDate, patientName, complaint, anamnesis, consiliumDoctors, diagnostic, checkupPlans, diagnosticData, comments, execDate, manager, managerSpeciality, managerSignUrlPath } = applItem
-  console.log(new Date(patientBirthDate).toLocaleString())
+
   const currentYear = new Date().getFullYear()
   const yearsOld = new Date(patientBirthDate).getFullYear()
   const month = new Date(patientBirthDate).getMonth()+1
@@ -280,7 +281,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             </View>
           </View>
           <Text style={styles.recomenTitle}>
-            {status}
+            РЕКОМЕНДАЦИИ ВРАЧА
           </Text>
           <Text style={{ ...styles.commonSize, ...styles.subtitle }}>
             (ВНИМАНИЕ! ДОКУМЕНТ ИСКЛЮЧИТЕЛЬНО ДЛЯ ВНУТРЕННЕГО ПОЛЬЗОВАНИЯ ОРГАНИЗАЦИИ)
