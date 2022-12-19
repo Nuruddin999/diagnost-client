@@ -5,6 +5,16 @@ import sell from '../../../sign.jpeg'
 import TimesNewRomanFont from '../../../TimesNewRomanPSMT.ttf'
 import TimesNewRomanBoldFont from '../../../TimesNewRomanPS-BoldMT.ttf'
 import Table from './Table'
+import hyphen from 'hyphen';
+import pattern from 'hyphen/patterns/ru';
+
+
+const hyphenator = hyphen(pattern);
+
+const hyphenationCallback = (word) => {
+  return hyphenator(word).split('\u00AD');
+}
+
 
 Font.register({
   family: "Roboto",
@@ -21,7 +31,7 @@ Font.register({
   src: TimesNewRomanBoldFont
 });
 const probDiagns = {
-  width: '90%',
+  width: '100%',
   margin: '0 auto 0',
   flexDirection: 'row',
   alignItems: 'center',
@@ -338,7 +348,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                 Выявлен наиболее вероятный
                 основной диагноз:
               </Text>
-              <Text style={{ ...styles.probableDiagnosisText, padding: 5 }}>
+              <Text style={{ ...styles.probableDiagnosisText, padding: 5 }}  hyphenationCallback={hyphenationCallback}>
                 {mostProblDiagnosis}
               </Text>
             </View>
@@ -346,7 +356,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               <Text style={styles.probableDiagnosisNum}>
                 Выявлены сопутствующие диагнозы:
               </Text>
-              <Text style={{ ...styles.probableDiagnosisText, padding: 5 }}>
+              <Text style={{ ...styles.probableDiagnosisText, padding: 5 }}  hyphenationCallback={hyphenationCallback}>
                 {secondaryDiagnosis}
               </Text>
             </View>
@@ -362,16 +372,16 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }} orphans={10}>Пояснения:</Text>
               <View style={{ ...styles.commentsWrapper, marginTop: 14 }} >
                 <Text style={styles.commentsNum}>1</Text>
-                <Text style={styles.commentsSecText}>{comments[0].comment}</Text>
+                <Text style={styles.commentsSecText}  hyphenationCallback={hyphenationCallback}>{comments[0].comment}</Text>
               </View>
               {comments[1] ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} >
                 <Text style={styles.commentsNum}>2</Text>
-                <Text style={styles.commentsSecText}>{comments[1].comment}</Text>
+                <Text style={styles.commentsSecText}  hyphenationCallback={hyphenationCallback}>{comments[1].comment}</Text>
               </View> : null}
             </View> : null}
             {comments.map((comment, index) => index > 1 ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} wrap={false}>
               <Text style={styles.commentsNum}>{index + 1}</Text>
-              <Text style={styles.commentsSecText}>{comment.comment}</Text>
+              <Text style={styles.commentsSecText}  hyphenationCallback={hyphenationCallback}>{comment.comment}</Text>
             </View> : null)}
           </View>
           {execDate && manager ?
