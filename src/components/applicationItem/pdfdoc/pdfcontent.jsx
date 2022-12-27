@@ -195,12 +195,11 @@ const styles = StyleSheet.create({
   },
   probableDiagnosisText: {
     width: '750px',
-    borderLeft: '1px solid left',
     textAlign: 'justify'
   },
   probableDiagnosisNum: {
     ...(examineStyle),
-    borderRight: 'initial',
+    borderRight: 'unset',
     fontFamily: "Times New Roman Bold",
     width: '350px',
     textAlign: 'start'
@@ -271,7 +270,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
 
   const currentYear = new Date().getFullYear()
   const yearsOld = new Date(patientBirthDate).getFullYear()
-  const month = new Date(patientBirthDate).getMonth()+1
+  const month = new Date(patientBirthDate).getMonth() + 1
   const date = new Date(patientBirthDate).getDate().toLocaleString()
   const age = currentYear - yearsOld
   const currentMonth = new Date().getMonth()
@@ -307,7 +306,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             </View> : <View></View>}
             {patientBirthDate ? <View style={styles.birth}>
               <Text>
-                {`${date  > 9 ? date : '0'+ date}.${month  > 9 ? month : '0'+ month }.${yearsOld} г.р. (${age > 0 ? age + 'лет' : ageInMonth + 'мес'})`}
+                {`${date > 9 ? date : '0' + date}.${month > 9 ? month : '0' + month}.${yearsOld} г.р. (${age > 0 ? age + 'лет' : ageInMonth + 'мес'})`}
               </Text>
               <Text style={styles.birthText}>
                 Дата рождения
@@ -343,22 +342,42 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             }
           </View>
           <View style={{ marginTop: 14, ...styles.commonSize }}>
-            <View style={styles.probableDiagnosis} wrap={false}>
-              <Text style={styles.probableDiagnosisNum}>
-                Выявлен наиболее вероятный
-                основной диагноз:
-              </Text>
-              <Text style={{ ...styles.probableDiagnosisText, padding: 5 }}  hyphenationCallback={hyphenationCallback}>
-                {mostProblDiagnosis}
-              </Text>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', border: '1px solid black' }} wrap={false}>
+              <View style={{ width: '350px', borderRight: '1px solid black', padding: '5px' }}>
+                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
+                  Выявлен наиболее
+                </Text>
+                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
+                  вероятный
+                  основной
+                </Text>
+                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
+                  диагноз
+                </Text>
+              </View>
+              <View style={{ width: '750px', display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                <Text style={{ ...styles.probableDiagnosisText, padding: 5 }} hyphenationCallback={hyphenationCallback}>
+                  {mostProblDiagnosis}
+                </Text>
+              </View>
             </View>
-            <View style={styles.secondaryDiagnosis} wrap={false}>
-              <Text style={styles.probableDiagnosisNum}>
-                Выявлены сопутствующие диагнозы:
-              </Text>
-              <Text style={{ ...styles.probableDiagnosisText, padding: 5 }}  hyphenationCallback={hyphenationCallback}>
-                {secondaryDiagnosis}
-              </Text>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', border: '1px solid black'}} wrap={false}>
+              <View style={{ width: '350px', borderRight: '1px solid black', padding: '5px' }}>
+                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
+                  Выявлены
+                </Text>
+                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
+                  сопутствующие
+                </Text>
+                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
+                  диагнозы
+                </Text>
+              </View>
+              <View style={{ width: '750px', display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                <Text style={{ ...styles.probableDiagnosisText, padding: 5, flexWrap: 'wrap' }} hyphenationCallback={hyphenationCallback}>
+                  {secondaryDiagnosis}
+                </Text>
+              </View>
             </View>
           </View>
           <View style={{ marginTop: 14, ...styles.commonSize }}>
@@ -372,16 +391,16 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }} orphans={10}>Пояснения:</Text>
               <View style={{ ...styles.commentsWrapper, marginTop: 14 }} >
                 <Text style={styles.commentsNum}>1</Text>
-                <Text style={styles.commentsSecText}  hyphenationCallback={hyphenationCallback}>{comments[0].comment}</Text>
+                <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comments[0].comment}</Text>
               </View>
               {comments[1] ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} >
                 <Text style={styles.commentsNum}>2</Text>
-                <Text style={styles.commentsSecText}  hyphenationCallback={hyphenationCallback}>{comments[1].comment}</Text>
+                <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comments[1].comment}</Text>
               </View> : null}
             </View> : null}
             {comments.map((comment, index) => index > 1 ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} wrap={false}>
               <Text style={styles.commentsNum}>{index + 1}</Text>
-              <Text style={styles.commentsSecText}  hyphenationCallback={hyphenationCallback}>{comment.comment}</Text>
+              <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comment.comment}</Text>
             </View> : null)}
           </View>
           {execDate && manager ?
