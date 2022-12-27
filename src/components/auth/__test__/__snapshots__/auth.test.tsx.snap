@@ -73,6 +73,7 @@ exports[`Auth  changes email and password properly 1`] = `
             </fieldset>
           </div>
         </div>
+        
         <button
           class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButton-fullWidth MuiButtonBase-root login-button css-1y3no4h-MuiButtonBase-root-MuiButton-root"
           tabindex="0"
@@ -171,6 +172,7 @@ exports[`Auth  renders properly 1`] = `
             </fieldset>
           </div>
         </div>
+        
         <button
           class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-disableElevation MuiButton-fullWidth MuiButtonBase-root login-button css-1y3no4h-MuiButtonBase-root-MuiButton-root"
           tabindex="0"

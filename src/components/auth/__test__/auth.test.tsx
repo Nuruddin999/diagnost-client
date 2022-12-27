@@ -80,6 +80,6 @@ describe('Auth ', () => {
     fireEvent.submit(getByTestId('loginform'))
     const loaded = screen.queryByTestId('loaded')
     expect(loaded).not.toBeInTheDocument()
-    expect(await findByText('Неизвестаня ошибка')).toBeInTheDocument()
+    expect(await findByText('Произошла ошибка, попробуйте позже')).toBeInTheDocument()
   })
 })

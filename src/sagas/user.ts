@@ -52,11 +52,7 @@ export function* loginUser(login: { type: 'user/login', payload: { email: string
       ])
   }
 }
-function* calculateProgress(loaded: number, total: number) {
-  const progress: number = yield put(setProgress(Math.round((100 * loaded) / total)))
-  console.log('progress', progress)
-  return progress
-}
+
 /**
  * Регистрация нов пользователя.
  * @param body .

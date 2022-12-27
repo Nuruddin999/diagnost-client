@@ -47,10 +47,16 @@ const AddModal = (): React.ReactElement => {
         execDate: '',
         creator: id
       }))
+      setPatientFIO('')
+      setPatientRequest('')
+      setFundName('')
+      setFundRequest('')
+      setManager(state=>({name:'',id:''}))
+      setSpeciality('')
   }
   return <div className='add-modal-container'>
     <div className="add-form-wrapper">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} data-testid='addrequest-form'>
         <div className='close-ic' onClick={() => dispatch(openModal(false))}>
           <CloseIcon />
         </div>
@@ -94,7 +100,7 @@ const AddModal = (): React.ReactElement => {
             onChange={(event: any) => setFundRequest(event.target.value)}
             required
           />
-          {role !== 'doctor' && <div className="manager-field" aria-required>
+          {role !== 'doctor' && <div className="manager-field" aria-required data-testid='manager-field'>
             <Typography
               children={'Выберете ответственного'}
               align='center'
