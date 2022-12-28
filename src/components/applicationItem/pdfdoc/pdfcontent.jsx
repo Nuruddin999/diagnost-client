@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     margin: 12,
     fontSize: 14,
     textAlign: 'justify',
-    fontFamily: "Roboto"
+    fontFamily: "Times New Roman Reg"
   },
   image: {
     marginVertical: 15,
@@ -148,14 +148,13 @@ const styles = StyleSheet.create({
   },
   complaintTitle: {
     flexDirection: 'row',
-    marginTop: 12,
     width: '100%',
-    textAlign: 'justify'
+    textAlign: 'justify',
+    fontSize: '12px'
   },
   complaintTitleAnamnesis: {
     width: '100%',
     textAlign: 'left',
-    marginTop: 8
   },
   complaintTitleFirstWord: {
     fontWeight: 700,
@@ -195,12 +194,15 @@ const styles = StyleSheet.create({
   },
   probableDiagnosisText: {
     width: '750px',
-    textAlign: 'justify'
+    textAlign: 'justify',
+    fontFamily: "Times New Roman Reg",
+    fontSize: '12px',
   },
   probableDiagnosisNum: {
     ...(examineStyle),
     borderRight: 'unset',
     fontFamily: "Times New Roman Bold",
+    fontSize: '12px',
     width: '350px',
     textAlign: 'start'
   },
@@ -331,15 +333,13 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             />
           </View>
           <View style={{ marginTop: 14, ...styles.commonSize }}>
-            {
-              diagnostic.length > 0 ? <Table
-                title='С целью проведения дифференциальной диагностики между'
-                subTitle='(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)'
-                headers={['№', 'Диагноз']}
-                dataContent={diagnostic}
-                contentKeys={['diagnosis']}
-              /> : null
-            }
+            <Table
+              title='С целью проведения дифференциальной диагностики между'
+              subTitle='(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)'
+              headers={['№', 'Диагноз']}
+              dataContent={diagnostic}
+              contentKeys={['diagnosis']}
+            />
           </View>
           <View style={{ marginTop: 14, ...styles.commonSize }}>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', border: '1px solid black' }} wrap={false}>
@@ -361,7 +361,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                 </Text>
               </View>
             </View>
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', border: '1px solid black'}} wrap={false}>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', border: '1px solid black' }} wrap={false}>
               <View style={{ width: '350px', borderRight: '1px solid black', padding: '5px' }}>
                 <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
                   Выявлены
@@ -386,6 +386,8 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               dataContent={checkupPlans}
               contentKeys={['kind', 'place', 'target']}
               title='На основании проведенного консилиума рекомендован план лечения (ПЛ):'
+              isDeletedPlace={isDeletedPlace}
+              status={status}
             />
             {comments ? <View style={styles.tabl} wrap={false}>
               <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }} orphans={10}>Пояснения:</Text>

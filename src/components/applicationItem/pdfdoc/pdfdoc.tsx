@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../app/store';
 import { Font } from '@react-pdf/renderer'
@@ -20,8 +20,8 @@ function MyDoc() {
   const { id } = useParams<{ id: string }>()
   const applItem = useSelector((state: RootState) => state.applicationItem)
   const { isDeletedPlace } = useSelector((state: RootState) => state.user.user)
-  const [status, setStatus] = useState(isDeletedPlace)
-  const bc = new BroadcastChannel('pdf_channel');
+  const [status, setStatus] = useState<boolean | undefined>(undefined)
+  const bc = useMemo(() => new BroadcastChannel('pdf_channel'), [status]);
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(checkUser())
@@ -29,7 +29,7 @@ function MyDoc() {
   }, [])
   useEffect(() => {
     bc.onmessage = ev => {
-      setStatus(ev.data);
+      setStatus(!ev.data)
     };
 
     return () => {
@@ -38,7 +38,7 @@ function MyDoc() {
   }, [bc, status]);
 
   return (
-  <MyDocContent applItem={applItem} isDeletedPlace={isDeletedPlace} status={status}/>
+    <MyDocContent applItem={applItem} isDeletedPlace={isDeletedPlace} status={status} />
   );
 }
 
