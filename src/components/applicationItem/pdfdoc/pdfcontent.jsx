@@ -48,7 +48,7 @@ const trow = {
 }
 const styles = StyleSheet.create({
   body: {
-    margin: '8px'
+    margin: '8px',
   },
   hdr: {
     flexDirection: 'row',
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   },
   recomenTitle: {
     fontWeight: 700,
+    fontSize:'12px',
     fontFamily: "Times New Roman Bold",
     marginTop: 12,
     marginBottom: 12,
@@ -240,7 +241,7 @@ const styles = StyleSheet.create({
     textAlign: 'justify'
   },
   commonSize: {
-    width: '90%',
+    width: '80%',
     marginHorizontal: 'auto'
   },
   finalDateAndFio: {
@@ -285,7 +286,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
         <Page style={styles.title}>
           <View style={{ ...styles.commonSize, ...styles.hdr, marginBottom: 5 }} fixed>
             <Image src={hopedoc} style={styles.hdrimg} />
-            <View>
+            <View style={{fontSize:'10px', fontFamily:'Times New Roman Reg'}}>
               <Text>г Махачкала, ул Батырая 11</Text>
               <Text>7 этаж 709 кабинет</Text>
               <Text>Тел. +7(964)0067007</Text>

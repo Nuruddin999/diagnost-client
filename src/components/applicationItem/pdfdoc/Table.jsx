@@ -22,7 +22,7 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
     </Text>
   </View>
     if (hdr !== 'Место') {
-      return hdrView
+      return  hdrView
     }
     else if (status !== undefined && !status) {
       return  hdrView

@@ -8,6 +8,7 @@
 }
 .user-item-wrapper {
   height: calc(100% - 60px);
+  overflow-y: auto;
   .user-item {
     width: 600px;
     margin: 0 auto 0;

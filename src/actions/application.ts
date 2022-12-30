@@ -5,6 +5,7 @@ export const Types = {
   applicationGetOne: 'application/getone',
   applicationUpdate: 'application/update',
   applicationDel: 'application/deleteone',
+  applicationChangeDeleteOption: 'application/changedelopt',
 }
 export type applicationForAdd = {
   id?: number,
@@ -42,6 +43,14 @@ export const getApplication = createAction(Types.applicationGet, function prepar
     },
   }
 })
+export const changeDeleteOptionAction = createAction(Types.applicationChangeDeleteOption, function prepare(id: string) {
+  return {
+    payload: {
+      id
+    },
+  }
+})
+
 export const getOneApplication = createAction(Types.applicationGetOne, function prepare(id: string) {
   return {
     payload: {

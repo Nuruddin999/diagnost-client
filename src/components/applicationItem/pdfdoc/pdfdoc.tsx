@@ -38,7 +38,7 @@ function MyDoc() {
   }, [bc, status]);
 
   return (
-    <MyDocContent applItem={applItem} isDeletedPlace={isDeletedPlace} status={status} />
+    <MyDocContent applItem={applItem} isDeletedPlace={applItem.checkUpPlaceIsDeleted} status={status} />
   );
 }
 

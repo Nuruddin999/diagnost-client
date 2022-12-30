@@ -1,10 +1,11 @@
+
 import { getListItemById } from './../common/api/api';
-import { deleteOneApplicationApi, getApplicationApi, updateOneApplicationApi } from './../api/application';
-import { applicationForAdd, getApplication } from './../actions/application';
+import { changeIsDeletedPlace, deleteOneApplicationApi, getApplicationApi, updateOneApplicationApi } from './../api/application';
+import { applicationForAdd, getApplication, Types } from './../actions/application';
 import { call, put, select, all, race } from "redux-saga/effects"
 import { addApplicationApi } from '../api/application';
 import { saveApplicationsList } from '../reducers/applicationSlice';
-import { applicationInitialState, saveApplicationItem, successUpdate } from '../reducers/applicationItemSlice';
+import { applicationInitialState, saveApplicationItem, saveCheckupPlanDeletedPlace, successUpdate } from '../reducers/applicationItemSlice';
 import { RootState } from '../app/store';
 import { setCircular, setError, setStatus } from '../reducers/ui';
 type applicationAddResponse = {
@@ -17,6 +18,7 @@ type applicationAddResponse = {
   manager: string,
   managerSpeciality: string,
   managerId: string,
+  checkUpPlaceIsDeleted: boolean,
   creationDate: string,
   execDate: string,
   updatedAt: string,
@@ -66,7 +68,7 @@ export type applicationItemResponse = applicationAddResponse & applicationItemFi
 export function* addApplication(addApplication: { type: 'application/add', payload: applicationForAdd }) {
   try {
     yield put(setStatus('pending'))
-    const {id: userId, role} = yield select((state: RootState) => state.user.user)
+    const { id: userId, role } = yield select((state: RootState) => state.user.user)
     const response: getAllApplicationsResponse = yield call(addApplicationApi, addApplication.payload)
     if (response) {
       yield put(setStatus('success'))
@@ -140,6 +142,28 @@ export function* updateOneApplication(updateApplication: { type: 'application/up
   }
 }
 
+/**
+ * Изменение опции удаления места в плане лечения.
+ */
+export function* changeDeleteOptionInPlan(body: {type: 'application/changedelopt', payload :{ id: string}}) {
+  try {
+    const response: { checkUpPlaceIsDeleted: boolean } = yield call(changeIsDeletedPlace, body.payload.id)
+    if (response) {
+      yield put(setCircular(false))
+      yield put(saveCheckupPlanDeletedPlace(response.checkUpPlaceIsDeleted))
+      yield put(successUpdate('success'))
+    }
+  } catch (e: any) {
+    if (e.response) {
+      yield put(setCircular(false))
+    }
+    else {
+      yield put(setCircular(false))
+    }
+  }
+}
+
+
 
 /**
 * Удаление  заключения.
@@ -149,11 +173,11 @@ export function* removeOneApplication(delApplication: { type: 'application/delet
 
   try {
     const { id } = delApplication.payload
-    const {id: userId, role} = yield select((state: RootState) => state.user.user)
+    const { id: userId, role } = yield select((state: RootState) => state.user.user)
     const response: {} = yield call(deleteOneApplicationApi, id)
     if (response) {
       yield put(successUpdate('success'))
-      yield put(getApplication(1, 10, '', '', '', '', '',role === 'doctor' ? userId : 'all'))
+      yield put(getApplication(1, 10, '', '', '', '', '', role === 'doctor' ? userId : 'all'))
     }
   } catch (e: any) {
     if (e.response) {

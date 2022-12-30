@@ -8,14 +8,14 @@ import { changeCheckupPlan, saveCheckupPlan, deleteCheckupPlan } from "../../../
 import './style.checkupplans.scss'
 import NoResult from "../../no-result/no-result";
 import CloseIcon from '@mui/icons-material/Close';
-import { changeIsDeletedPlaceAction } from "../../../actions/user";
 import { selectApplicationUserRights } from "../../../common/selectors/user";
+import { changeDeleteOptionAction } from "../../../actions/application";
 
 
 const CheckupPlanForm = (): React.ReactElement => {
   const dispatch = useDispatch()
-  const checkupPlansProp = useSelector((state: RootState) => state.applicationItem.checkupPlans)
-  const {  email, isDeletedPlace } = useSelector((state: RootState) => state.user.user)
+  const {checkupPlans, id, checkUpPlaceIsDeleted } = useSelector((state: RootState) => state.applicationItem)
+  const {  isDeletedPlace } = useSelector((state: RootState) => state.user.user)
   const { applications, checkupPlanPlace } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
   const [kind, setKind] = useState('')
   const [place, setPlace] = useState('')
@@ -31,8 +31,8 @@ const CheckupPlanForm = (): React.ReactElement => {
     dispatch(deleteCheckupPlan(index))
   }
   const sendBroadcastMessage = () => {
-    dispatch(changeIsDeletedPlaceAction(email))
-    bc.postMessage(isDeletedPlace);
+    dispatch(changeDeleteOptionAction(id.toString()))
+    bc.postMessage(checkUpPlaceIsDeleted);
   }
   useEffect(() => {
     return () => {
@@ -40,7 +40,7 @@ const CheckupPlanForm = (): React.ReactElement => {
     };
   }, [bc]);
   return <div>
-    {checkupPlansProp.length > 0 ? <table>
+    {checkupPlans.length > 0 ? <table>
       <tr>
         <th>
           <span>
@@ -52,7 +52,7 @@ const CheckupPlanForm = (): React.ReactElement => {
             Вид обследования
           </span>
         </th>
-        {!isDeletedPlace && <th>
+        {!checkUpPlaceIsDeleted && <th>
           <span>
             Место
           </span>
@@ -62,7 +62,7 @@ const CheckupPlanForm = (): React.ReactElement => {
         </th>
       </tr>
       <tbody>
-        {checkupPlansProp.length > 0 && checkupPlansProp.map((checkupPlan, index) => <tr>
+        {checkupPlans.length > 0 && checkupPlans.map((checkupPlan, index) => <tr>
           <td>{index + 1}</td>
           <td>    <TextField
             value={checkupPlan.kind}
@@ -72,7 +72,7 @@ const CheckupPlanForm = (): React.ReactElement => {
             placeholder='Вид обследования'
             onChange={(e) => applications?.update && dispatch(changeCheckupPlan({ index, checkupPlan: { kind: e.target.value, place: checkupPlan.place, target: checkupPlan.target } }))}
           /></td>
-          {!isDeletedPlace && <td>
+          {!checkUpPlaceIsDeleted && <td>
             <TextField
               value={checkupPlan.place}
               variant='standard'
@@ -109,19 +109,19 @@ const CheckupPlanForm = (): React.ReactElement => {
       <div className='place'>
         {checkupPlanPlace?.delete  &&
           <div>
-            {!isDeletedPlace && <IconButton size='small' className='hide-place' onClick={sendBroadcastMessage}>
+            {!checkUpPlaceIsDeleted && <IconButton size='small' className='hide-place' onClick={sendBroadcastMessage}>
               <CloseIcon />
             </IconButton>}
           </div>
         }
-        {!isDeletedPlace ? <TextField
+        {!checkUpPlaceIsDeleted ? <TextField
           value={place}
           variant='outlined'
           size='small'
           fullWidth
           placeholder='Место'
           onChange={(e) => setPlace(e.target.value)}
-        /> : <Button onClick={sendBroadcastMessage}>показать</Button>}
+        /> : <Button disabled={!checkupPlanPlace?.delete} onClick={sendBroadcastMessage}>показать</Button>}
       </div>
       <TextField
         value={target}

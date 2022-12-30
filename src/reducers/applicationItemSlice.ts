@@ -14,6 +14,7 @@ export type applicationInitialState = {
   managerSignUrlPath: string,
   creationDate: string,
   execDate: string,
+  checkUpPlaceIsDeleted: boolean,
   consiliumDoctors: Array<consiliumDoctor>,
   diagnostic: Array<{
     id?: number,
@@ -54,6 +55,7 @@ export const initialState: applicationInitialState = {
   patientBirthDate: '',
   patientName: '',
   diagnosticData: '',
+  checkUpPlaceIsDeleted: false,
   consiliumDoctors: [],
   diagnostic: [],
   mostProblDiagnosis: '',
@@ -86,6 +88,7 @@ export const applicationItemSlice = createSlice({
       state.managerSpeciality = action.payload.managerSpeciality
       state.managerSignUrlPath = action.payload.managerSignUrlPath
       state.diagnosticData = action.payload.diagnosticData
+      state.checkUpPlaceIsDeleted = action.payload.checkUpPlaceIsDeleted
     },
     saveConsiliumDoctors: (state, action: PayloadAction<consiliumDoctor>) => {
       state.consiliumDoctors = [...state.consiliumDoctors, { name: action.payload.name, speciality: action.payload.speciality }]
@@ -134,7 +137,7 @@ export const applicationItemSlice = createSlice({
       state.comments = [...state.comments, { comment: action.payload }]
     },
     changeComment: (state, action: PayloadAction<{ index: number, comment: string }>) => {
-      state.comments = state.comments.map((commentEl, commentIndex) => commentIndex === action.payload.index ? { ...commentEl,comment: action.payload.comment } : commentEl)
+      state.comments = state.comments.map((commentEl, commentIndex) => commentIndex === action.payload.index ? { ...commentEl, comment: action.payload.comment } : commentEl)
     },
     deleteComment: (state, action: PayloadAction<number>) => {
       state.comments = state.comments.filter((commentElm, index) => index !== action.payload)
@@ -156,11 +159,14 @@ export const applicationItemSlice = createSlice({
     },
     successUpdate: (state, action: PayloadAction<string>) => {
       state.status = action.payload
+    },
+    saveCheckupPlanDeletedPlace: (state, action: PayloadAction<boolean>) => {
+      state.checkUpPlaceIsDeleted = action.payload
     }
   },
 });
 
-export const { saveApplicationItem, saveConsiliumDoctors, changeConsiliumDoctors, deleteConsiliumDoctors, saveDiagnostic, changeDiagnostic, deleteDiagnostic, changeMostProblDiagnosis, changeSecondaryDiagnosis, saveCheckupPlan, changeCheckupPlan, deleteCheckupPlan, saveComment, changeComment, deleteComment, changeAnamnesis, changeComplaints, changeDiagnosticData, changePatientBirthDate, changePatientName, successUpdate } = applicationItemSlice.actions;
+export const { saveApplicationItem, saveConsiliumDoctors, changeConsiliumDoctors, deleteConsiliumDoctors, saveDiagnostic, changeDiagnostic, deleteDiagnostic, changeMostProblDiagnosis, changeSecondaryDiagnosis, saveCheckupPlan, changeCheckupPlan, deleteCheckupPlan, saveComment, changeComment, deleteComment, changeAnamnesis, changeComplaints, changeDiagnosticData, changePatientBirthDate, changePatientName, successUpdate,saveCheckupPlanDeletedPlace } = applicationItemSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

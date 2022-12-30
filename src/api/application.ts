@@ -38,6 +38,15 @@ export const updateOneApplicationApi = async (application: applicationInitialSta
   return response.data
 }
 /**
+ * Изменение опции удалении места в плане лечения в печатной версии
+ */
+export const changeIsDeletedPlace = async (id: string) => {
+  const response = await diagnostApi.post('/changedeloptn', {
+    id
+  }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
+  return response.data
+}
+/**
  * Удаление одного заключения по id.
  * @param {number} id Id заключения.
  */
