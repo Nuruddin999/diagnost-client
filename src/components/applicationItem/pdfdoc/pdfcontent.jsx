@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   recomenTitle: {
     fontWeight: 700,
-    fontSize:'12px',
+    fontSize: '12px',
     fontFamily: "Times New Roman Bold",
     marginTop: 12,
     marginBottom: 12,
@@ -138,13 +138,13 @@ const styles = StyleSheet.create({
   },
   anamnesisSection: {
     textAlign: 'center',
-    marginTop:'7px'
+    marginTop: '7px'
   },
   reasonTitle: {
     fontWeight: 700,
     fontFamily: "Times New Roman Bold",
     fontSize: '12px',
-    marginTop:'14px'
+    marginTop: '14px'
   },
   reasonSubTitle: {
     fontWeight: 700,
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderBottom: '1px solid black',
     fontFamily: "Times New Roman Reg",
-    fontSize:'12px',
+    fontSize: '12px',
     textAlign: 'justify'
   },
   commonSize: {
@@ -292,7 +292,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
         <Page style={styles.title}>
           <View style={{ ...styles.commonSize, ...styles.hdr, marginBottom: 5 }} fixed>
             <Image src={hopedoc} style={styles.hdrimg} />
-            <View style={{fontSize:'10px', fontFamily:'Times New Roman Reg'}}>
+            <View style={{ fontSize: '10px', fontFamily: 'Times New Roman Reg' }}>
               <Text>г Махачкала, ул Батырая 11</Text>
               <Text>7 этаж 709 кабинет</Text>
               <Text>Тел. +7(964)0067007</Text>
@@ -326,9 +326,9 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           <Text style={styles.reasonSubTitle}> (указать основания: жалобы, симптомы, синдромы подозрения врача и пр.): </Text>
           <View style={{ ...styles.commonSize, ...styles.anamnesisSection }}>
             {complaint ? <Text style={styles.complaintTitle} wrap={false}><Text style={styles.complaintTitleFirstWord}>Жалоб: </Text>{complaint}</Text> : null}
-            {anamnesis ? <Text style={{...styles.complaintTitle, marginTop: '10px' }} wrap={false}><Text style={styles.complaintTitleFirstWord}>Анамнеза- </Text>{anamnesis}
+            {anamnesis ? <Text style={{ ...styles.complaintTitle, marginTop: '10px' }} wrap={false}><Text style={styles.complaintTitleFirstWord}>Анамнеза- </Text>{anamnesis}
             </Text> : null}
-            {diagnosticData ? <Text style={{...styles.complaintTitle, marginTop:'10px'}} wrap={false}><Text style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}</Text> : null}
+            {diagnosticData ? <Text style={{ ...styles.complaintTitle, marginTop: '10px' }} wrap={false}><Text style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}</Text> : null}
           </View>
           <View style={{ ...styles.commonSize, marginTop: 10 }}>
             <Table
@@ -349,38 +349,31 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             />
           </View>
           <View style={{ marginTop: 44, ...styles.commonSize }}>
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderBottom: '1px solid black',}} wrap={false}>
-              <View style={{ width: '350px', borderRight: '1px solid black', padding: '5px' }}>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderBottom: '1px solid black', }} wrap={false}>
+              <View style={{ width: '450px', borderRight: '1px solid black', padding: '5px' }}>
                 <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
-                  Выявлен наиболее
+                  Выявлен наиболее вероятный
                 </Text>
                 <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
-                  вероятный
-                  основной
-                </Text>
-                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
-                  диагноз
+                  основной диагноз:
                 </Text>
               </View>
-              <View style={{ width: '750px', display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+              <View style={{ width: '650px', display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                 <Text style={{ ...styles.probableDiagnosisText, padding: 5 }} hyphenationCallback={hyphenationCallback}>
                   {mostProblDiagnosis}
                 </Text>
               </View>
             </View>
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderTop: '1px solid black',}} wrap={false}>
-              <View style={{ width: '350px', borderRight: '1px solid black', padding: '5px' }}>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderTop: '1px solid black', }} wrap={false}>
+              <View style={{ width: '450px', borderRight: '1px solid black', padding: '5px' }}>
                 <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
-                  Выявлены
+                  Выявлены сопутствующие
                 </Text>
                 <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
-                  сопутствующие
-                </Text>
-                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
-                  диагнозы
+                  диагнозы:
                 </Text>
               </View>
-              <View style={{ width: '750px', display: 'flex', flexDirection: 'row', flexWrap: 'wrap', }}>
+              <View style={{ width: '650px', display: 'flex', flexDirection: 'row', flexWrap: 'wrap', }}>
                 <Text style={{ ...styles.probableDiagnosisText, padding: 5, flexWrap: 'wrap' }} hyphenationCallback={hyphenationCallback}>
                   {secondaryDiagnosis}
                 </Text>
