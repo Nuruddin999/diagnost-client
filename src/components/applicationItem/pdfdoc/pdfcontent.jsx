@@ -390,7 +390,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               status={status}
             />
             {comments ? <View style={styles.tabl} wrap={false}>
-              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }} orphans={10}>Пояснения:</Text>
+              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left', fontSize:'12px' }} orphans={10}>   Пояснения:</Text>
               <View style={{ ...styles.commentsWrapper, marginTop: 28 }} >
                 <Text style={styles.commentsNum}>1</Text>
                 <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comments[0].comment}</Text>
