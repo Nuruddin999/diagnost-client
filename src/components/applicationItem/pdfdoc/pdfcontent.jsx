@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   subtitle: {
-    fontSize: 9,
+    fontSize: 8,
     marginTop: 8,
     fontWeight: 700,
     fontFamily: "Times New Roman Bold",
@@ -122,7 +122,8 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     fontFamily: "Times New Roman Bold",
     padding: 0,
-    width: '50%'
+    width: '50%',
+    fontSize: '12px'
   },
   birthWrapper: {
     display: 'flex',
@@ -133,19 +134,22 @@ const styles = StyleSheet.create({
     borderTop: '1px solid black',
     width: '100%',
     fontFamily: "Times New Roman Reg",
-    fontSize: 10
+    fontSize: '8px'
   },
   anamnesisSection: {
-    textAlign: 'center'
+    textAlign: 'center',
+    marginTop:'7px'
   },
   reasonTitle: {
     fontWeight: 700,
     fontFamily: "Times New Roman Bold",
+    fontSize: '12px',
+    marginTop:'14px'
   },
   reasonSubTitle: {
     fontWeight: 700,
     fontFamily: "Times New Roman Bold",
-    fontSize: 10
+    fontSize: 7
   },
   complaintTitle: {
     flexDirection: 'row',
@@ -238,6 +242,8 @@ const styles = StyleSheet.create({
   commentsSecText: {
     width: '100%',
     borderBottom: '1px solid black',
+    fontFamily: "Times New Roman Reg",
+    fontSize:'12px',
     textAlign: 'justify'
   },
   commonSize: {
@@ -320,9 +326,9 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           <Text style={styles.reasonSubTitle}> (указать основания: жалобы, симптомы, синдромы подозрения врача и пр.): </Text>
           <View style={{ ...styles.commonSize, ...styles.anamnesisSection }}>
             {complaint ? <Text style={styles.complaintTitle} wrap={false}><Text style={styles.complaintTitleFirstWord}>Жалоб: </Text>{complaint}</Text> : null}
-            {anamnesis ? <Text style={styles.complaintTitle} wrap={false}><Text style={styles.complaintTitleFirstWord}>Анамнеза: </Text>{anamnesis}
+            {anamnesis ? <Text style={{...styles.complaintTitle, marginTop: '10px' }} wrap={false}><Text style={styles.complaintTitleFirstWord}>Анамнеза- </Text>{anamnesis}
             </Text> : null}
-            {diagnosticData ? <Text style={styles.complaintTitle} wrap={false}><Text style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}</Text> : null}
+            {diagnosticData ? <Text style={{...styles.complaintTitle, marginTop:'10px'}} wrap={false}><Text style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}</Text> : null}
           </View>
           <View style={{ ...styles.commonSize, marginTop: 10 }}>
             <Table
@@ -342,8 +348,8 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               contentKeys={['diagnosis']}
             />
           </View>
-          <View style={{ marginTop: 14, ...styles.commonSize }}>
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', border: '1px solid black' }} wrap={false}>
+          <View style={{ marginTop: 44, ...styles.commonSize }}>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderBottom: '1px solid black',}} wrap={false}>
               <View style={{ width: '350px', borderRight: '1px solid black', padding: '5px' }}>
                 <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
                   Выявлен наиболее
@@ -362,7 +368,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                 </Text>
               </View>
             </View>
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', border: '1px solid black' }} wrap={false}>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderTop: '1px solid black',}} wrap={false}>
               <View style={{ width: '350px', borderRight: '1px solid black', padding: '5px' }}>
                 <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
                   Выявлены
@@ -374,14 +380,14 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                   диагнозы
                 </Text>
               </View>
-              <View style={{ width: '750px', display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+              <View style={{ width: '750px', display: 'flex', flexDirection: 'row', flexWrap: 'wrap', }}>
                 <Text style={{ ...styles.probableDiagnosisText, padding: 5, flexWrap: 'wrap' }} hyphenationCallback={hyphenationCallback}>
                   {secondaryDiagnosis}
                 </Text>
               </View>
             </View>
           </View>
-          <View style={{ marginTop: 14, ...styles.commonSize }}>
+          <View style={{ marginTop: 44, ...styles.commonSize }}>
             <Table
               headers={['№', 'Вид обследования', 'Место', 'Цель проведения']}
               dataContent={checkupPlans}
@@ -392,16 +398,16 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             />
             {comments ? <View style={styles.tabl} wrap={false}>
               <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left' }} orphans={10}>Пояснения:</Text>
-              <View style={{ ...styles.commentsWrapper, marginTop: 14 }} >
+              <View style={{ ...styles.commentsWrapper, marginTop: 28 }} >
                 <Text style={styles.commentsNum}>1</Text>
                 <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comments[0].comment}</Text>
               </View>
-              {comments[1] ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} >
+              {comments[1] ? <View style={{ ...styles.commentsWrapper, marginTop: 28 }} >
                 <Text style={styles.commentsNum}>2</Text>
                 <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comments[1].comment}</Text>
               </View> : null}
             </View> : null}
-            {comments.map((comment, index) => index > 1 ? <View style={{ ...styles.commentsWrapper, marginTop: 14 }} wrap={false}>
+            {comments.map((comment, index) => index > 1 ? <View style={{ ...styles.commentsWrapper, marginTop: 28 }} wrap={false}>
               <Text style={styles.commentsNum}>{index + 1}</Text>
               <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comment.comment}</Text>
             </View> : null)}

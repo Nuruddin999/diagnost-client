@@ -15,7 +15,8 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
     style={{
       flexBasis: hdr === '№' ? '5%' : `${(status || isDeletedPlace) ? 95 / (headers.length - 2) : 95 / (headers.length - 1)}%`,
       height: '100%',
-      border: '1px solid black'
+      border: '1px solid black',
+      padding:'7px'
     }}>
     <Text hyphenationCallback={hyphenationCallback} style={{ fontFamily: "Times New Roman Bold", fontSize: '12px' }}>
       {hdr}
@@ -77,7 +78,7 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
         {title}
       </Text>
       <Text
-        style={{ fontSize: '12px', marginTop: 4, marginBottom: 10, fontFamily: "Times New Roman Bold", }}>
+        style={{ fontSize: '7px', marginBottom: 10, fontFamily: "Times New Roman Bold", }}>
         {subTitle}
       </Text>
       {headers.length > 0 ?
