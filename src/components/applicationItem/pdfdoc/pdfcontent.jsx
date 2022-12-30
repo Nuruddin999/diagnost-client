@@ -365,7 +365,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               </View>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderTop: '1px solid black', }} wrap={false}>
-              <View style={{ width: '450px', borderRight: '1px solid black', padding: '5px' }}>
+              <View style={{ width: '450px', height: '100%', borderRight: '1px solid black', padding: '5px' }}>
                 <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
                   Выявлены сопутствующие
                 </Text>
