@@ -8,6 +8,7 @@ import Table from './Table'
 import hyphen from 'hyphen';
 import pattern from 'hyphen/patterns/ru';
 import { declination } from '../../../helpers'
+import BirthBlock from './BirthBlock'
 
 
 const hyphenator = hyphen(pattern);
@@ -116,24 +117,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'grey',
   },
-  birth: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+  newbirth: {
     fontWeight: 700,
     fontFamily: "Times New Roman Bold",
-    padding: 0,
-    width: '50%',
     fontSize: '12px'
   },
-  birthWrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: 24
-  },
-  birthText: {
-    borderTop: '1px solid black',
-    width: '100%',
+  newbirthText: {
     fontFamily: "Times New Roman Reg",
     fontSize: '8px'
   },
@@ -283,7 +272,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
   const month = new Date(patientBirthDate).getMonth() + 1
   const date = new Date(patientBirthDate).getDate().toLocaleString()
   const age = currentYear - yearsOld
-  const ageWithEnding = declination(age,[' год', ' года', ' лет'])
+  const ageWithEnding = declination(age, [' год', ' года', ' лет'])
   const currentMonth = new Date().getMonth()
   const yearsInMonth = new Date(patientBirthDate).getMonth()
   const birthInMonthDifference = currentMonth - yearsInMonth
@@ -306,23 +295,23 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           <Text style={{ ...styles.commonSize, ...styles.subtitle }}>
             (ВНИМАНИЕ! ДОКУМЕНТ ИСКЛЮЧИТЕЛЬНО ДЛЯ ВНУТРЕННЕГО ПОЛЬЗОВАНИЯ ОРГАНИЗАЦИИ)
           </Text>
-          <View style={{ ...styles.commonSize, ...styles.birthWrapper }}>
-            {patientName ? <View style={styles.birth}>
-              <Text>
-                {patientName}
-              </Text>
-              <Text style={styles.birthText}>
-                ФИО
-              </Text>
-            </View> : <View></View>}
-            {patientBirthDate ? <View style={styles.birth}>
-              <Text>
-                {`${date > 9 ? date : '0' + date}.${month > 9 ? month : '0' + month}.${yearsOld} г.р.   (${age > 0 ? age + ' '+ ageWithEnding : ageInMonth + 'мес'})`}
-              </Text>
-              <Text style={styles.birthText}>
-                Дата рождения
-              </Text>
-            </View> : <View></View>}
+          <View style={{ width:'80%',marginHorizontal:'auto', marginTop:'24px', display: 'flex', flexDirection:'row', justifyContent:'center' }}>
+            <BirthBlock
+              text={patientName}
+              patientName={patientName}
+              patientBirthDate={patientBirthDate}
+              styles={styles.newbirth}
+              flex={'1'}
+              underText={'ФИО'}
+            />
+                 <BirthBlock
+              text={`${date > 9 ? date : '0' + date}.${month > 9 ? month : '0' + month}.${yearsOld} г.р.   (${age > 0 ? age + ' '+ ageWithEnding : ageInMonth + 'мес'})`}
+              patientName={patientName}
+              patientBirthDate={patientBirthDate}
+              styles={styles.newbirth}
+              flex={'0.5'}
+              underText={'Дата рождения'}
+            />
           </View>
           <Text style={styles.reasonTitle}>На основании: </Text>
           <Text style={styles.reasonSubTitle}> (указать основания: жалобы, симптомы, синдромы, подозрения врача и пр.): </Text>
@@ -392,7 +381,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               status={status}
             />
             {comments ? <View style={styles.tabl} wrap={false}>
-              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left', fontSize:'12px' }} orphans={10}>   Пояснения:</Text>
+              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left', fontSize: '12px' }} orphans={10}>   Пояснения:</Text>
               <View style={{ ...styles.commentsWrapper, marginTop: 28 }} >
                 <Text style={styles.commentsNum}>1</Text>
                 <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comments[0].comment}</Text>
