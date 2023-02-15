@@ -244,13 +244,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   finalDateAndFioText: {
-    textDecoration: 'underline'
+    fontSize: '12px'
   },
-  exeDateText: { width: '150px', marginHorizontal: '10px' },
-  managerAndSpeciality: { display: 'flex', flexDirection: 'column', width: '150px', alignItems: 'center', marginHorizontal: '10px', flexWrap: 'wrap' }
+  exeDateText: { width: '150px', marginHorizontal: '10px', borderBottom: '1px solid black', },
+  managerAndSpeciality: { display: 'flex', flexDirection: 'row', width: '550px', alignItems: 'center', marginHorizontal: '10px', flexWrap: 'wrap', borderBottom: '1px solid black', justifyContent: 'center' }
 
 });
 
@@ -277,6 +277,13 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
   const yearsInMonth = new Date(patientBirthDate).getMonth()
   const birthInMonthDifference = currentMonth - yearsInMonth
   const ageInMonth = age * 12 + birthInMonthDifference
+  let managerFio = "";
+  if (manager) {
+    let credentials = manager ? manager.replace(/ +/g, ' ') : ""
+    let withSpaceInFirst = credentials.split(" ")
+    let isSpaceFirst = withSpaceInFirst[0] === ""
+    managerFio = withSpaceInFirst[isSpaceFirst ? 1 : 0] + " " + withSpaceInFirst[isSpaceFirst ? 2 : 1][0] + "." + " " + withSpaceInFirst[isSpaceFirst ? 3 : 2][0] + "."
+  }
   return (
     <PDFViewer>
       <Document>
@@ -295,7 +302,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           <Text style={{ ...styles.commonSize, ...styles.subtitle }}>
             (ВНИМАНИЕ! ДОКУМЕНТ ИСКЛЮЧИТЕЛЬНО ДЛЯ ВНУТРЕННЕГО ПОЛЬЗОВАНИЯ ОРГАНИЗАЦИИ)
           </Text>
-          <View style={{ width:'80%',marginHorizontal:'auto', marginTop:'24px', display: 'flex', flexDirection:'row', justifyContent:'center' }}>
+          <View style={{ width: '80%', marginHorizontal: 'auto', marginTop: '24px', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
             <BirthBlock
               text={patientName}
               patientName={patientName}
@@ -304,8 +311,8 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               flex={'1'}
               underText={'ФИО'}
             />
-                 <BirthBlock
-              text={`${date > 9 ? date : '0' + date}.${month > 9 ? month : '0' + month}.${yearsOld} г.р.   (${age > 0 ? age + ' '+ ageWithEnding : ageInMonth + 'мес'})`}
+            <BirthBlock
+              text={`${date > 9 ? date : '0' + date}.${month > 9 ? month : '0' + month}.${yearsOld} г.р.   (${age > 0 ? age + ' ' + ageWithEnding : ageInMonth + 'мес'})`}
               patientName={patientName}
               patientBirthDate={patientBirthDate}
               styles={styles.newbirth}
@@ -398,12 +405,13 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           </View>
           {execDate && manager ?
             <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }} wrap={false}>
-              <Text style={styles.exeDateText}>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
+              <View style={styles.exeDateText}><Text>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
+              </View>
               {managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg} /> : null}
               <Image src={sell} style={styles.hdrimg} />
               <View style={styles.managerAndSpeciality}>
-                {managerSpeciality ? <Text >{managerSpeciality}</Text> : null}
-                <Text>{manager}</Text>
+                {managerSpeciality ? <Text>врач-{managerSpeciality.toLowerCase()}  /</Text> : null}
+                <Text style={{ paddingLeft: '10px' }}>{managerFio}</Text>
               </View>
             </View> : null}
         </Page>
