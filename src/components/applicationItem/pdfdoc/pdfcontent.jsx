@@ -403,17 +403,20 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comment.comment}</Text>
             </View> : null)}
           </View>
+          <View style={{...styles.commonSize,position:'relative'}}  wrap={false}>
+          <Image src={sell} style={{ width: '200px', alignSelf:'center', marginLeft:'50px'}} />
           {execDate && manager ?
-            <View style={{ ...styles.commonSize, ...styles.finalDateAndFio, ...styles.finalDateAndFioText }} wrap={false}>
+            <View style={{ ...styles.commonSize, width:'100%', height:'100px', ...styles.finalDateAndFio, ...styles.finalDateAndFioText, position
+          :'absolute', top:'25px',left:'0' }} >
               <View style={styles.exeDateText}><Text>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
               </View>
               {managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg} /> : null}
-              <Image src={sell} style={styles.hdrimg} />
               <View style={styles.managerAndSpeciality}>
                 {managerSpeciality ? <Text>врач-{managerSpeciality.toLowerCase()}  /</Text> : null}
                 <Text style={{ paddingLeft: '10px' }}>{managerFio}</Text>
               </View>
             </View> : null}
+            </View>
         </Page>
       </Document>
     </PDFViewer>
