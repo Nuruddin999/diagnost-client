@@ -1,16 +1,25 @@
-h5 {
-    margin-top:-12px;
+.checkup-section {
+  h5 {
+    margin-top: -12px;
     font-weight: 300;
-}
-table {
+  }
+  table {
     width: 100%;
-}
-.place {
+    tr {
+      td {
+        padding: 10px;
+        vertical-align: baseline;
+        border-bottom: 1px solid black;
+      }
+    }
+  }
+  .place {
     position: relative;
     width: 100%;
     .hide-place {
-        position: absolute;
-        top: -30px;
-        right: 2px;
+      position: absolute;
+      top: -30px;
+      right: 2px;
     }
+  }
 }

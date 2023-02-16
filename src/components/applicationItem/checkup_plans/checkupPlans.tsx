@@ -39,7 +39,7 @@ const CheckupPlanForm = (): React.ReactElement => {
       bc.close();
     };
   }, [bc]);
-  return <div>
+  return <div className="checkup-section">
     {checkupPlans.length > 0 ? <table>
       <tr>
         <th>
@@ -64,7 +64,7 @@ const CheckupPlanForm = (): React.ReactElement => {
       <tbody>
         {checkupPlans.length > 0 && checkupPlans.map((checkupPlan, index) => <tr>
           <td>{index + 1}</td>
-          <td>    <TextField
+          <td align="left">    <TextField
             value={checkupPlan.kind}
             variant='standard'
             size='small'
