@@ -7,13 +7,14 @@ import TimesNewRomanBoldFont from '../../../TimesNewRomanPS-BoldMT.ttf'
 import Table from './Table'
 import hyphen from 'hyphen';
 import pattern from 'hyphen/patterns/ru';
+import engpattern from 'hyphen/patterns/en-gb';
 import { declination } from '../../../helpers'
 import BirthBlock from './BirthBlock'
 
 
 const hyphenator = hyphen(pattern);
-
 const hyphenationCallback = (word) => {
+  const englishWord = /^[A-Za-z0-9]*$/;
   return hyphenator(word).split('\u00AD');
 }
 
@@ -387,7 +388,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               isDeletedPlace={isDeletedPlace}
               status={status}
             />
-            {comments ? <View style={styles.tabl} wrap={false}>
+            {comments ? <View style={styles.tabl}>
               <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left', fontSize: '12px' }} orphans={10}>   Пояснения:</Text>
               <View style={{ ...styles.commentsWrapper, marginTop: 28 }} >
                 <Text style={styles.commentsNum}>1</Text>
@@ -398,25 +399,28 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                 <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comments[1].comment}</Text>
               </View> : null}
             </View> : null}
-            {comments.map((comment, index) => index > 1 ? <View style={{ ...styles.commentsWrapper, marginTop: 28 }} wrap={false}>
+            {/** разделил блоки комментариев, чтоб первый комментарий не оставался на заполненном листе и переносился на новый, сейчас это отменено, //todo написать один компонент без разделения  */}
+            {comments.map((comment, index) => index > 1 ? <View style={{ ...styles.commentsWrapper, marginTop: 28 }}>
               <Text style={styles.commentsNum}>{index + 1}</Text>
               <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comment.comment}</Text>
             </View> : null)}
           </View>
-          <View style={{...styles.commonSize,position:'relative'}}  wrap={false}>
-          <Image src={sell} style={{ width: '200px', alignSelf:'center', marginLeft:'50px'}} />
-          {execDate && manager ?
-            <View style={{ ...styles.commonSize, width:'100%', height:'100px', ...styles.finalDateAndFio, ...styles.finalDateAndFioText, position
-          :'absolute', top:'25px',left:'0' }} >
-              <View style={styles.exeDateText}><Text>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
-              </View>
-              {managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg} /> : null}
-              <View style={styles.managerAndSpeciality}>
-                {managerSpeciality ? <Text>врач-{managerSpeciality.toLowerCase()}  /</Text> : null}
-                <Text style={{ paddingLeft: '10px' }}>{managerFio}</Text>
-              </View>
-            </View> : null}
-            </View>
+          <View style={{ ...styles.commonSize, position: 'relative' }} wrap={false}>
+            <Image src={sell} style={{ width: '200px', alignSelf: 'center', marginLeft: '50px' }} />
+            {execDate && manager ?
+              <View style={{
+                ...styles.commonSize, width: '100%', height: '100px', ...styles.finalDateAndFio, ...styles.finalDateAndFioText, position
+                  : 'absolute', top: '25px', left: '0'
+              }} >
+                <View style={styles.exeDateText}><Text>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
+                </View>
+                {managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg} /> : null}
+                <View style={styles.managerAndSpeciality}>
+                  {managerSpeciality ? <Text>врач-{managerSpeciality.toLowerCase()}  /</Text> : null}
+                  <Text style={{ paddingLeft: '10px' }}>{managerFio}</Text>
+                </View>
+              </View> : null}
+          </View>
         </Page>
       </Document>
     </PDFViewer>
