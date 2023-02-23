@@ -51,7 +51,7 @@ const trow = {
 }
 const styles = StyleSheet.create({
   body: {
-    margin: '8px',
+   // margin: '8px',
   },
   hdr: {
     flexDirection: 'row',
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
   title: {
     margin: '8px',
-    paddingBottom: '16px',
+    paddingBottom: '42px',
     fontSize: 14,
     textAlign: 'center',
     fontFamily: "Times New Roman Reg"
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   },
   commonSize: {
     width: '80%',
-    marginHorizontal: 'auto'
+    marginHorizontal: 'auto',
   },
   finalDateAndFio: {
     display: 'flex',
@@ -289,7 +289,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
     <PDFViewer>
       <Document>
         <Page style={styles.title}>
-          <View style={{ ...styles.commonSize, ...styles.hdr, marginBottom: 5 }} fixed>
+          <View style={{ ...styles.commonSize, ...styles.hdr, marginBottom: 15 }} fixed>
             <Image src={hopedoc} style={styles.hdrimg} />
             <View style={{ fontSize: '10px', fontFamily: 'Times New Roman Reg' }}>
               <Text>г Махачкала, ул Батырая 11</Text>
