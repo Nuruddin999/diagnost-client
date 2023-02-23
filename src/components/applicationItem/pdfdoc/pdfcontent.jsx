@@ -51,7 +51,7 @@ const trow = {
 }
 const styles = StyleSheet.create({
   body: {
-   // margin: '8px',
+    // margin: '8px',
   },
   hdr: {
     flexDirection: 'row',
@@ -251,7 +251,8 @@ const styles = StyleSheet.create({
     fontSize: '12px'
   },
   exeDateText: { width: '150px', marginHorizontal: '10px', borderBottom: '1px solid black', },
-  managerAndSpeciality: { display: 'flex', flexDirection: 'row', width: '550px', alignItems: 'center', marginHorizontal: '10px', flexWrap: 'wrap', borderBottom: '1px solid black', justifyContent: 'center' }
+  managerAndSpeciality: { display: 'flex', flexDirection: 'row', width: '550px', alignItems: 'center', marginHorizontal: '10px', flexWrap: 'wrap', borderBottom: '1px solid black', justifyContent: 'center' },
+  probDiagValue: { flexBasis: '650px', minHeight: '40px', display: 'flex', flexDirection: 'row', borderLeft: '1px solid black', flexWrap: 'wrap', alignItems: 'center' }
 
 });
 
@@ -348,8 +349,8 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             />
           </View>
           <View style={{ marginTop: 44, ...styles.commonSize }}>
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderBottom: '1px solid black', }} wrap={false}>
-              <View style={{ width: '450px', borderRight: '1px solid black', padding: '5px' }}>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderBottom: '1px solid black', width: '100%' }} wrap={false}>
+              <View style={{ flexBasis: '450px', padding: '5px' }}>
                 <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
                   Выявлен наиболее вероятный
                 </Text>
@@ -357,14 +358,14 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                   основной диагноз:
                 </Text>
               </View>
-              <View style={{ width: '650px', display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+              <View style={styles.probDiagValue}>
                 <Text style={{ ...styles.probableDiagnosisText, padding: 5 }} hyphenationCallback={hyphenationCallback}>
                   {mostProblDiagnosis}
                 </Text>
               </View>
             </View>
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderTop: '1px solid black', }} wrap={false}>
-              <View style={{ width: '450px', height: '100%', borderRight: '1px solid black', padding: '5px' }}>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', borderTop: '1px solid black', width: '100%' }} wrap={false}>
+              <View style={{ flexBasis: '450px', padding: '5px' }}>
                 <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }} hyphenationCallback={hyphenationCallback} >
                   Выявлены сопутствующие
                 </Text>
@@ -372,7 +373,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                   диагнозы:
                 </Text>
               </View>
-              <View style={{ width: '650px', display: 'flex', flexDirection: 'row', flexWrap: 'wrap', }}>
+              <View style={styles.probDiagValue}>
                 <Text style={{ ...styles.probableDiagnosisText, padding: 5, flexWrap: 'wrap' }} hyphenationCallback={hyphenationCallback}>
                   {secondaryDiagnosis}
                 </Text>
