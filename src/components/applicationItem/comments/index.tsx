@@ -27,7 +27,6 @@ const Comments = (): React.ReactElement => {
           placeholder={commentEl.title}
           size='small'
           multiline
-          maxRows={4}
           value={commentEl.comment}
           onChange={(e) => processedRights.applications?.update &&  dispatch(changeComment({ index, comment: e.target.value }))}
           margin='normal'
