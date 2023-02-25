@@ -223,7 +223,6 @@ const styles = StyleSheet.create({
   },
   commentsWrapper: {
     ...(trow),
-    alignItems: 'start'
   },
   commentsNum: {
     width: '50px',
@@ -389,22 +388,20 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
               isDeletedPlace={isDeletedPlace}
               status={status}
             />
-            {comments ? <View style={styles.tabl}>
-              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left', fontSize: '12px' }} orphans={10}>   Пояснения:</Text>
-              <View style={{ ...styles.commentsWrapper, marginTop: 28 }} >
-                <Text style={styles.commentsNum}>1</Text>
-                <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comments[0].comment}</Text>
+            {comments ? <View wrap={false}>
+              <Text style={{ fontFamily: 'Times New Roman Bold', marginTop: 14, textAlign: 'left', fontSize: '12px' }}>   Пояснения:</Text>
+              <View style={{ ...styles.commentsWrapper, marginTop: 28 }}>
+                <View style={{ width: '100%' }}>
+                  <Text style={{ ...styles.commentsSecText }} hyphenationCallback={hyphenationCallback}>{1}  {comments[0].comment}</Text>
+                </View>
               </View>
-              {comments[1] ? <View style={{ ...styles.commentsWrapper, marginTop: 28 }} >
-                <Text style={styles.commentsNum}>2</Text>
-                <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comments[1].comment}</Text>
-              </View> : null}
             </View> : null}
             {/** разделил блоки комментариев, чтоб первый комментарий не оставался на заполненном листе и переносился на новый, сейчас это отменено, //todo написать один компонент без разделения  */}
-            {comments.map((comment, index) => index > 1 ? <View style={{ ...styles.commentsWrapper, marginTop: 28 }}>
-              <Text style={styles.commentsNum}>{index + 1}</Text>
-              <Text style={styles.commentsSecText} hyphenationCallback={hyphenationCallback}>{comment.comment}</Text>
-            </View> : null)}
+            {comments ? comments.map((comment, index) => index > 0 ? <View style={{ ...styles.commentsWrapper, marginTop: 28 }}>
+              <View style={{ width: '100%' }}>
+                <Text style={{ ...styles.commentsSecText }} hyphenationCallback={hyphenationCallback}>{index + 1}  {comment.comment}</Text>
+              </View>
+            </View> : null) : null}
           </View>
           <View style={{ ...styles.commonSize, position: 'relative' }} wrap={false}>
             <Image src={sell} style={{ width: '150px', alignSelf: 'center', marginLeft: '20px' }} />
