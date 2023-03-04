@@ -1,13 +1,13 @@
 import React from "react";
-import {  Typography } from "@mui/material";
 import './style.button.scss'
 
 type ButtonProps = {
   onClick: () => void,
-  title?: string
+  title?: string,
+  disabled?:boolean
 }
-export const CommonButton = ({ title = '', onClick }: ButtonProps): React.ReactElement => {
-  return    <button className='add-button' onClick={onClick}>
+export const CommonButton = ({ title = '', onClick, disabled }: ButtonProps): React.ReactElement => {
+  return    <button className='add-button' onClick={onClick} disabled={disabled}>
 {title}
 </button>
 }

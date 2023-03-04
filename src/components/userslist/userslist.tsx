@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {  Pagination, TextField, CircularProgress } from "@mui/material";
 import React, { useCallback } from "react";
-import './style.reportlist.scss'
+import './style.userlist.scss'
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser } from "../../actions/user";
 import { RootState } from "../../app/store";

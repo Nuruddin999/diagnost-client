@@ -5,12 +5,14 @@ import applicationSlice from '../reducers/applicationSlice';
 import uiSlice  from '../reducers/ui';
 import userSlice from '../reducers/userSlice';
 import runSagas from '../sagas';
+import specialitySlice from "../reducers/specialitySlice";
 
 export const rootReducer = combineReducers({
   user: userSlice,
   application:applicationSlice,
   applicationItem:applicationItemSlice,
-  ui: uiSlice
+  ui: uiSlice,
+  speciality:specialitySlice
 })
 
 export type RootState = ReturnType<typeof rootReducer>

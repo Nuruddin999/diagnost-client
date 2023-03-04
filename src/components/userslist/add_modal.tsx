@@ -1,6 +1,6 @@
 import React from "react";
 import CloseIcon from '@mui/icons-material/Close';
-import './style.reportlist.scss'
+import './style.userlist.scss'
 import { useDispatch } from "react-redux";
 import './style.addmodal.scss'
 import { openModal } from "../../reducers/ui";

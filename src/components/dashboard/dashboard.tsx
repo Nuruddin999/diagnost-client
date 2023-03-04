@@ -20,6 +20,7 @@ import UsersList from "../userslist/userslist";
 import UserItem from "../useritem";
 import { selectApplicationUserRights } from "../../common/selectors/user";
 import { RoundLoader } from "../../common/components/roundloader";
+import Specialities from "../specialities/Specialities";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -80,6 +81,18 @@ const Dashboard = (): React.ReactElement => {
               </ListItemText>
             </Link>
           </div>}
+          {rights.isUsersOneRight && <div className='list-item'>
+            <Link to='/main/speciality'>
+              <ListItemIcon>
+                <PeopleAltIcon />
+              </ListItemIcon>
+            </Link>
+            <Link to='/main/speciality'>
+              <ListItemText>
+                Специальности
+              </ListItemText>
+            </Link>
+          </div>}
         </div>
         <div className="main-content">
           <Switch>
@@ -97,6 +110,9 @@ const Dashboard = (): React.ReactElement => {
             </Route>
             <Route path='/main/users'>
               {rights.processedRights.users?.read ? <UsersList /> : <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
+            </Route>
+            <Route path='/main/speciality'>
+              {rights.processedRights.users?.read ? <Specialities /> : <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
             </Route>
             <Route path='/main/aboutme'>
               <UserItem isProfile />
