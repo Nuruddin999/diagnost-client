@@ -1,23 +1,27 @@
 import React, {useState, useEffect} from "react";
-import {specialities} from "../../constants";
 import "./speciality_style.scss"
 import {Grid, IconButton, TextField} from "@mui/material";
 import {CommonButton} from "../../common/components/button"
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import {useDispatch, useSelector} from "react-redux";
-import {addSpecialityAction, getSpecialityAction} from "../../actions/speciality";
+import {addSpecialityAction, deleteOneSpecialityAction} from "../../actions/speciality";
 import {RootState} from "../../app/store";
+import {useGetSpecialities} from "../../common/hooks/useGetSpecialities";
+import {selectApplicationUserRights} from "../../common/selectors/user";
 const Specialities=():React.ReactElement=>{
     const [specName,setSpecName]=useState<string>()
     const [page, setPage] = React.useState(1);
+    const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
     const {specialities}=useSelector((state:RootState)=>state.speciality)
     const dispatch = useDispatch()
+    useGetSpecialities(specialities)
     const addSpeciality =()=>{
         specName && dispatch(addSpecialityAction(specName))
     }
-    useEffect(()=>{
-       dispatch(getSpecialityAction(page,100))
-    },[])
+
+    const deleteSpeciality =(id:number)=>{
+            dispatch(deleteOneSpecialityAction(id.toString()))
+    }
 
     useEffect(()=>{
         setSpecName('')
@@ -43,11 +47,12 @@ const Specialities=():React.ReactElement=>{
                 <tbody>
                 {specialities.map((el => <tr key={el.id}>
                     <td>{el.name}</td>
-                    <td><IconButton className='delete-button' onClick={(e: any) => {
+                    {(rights.processedRights.applications?.delete) && <td><IconButton className='delete-button' onClick={(e: any) => {
                         e.stopPropagation()
+                        el.id && deleteSpeciality(el.id)
                     }}>
-                        <DeleteOutlineIcon/>
-                    </IconButton></td>
+                        <DeleteOutlineIcon />
+                    </IconButton></td>}
                 </tr>))}
                 </tbody>
             </table>

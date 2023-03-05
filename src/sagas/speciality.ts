@@ -3,7 +3,7 @@ import { getUserByLetter } from "../actions/user"
 import { deleteUserApi, upLoadFileApi } from "../api/user"
 import { setFileUploadStatus, setError, setStatus } from "../reducers/ui"
 import { changeReqStatus,  saveUserItemSignFileInfo,} from "../reducers/userSlice"
-import {addSpecialityApi, getAllSpecApi} from "../api/speciality";
+import {addSpecialityApi, deleteOneSpecialityApi, getAllSpecApi} from "../api/speciality";
 import {getSpecialityAction } from "../actions/speciality"
 import {saveSpecialities} from "../reducers/specialitySlice";
 
@@ -56,20 +56,21 @@ export function* fetchSpeciality(getSpec: { type: 'speciality/get', payload: { p
  * Удаление  пользователя.
  * @param {Object} delUser .
  */
-export function* removeUser(delUser: { type: 'user/deleteone', payload: { id: string } }) {
+export function* removeSpeciality(delSpeciality: { type: 'speciality/deleteone', payload: { id: string } }) {
     try {
-        const { id } = delUser.payload
-        const response: {} = yield call(deleteUserApi, id)
+        yield put(setStatus('pending'))
+        const { id } = delSpeciality.payload
+        const response: {} = yield call(deleteOneSpecialityApi, id)
         if (response) {
-            yield put(changeReqStatus('success'))
-            yield put(getUserByLetter(1, 10, '', '', '', ''))
+            yield put(getSpecialityAction(1,100))
+            yield put(setStatus('ok'))
         }
     } catch (e: any) {
         if (e.response) {
-            yield put(changeReqStatus(e.response?.data?.message))
+            yield   put(setError('Произошла ошибка, попробуйте позже'))
         }
         else {
-            yield put(changeReqStatus('Неизвестаня ошибка'))
+            yield put(setStatus('pending'))
         }
     }
 }

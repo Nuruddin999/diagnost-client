@@ -14,6 +14,7 @@ import { RootState } from "../../app/store";
 import { checkUser, logOutUser } from "../../actions/user";
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import ApplicationItem from "../applicationItem";
 import { Registration } from "../../common/components/registration/registration";
 import UsersList from "../userslist/userslist";
@@ -81,10 +82,10 @@ const Dashboard = (): React.ReactElement => {
               </ListItemText>
             </Link>
           </div>}
-          {rights.isUsersOneRight && <div className='list-item'>
+          <div className='list-item'>
             <Link to='/main/speciality'>
               <ListItemIcon>
-                <PeopleAltIcon />
+                <BusinessCenterIcon />
               </ListItemIcon>
             </Link>
             <Link to='/main/speciality'>
@@ -92,7 +93,7 @@ const Dashboard = (): React.ReactElement => {
                 Специальности
               </ListItemText>
             </Link>
-          </div>}
+          </div>
         </div>
         <div className="main-content">
           <Switch>

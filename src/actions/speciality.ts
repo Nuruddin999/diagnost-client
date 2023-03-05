@@ -25,7 +25,7 @@ export const getSpecialityAction = createAction(Types.specialityGet, function pr
     }
 })
 
-export const deleteOneApplication = createAction(Types.specialityDel, function prepare(id: string) {
+export const deleteOneSpecialityAction = createAction(Types.specialityDel, function prepare(id: string) {
     return {
         payload: {
             id

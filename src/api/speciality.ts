@@ -26,8 +26,8 @@ export const getAllSpecApi = async (page: number,
  * @param {Object} application обновленное заключение.
  */
 
-export const deleteOneApplicationApi = async (id: string) => {
-    const response = await diagnostApi.get(`/applicationdel/${id}`,
+export const deleteOneSpecialityApi = async (id: string) => {
+    const response = await diagnostApi.get(`/docspecs/${id}`,
         {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
         })
