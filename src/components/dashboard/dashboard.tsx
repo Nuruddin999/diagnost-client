@@ -113,7 +113,7 @@ const Dashboard = (): React.ReactElement => {
               {rights.processedRights.users?.read ? <UsersList /> : <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
             </Route>
             <Route path='/main/speciality'>
-              {rights.processedRights.users?.read ? <Specialities /> : <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
+              {rights.processedRights.applications?.read ? <Specialities /> : <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
             </Route>
             <Route path='/main/aboutme'>
               <UserItem isProfile />
