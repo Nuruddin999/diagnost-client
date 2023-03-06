@@ -407,14 +407,13 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
             <Image src={sell} style={{ width: '150px', alignSelf: 'center', marginLeft: '20px' }} />
             {execDate && manager ?
               <View style={{
-                ...styles.commonSize, width: '100%', height: '100px', ...styles.finalDateAndFio, ...styles.finalDateAndFioText, position
-                  : 'absolute', top: '15px', left: '0'
+                ...styles.commonSize, width: '100%', height: '100px', ...styles.finalDateAndFio, ...styles.finalDateAndFioText, position: 'absolute', top: '15px', left: '0'
               }} >
                 <View style={styles.exeDateText}><Text>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
                 </View>
                 {managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg} /> : null}
                 <View style={styles.managerAndSpeciality}>
-                  {managerSpeciality ? <Text>врач-{managerSpeciality.toLowerCase()}  /</Text> : null}
+                  {managerSpeciality ? <Text>{managerSpeciality}  /</Text> : null}
                   <Text style={{ paddingLeft: '10px' }}>{managerFio}</Text>
                 </View>
               </View> : null}
