@@ -285,6 +285,8 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
     let isSpaceFirst = withSpaceInFirst[0] === ""
     managerFio = withSpaceInFirst[isSpaceFirst ? 1 : 0] + " " + withSpaceInFirst[isSpaceFirst ? 2 : 1][0] + "." + " " + withSpaceInFirst[isSpaceFirst ? 3 : 2][0] + "."
   }
+  // TODO может есть какой-то проще метод, типа равно врач ignore case
+  const isContainsDoctorWord = (managerSpeciality.replace(/\s/g, "").substring(0,4) ==='Врач') || (managerSpeciality.replace(/\s/g, "").substring(0,4) ==='врач')
   return (
     <PDFViewer>
       <Document>
@@ -413,7 +415,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                 </View>
                 {managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg} /> : null}
                 <View style={styles.managerAndSpeciality}>
-                  {managerSpeciality ? <Text>{managerSpeciality}  /</Text> : null}
+                  {managerSpeciality ? <Text>{ isContainsDoctorWord ? managerSpeciality : `Врач-${managerSpeciality.toLowerCase()}`}  /</Text> : null}
                   <Text style={{ paddingLeft: '10px' }}>{managerFio}</Text>
                 </View>
               </View> : null}
