@@ -7,7 +7,6 @@ import TimesNewRomanBoldFont from '../../../TimesNewRomanPS-BoldMT.ttf'
 import Table from './Table'
 import hyphen from 'hyphen';
 import pattern from 'hyphen/patterns/ru';
-import engpattern from 'hyphen/patterns/en-gb';
 import { declination } from '../../../helpers'
 import BirthBlock from './BirthBlock'
 
@@ -294,9 +293,10 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
           <View style={{ ...styles.commonSize, ...styles.hdr, marginBottom: 15 }} fixed>
             <Image src={hopedoc} style={styles.hdrimg} />
             <View style={{ fontSize: '10px', fontFamily: 'Times New Roman Reg' }}>
-              <Text>г Махачкала, ул Батырая 11</Text>
-              <Text>7 этаж 709 кабинет</Text>
-              <Text>Тел. +7(964)0067007</Text>
+              <Text>г Махачкала, проспект А. Акушинского д.395</Text>
+              <Text>4 этаж, офис №5</Text>
+              <Text>Тел. +7(8722)98-96-97, +7(964)006-70-07</Text>
+              <Text>vrachi_nadejdi@mail.ru</Text>
             </View>
           </View>
           <Text style={styles.recomenTitle}>
