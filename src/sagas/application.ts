@@ -1,13 +1,19 @@
 
 import { getListItemById } from './../common/api/api';
-import { changeIsDeletedPlace, deleteOneApplicationApi, getApplicationApi, updateOneApplicationApi } from './../api/application';
+import {
+  changeIsDeletedPlace,
+  changeManagerApi,
+  deleteOneApplicationApi,
+  getApplicationApi,
+  updateOneApplicationApi
+} from './../api/application';
 import { applicationForAdd, getApplication, Types } from './../actions/application';
 import { call, put, select, all, race } from "redux-saga/effects"
 import { addApplicationApi } from '../api/application';
 import { saveApplicationsList } from '../reducers/applicationSlice';
 import { applicationInitialState, saveApplicationItem, saveCheckupPlanDeletedPlace, successUpdate } from '../reducers/applicationItemSlice';
 import { RootState } from '../app/store';
-import { setCircular, setError, setStatus } from '../reducers/ui';
+import {openManagerChangeModal, setCircular, setError, setStatus} from '../reducers/ui';
 type applicationAddResponse = {
   id: number,
   patientName: string,
@@ -184,5 +190,27 @@ export function* removeOneApplication(delApplication: { type: 'application/delet
     }
     else {
     }
+  }
+}
+
+/**
+ * Изменение ответственного.
+ * @param {Object} changeManager .
+ */
+export function* changeManagerSaga(changeManager: { type: 'application/updatemanager', payload: { applId: number|string, userId: string } }) {
+
+  try {
+    yield put(setCircular(true))
+    const { applId, userId } = changeManager.payload
+    const { id, role } = yield select((state: RootState) => state.user.user)
+    const response: {} = yield call(changeManagerApi, applId.toString(),userId)
+    if (response){
+      yield put(getApplication(1, 10, '', '', '', '', '', role === 'doctor' ? id : 'all'))
+      yield put(setCircular(false))
+      yield put(openManagerChangeModal(undefined))
+    }
+
+  } catch (e: any) {
+    setCircular(false)
   }
 }

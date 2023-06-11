@@ -4,6 +4,7 @@ export interface UiState {
   status: string,
   userItemStatus:string,
   isModalOpened: boolean,
+  isManagerChangeModalOpened?:number | undefined,
   addUserStatus:string,
   isCircular: boolean,
   fileProgress: number,
@@ -17,6 +18,7 @@ const initialState: UiState = {
   userItemStatus:'none',
   addUserStatus:'none',
   isModalOpened: false,
+  isManagerChangeModalOpened :undefined,
   isCircular: false,
   fileProgress: 0,
   fileUploadStatus: 'none',
@@ -40,6 +42,9 @@ export const uiSlice = createSlice({
     openModal: (state, action: PayloadAction<boolean>) => {
       state.isModalOpened = !state.isModalOpened
     },
+    openManagerChangeModal: (state, action: PayloadAction<number | undefined>) => {
+      state.isManagerChangeModalOpened = action.payload
+    },
     setCircular: (state, action: PayloadAction<boolean>) => {
       state.isCircular = action.payload
     },
@@ -55,6 +60,6 @@ export const uiSlice = createSlice({
   },
 });
 
-export const { setStatus, openModal, setCircular, setProgress, setFileUploadStatus, setError,setUserItemStatus, setAddUserStatus } = uiSlice.actions;
+export const { setStatus, openModal, setCircular, setProgress, setFileUploadStatus, setError,setUserItemStatus, setAddUserStatus, openManagerChangeModal } = uiSlice.actions;
 
 export default uiSlice.reducer;

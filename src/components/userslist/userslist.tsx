@@ -17,12 +17,13 @@ import { useUsers } from "../../common/hooks/useUsers";
 import UserItemScreen from "../useritem/userItemScreen";
 import { CommonButton } from "../../common/components/button";
 import BlockIcon from '@mui/icons-material/Block';
+import {updateManagerAction} from "../../actions/application";
 
-const UsersList = (): React.ReactElement => {
+const UsersList = ({isChangeManager=false, applIdForChangeManager}:{isChangeManager?:boolean, applIdForChangeManager?: number }): React.ReactElement => {
   const dispatch = useDispatch()
   const { users, user } = useSelector((state: RootState) => state.user)
   const { users: applUserRights } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
-  const { isModalOpened, status } = useSelector((state: RootState) => state.ui)
+  const { isModalOpened, status, isManagerChangeModalOpened } = useSelector((state: RootState) => state.ui)
   const count = useSelector((state: RootState) => state.user.count)
   const [page, setPage] = React.useState(1);
   const [name, setUserName] = React.useState('');
@@ -56,21 +57,25 @@ const UsersList = (): React.ReactElement => {
     debounce(changeHandler, 300)
     , []);
 
+  const changeApplicationManager = (applId:number, userId:string)=>{
+dispatch(updateManagerAction(applId.toString(),userId))
+  }
+
   useUsers(page, email, name, speciality, phone)
 
 
   return <div className='add-appl-container'>
     {isModalOpened && <AddModal />}
-    <div className='add-button-wrapper'>
-      {applUserRights?.create && <CommonButton title='Новый пользователь' onClick={() => dispatch(openModal(true))} />}
-    </div>
+    {!isManagerChangeModalOpened && applUserRights?.create && <div className='add-button-wrapper'>
+  <CommonButton title='Новый пользователь' onClick={() => dispatch(openModal(true))} />
+    </div>}
     <div>
       <div className="appl-table">
         <div>
           <table>
             <thead>
               <tr>
-                {tableData.map(el => (<th key={isObject(el) ? el.title : el}>
+                {tableData.map(el =>isManagerChangeModalOpened && el === 'Удалить' ? null :  (<th key={isObject(el) ? el.title : el}>
                   <div>
                     <div>
                       <span>
@@ -90,19 +95,19 @@ const UsersList = (): React.ReactElement => {
               </tr>
             </thead>
             <tbody>
-              {status === 'ok' && !isEmpty(users.filter(el=>el.id !=='1')) && users.filter(el=>el.id !=='1').map((userItem, index) => user.id !== String(userItem.id) && <tr   key={userItem.name}  onClick={() => setCurrentUserId(userItem.id)}>
+              {status === 'ok' && !isEmpty(users.filter(el=>el.id !=='1')) && users.filter(el=>el.id !=='1').map((userItem, index) => user.id !== String(userItem.id) && <tr   key={userItem.name}  onClick={() => isManagerChangeModalOpened ? changeApplicationManager(isManagerChangeModalOpened, userItem.id) :setCurrentUserId(userItem.id)}>
                 <td>{index + 1}</td>
                 <td>{userItem.name}</td>
                 <td>{roles[userItem.role as keyof typeof roles]}</td>
                 <td>{userItem.speciality}</td>
                 <td>{userItem.email}</td>
                 <td>{userItem.phone}</td>
-                <td><IconButton disabled={!applUserRights?.delete} className='delete-button' onClick={(e: any) => {
+                {!isManagerChangeModalOpened && <td><IconButton disabled={!applUserRights?.delete} className='delete-button' onClick={(e: any) => {
                   e.stopPropagation()
                   userItem.id && deleteAppl(userItem.id)
                 }}>
-                  <DeleteOutlineIcon />
-                </IconButton></td>
+                  <DeleteOutlineIcon/>
+                </IconButton></td>}
               </tr>)}
             </tbody>
           </table>

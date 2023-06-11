@@ -5,7 +5,15 @@ import { TYPES } from '../actions/user';
 import {Types as CommonTypes} from '../common/actions/common'
 import {Types as SpecTypes} from '../actions/speciality'
 import { fetchListItem } from '../common/sagas/common';
-import { addApplication, fetchApplication, fetchOneApplication, removeOneApplication, updateOneApplication, changeDeleteOptionInPlan } from './application';
+import {
+    addApplication,
+    fetchApplication,
+    fetchOneApplication,
+    removeOneApplication,
+    updateOneApplication,
+    changeDeleteOptionInPlan,
+    changeManagerSaga
+} from './application';
 import { checkUserAuth, loginUser, logoutUser, registerUser, changeIsDeletedPlace, fetchUser, removeUser, updateUserRights, updateUserSignFile, updateUserPrimary } from './user';
 import {addSpeciality, fetchSpeciality, removeSpeciality} from "./speciality";
 export default function* runSagas(){
@@ -21,6 +29,7 @@ export default function* runSagas(){
         takeLatest(TYPES.userUpdatePrimary, updateUserPrimary),
         takeLatest(TYPES.userUpdateSignFile, updateUserSignFile),
         takeLatest(Types.applicationAdd, addApplication),
+        takeLatest(Types.updateManager, changeManagerSaga),
         takeLatest(Types.applicationGet, fetchApplication),
         takeLatest(Types.applicationGetOne, fetchOneApplication),
         takeLatest(CommonTypes.getListItem, fetchListItem),

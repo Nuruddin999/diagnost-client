@@ -6,6 +6,7 @@ export const Types = {
   applicationUpdate: 'application/update',
   applicationDel: 'application/deleteone',
   applicationChangeDeleteOption: 'application/changedelopt',
+  updateManager:'application/updatemanager'
 }
 export type applicationForAdd = {
   id?: number,
@@ -71,3 +72,11 @@ export const deleteOneApplication = createAction(Types.applicationDel, function 
  */
 export const updateApplication = createAction(Types.applicationUpdate)
 
+export const updateManagerAction = createAction(Types.updateManager, function prepare(applId:number | string,userId:number | string){
+  return {
+    payload: {
+      applId,
+      userId
+    }
+  }
+})

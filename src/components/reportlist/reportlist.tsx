@@ -3,23 +3,26 @@ import { Button, Typography, Pagination, TextField, CircularProgress } from "@mu
 import React, { useEffect, useCallback } from "react";
 import './style.reportlist.scss'
 import { useDispatch, useSelector } from "react-redux";
-import { deleteOneApplication, getApplication } from "../../actions/application";
+import {deleteOneApplication, getApplication} from "../../actions/application";
 import { RootState } from "../../app/store";
 import AddModal from "./add_modal";
 import { IconButton } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useHistory } from "react-router-dom";
-import { openModal, setStatus } from "../../reducers/ui";
+import { openModal, setStatus, openManagerChangeModal } from "../../reducers/ui";
 import isObject from "lodash/isObject";
 import { debounce, isEmpty } from "lodash";
 import { selectApplicationUserRights } from "../../common/selectors/user";
 import BlockIcon from '@mui/icons-material/Block';
+import EditIcon from '@mui/icons-material/Edit';
+import ManagerChangeModal from "./manager_change_modal";
 
 const ReportList = (): React.ReactElement => {
   const dispatch = useDispatch()
   const history = useHistory()
   const applications = useSelector((state: RootState) => state.application.applications)
-  const { isModalOpened, status, errorMessage } = useSelector((state: RootState) => state.ui)
+  const { isModalOpened, status, errorMessage,
+   isManagerChangeModalOpened} = useSelector((state: RootState) => state.ui)
   const { id, role } = useSelector((state: RootState) => state.user.user)
   const count = useSelector((state: RootState) => state.application.count)
   const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
@@ -29,6 +32,7 @@ const ReportList = (): React.ReactElement => {
   const [fundRequest, setFundRequest] = React.useState('');
   const [fundName, setFundName] = React.useState('');
   const [manager, setManager] = React.useState('');
+
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
@@ -76,8 +80,9 @@ const ReportList = (): React.ReactElement => {
   }
   return <div className='add-appl-container'>
     {isModalOpened && <AddModal />}
+    {isManagerChangeModalOpened && <ManagerChangeModal   />}
     <div className='add-button-wrapper'>
-      {rights.processedRights.applications?.create && <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
+      {isManagerChangeModalOpened === undefined && rights.processedRights.applications?.create && <Button size='small' variant='contained' className='add-button' onClick={() => dispatch(openModal(true))}>
         <Typography>Новое заключение</Typography>
       </Button>}
     </div>
@@ -110,6 +115,9 @@ const ReportList = (): React.ReactElement => {
               }
             }
             )}
+            {role !== 'doctor' && <th>
+              Поменять ответственного
+            </th>}
           </tr>
         </thead>
         <tbody>
@@ -129,6 +137,12 @@ const ReportList = (): React.ReactElement => {
             }}>
               <DeleteOutlineIcon />
             </IconButton></td>}
+            {role !== 'doctor' && <td><IconButton>
+<EditIcon onClick={(e:any) => {
+  e.stopPropagation();
+  dispatch(openManagerChangeModal(appl.id))
+}}/></IconButton>
+            </td>}
           </tr>)}
         </tbody>
       </table>

@@ -58,4 +58,13 @@ export const deleteOneApplicationApi = async (id: string) => {
   return response.data
 }
 
-
+/**
+ * Изменение ответственного
+ */
+export const changeManagerApi = async (id: string, managerId: string) => {
+  const response = await diagnostApi.post('/updman', {
+    id,
+    managerId
+  }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
+  return response.data
+}
