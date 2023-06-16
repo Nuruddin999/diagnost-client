@@ -4,7 +4,7 @@ import { Checkbox, TextField, Typography, Button, CircularProgress } from "@mui/
 import './style.applicationitem.scss'
 import { RootState } from "../../app/store";
 import { getListItemAction } from "../../common/actions/common";
-import { Right, savePhone, saveUserItem, saveUserItemSpeciality } from "../../reducers/userSlice";
+import {Right, saveName, savePhone, saveUserItem, saveUserItemSpeciality} from "../../reducers/userSlice";
 import { entitiesForRights } from "../../constants";
 import { updatePrimaryData, updateRightsAction, userSignFileUpdate } from "../../actions/user";
 import { selectApplicationUserRights, selectsUserItemRights } from "../../common/selectors/user";
@@ -65,7 +65,7 @@ const UserItemScreen = ({ isProfile, id, onClose }: userItem): React.ReactElemen
           <Typography fontWeight='bold'>
             Имя
           </Typography>
-          <Typography children={name} className='user-info-name' />
+          <TextField size='small'  value={name} className='user-info-name' onChange={(e) => dispatch(saveName(e.target.value))} />
         </div>
         <div className="user-info">
           <Typography fontWeight='bold'>
@@ -134,7 +134,7 @@ const UserItemScreen = ({ isProfile, id, onClose }: userItem): React.ReactElemen
         </Typography>}
       </div>
       <div className='save-button'>
-        <CommonButton title='Сохранить' onClick={() => dispatch(updatePrimaryData(email,speciality,phone))} />
+        <CommonButton title='Сохранить' onClick={() => dispatch(updatePrimaryData(email,speciality,phone,name))} />
       </div>
 
     </div> : <div className="user-item-loader"><Typography>{errorMessage}</Typography></div>}

@@ -56,10 +56,10 @@ export const updateRightsAction = createAction(TYPES.userUpdateRights, function 
     },
   }
 })
-export const updatePrimaryData = createAction(TYPES.userUpdatePrimary, function prepare(email: string, speciality: string, phone: string) {
+export const updatePrimaryData = createAction(TYPES.userUpdatePrimary, function prepare(email: string, speciality: string, phone: string, name:string) {
   return {
     payload: {
-      email, speciality, phone
+      email, speciality, phone, name
     },
   }
 })

@@ -61,9 +61,9 @@ export const updateRightApi = async (entity: string, field: string, value: boole
   }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
   return response.data
 }
-export const updatePrimaryApi = async (email: string, speciality: string, phone: string) => {
+export const updatePrimaryApi = async (email: string, speciality: string, phone: string, name: string) => {
   const response = await diagnostApi.post('/usrupd', {
-    email, speciality, phone
+    email, speciality, phone, name
   }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
   return response.data
 }

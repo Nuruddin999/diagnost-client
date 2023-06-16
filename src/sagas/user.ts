@@ -192,13 +192,14 @@ export function* updateUserRights(updateRight: { type: 'user/updateRights', payl
  * Сага обновления специальности и телефона пользователя.
  * @param addApplication
  */
- export function* updateUserPrimary(updatePrimary: { type: 'user/updateRights', payload: { email: string, speciality: string, phone: string } }) {
+ export function* updateUserPrimary(updatePrimary: { type: 'user/updateprimary', payload: { email: string, speciality: string, phone: string, name:string } }) {
   try {
     yield put(setUserItemStatus('pending'))
-    const { email, speciality, phone } = updatePrimary.payload
-    const response: allUsersResponse = yield call(updatePrimaryApi, email, speciality, phone)
+    const { email, speciality, phone,name } = updatePrimary.payload
+    const response: allUsersResponse = yield call(updatePrimaryApi, email, speciality, phone,name)
     if (response) {
       yield put(setUserItemStatus('ok'))
+      yield put(getUserByLetter(1, 10, '', '', '', ''))
     }
   } catch (e: any) {
     yield put(setUserItemStatus('Произошла ошибка, попробуйте позже'))
