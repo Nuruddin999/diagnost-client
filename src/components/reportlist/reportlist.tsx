@@ -152,7 +152,7 @@ const ReportList = (): React.ReactElement => {
     {status === 'no' && <Typography sx={{ color: 'red' }}>{errorMessage}</Typography>}
     {count > 10 && <div className="pagination">
       <Pagination
-        count={(count / 10) + 1}
+        count={(Math.ceil(count / 10)) + 1}
         variant="outlined"
         shape="rounded"
         onChange={handleChange}
