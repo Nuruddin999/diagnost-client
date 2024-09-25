@@ -15,7 +15,6 @@ import { changeDeleteOptionAction } from "../../../actions/application";
 const CheckupPlanForm = (): React.ReactElement => {
   const dispatch = useDispatch()
   const {checkupPlans, id, checkUpPlaceIsDeleted } = useSelector((state: RootState) => state.applicationItem)
-  const {  isDeletedPlace } = useSelector((state: RootState) => state.user.user)
   const { applications, checkupPlanPlace } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
   const [kind, setKind] = useState('')
   const [place, setPlace] = useState('')

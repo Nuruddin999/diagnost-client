@@ -10,7 +10,13 @@ export const addApplicationApi = async (application: applicationForAdd) => {
 /**
  * Получаем список заключений.
  * @param {number} page Страница.
+ * @param creator
  * @param {number} limit Сколько показывать.
+ * @param manager
+ * @param patientName
+ * @param patientRequest
+ * @param fundName
+ * @param fundRequest
  * @returns
  */
 export const getApplicationApi = async (page: number,

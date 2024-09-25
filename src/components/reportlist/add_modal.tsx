@@ -13,7 +13,6 @@ import { Loader } from "../loader/loader";
 import { RootState } from "../../app/store";
 import UsersDropDown from "../usersdropdown/usersdropdown";
 import ArrowDropDownCircleIcon from '@mui/icons-material/ArrowDropDownCircle';
-import { mainModule } from "process";
 
 
 const AddModal = (): React.ReactElement => {
@@ -51,7 +50,7 @@ const AddModal = (): React.ReactElement => {
       setPatientRequest('')
       setFundName('')
       setFundRequest('')
-      setManager(state=>({name:'',id:''}))
+      setManager(()=>({name:'',id:''}))
       setSpeciality('')
   }
   return <div className='add-modal-container'>
@@ -68,6 +67,13 @@ const AddModal = (): React.ReactElement => {
             onChange={(event: any) => setPatientFIO(event.target.value)}
             required
           />
+            <TextField
+                placeholder='Представитель  пациента'
+                size='small'
+                value={patientRequest}
+                onChange={(event: any) => setPatientRequest(event.target.value)}
+                required
+            />
           <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
             <div>
               <DatePicker

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import './style.managerchange.scss'
 import UsersList from "../userslist/userslist";
 import {IconButton, Typography} from "@mui/material";
@@ -6,9 +6,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import {openManagerChangeModal} from "../../reducers/ui";
-import {applicationForAdd} from "../../actions/application";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import EditIcon from "@mui/icons-material/Edit";
 const ManagerChangeModal =(): React.ReactElement=>{
 
     const {isManagerChangeModalOpened}=useSelector((state:RootState)=>state.ui)
