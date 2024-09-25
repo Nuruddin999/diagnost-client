@@ -3,7 +3,6 @@ import {Button, Typography, Pagination, TextField, CircularProgress} from "@mui/
 import React, {useEffect, useCallback} from "react";
 import './style.reportlist.scss'
 import {useDispatch, useSelector} from "react-redux";
-import {deleteOneApplication} from "../../actions/application";
 import {RootState} from "../../app/store";
 import AddModal from "./add_modal";
 import {IconButton} from '@mui/material';
@@ -130,6 +129,7 @@ const ReportList = (): React.ReactElement => {
                                     </div>
                                 </th>
                             }
+                            return null
                         }
                     )}
                     {role !== 'doctor' && <th>

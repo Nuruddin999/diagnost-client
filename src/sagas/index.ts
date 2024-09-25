@@ -7,7 +7,6 @@ import {Types as SpecTypes} from '../actions/speciality'
 import { fetchListItem } from '../common/sagas/common';
 import {
     fetchOneApplication,
-    removeOneApplication,
     updateOneApplication,
     changeDeleteOptionInPlan,
     changeManagerSaga
@@ -31,7 +30,6 @@ export default function* runSagas(){
         takeLatest(CommonTypes.getListItem, fetchListItem),
         takeLatest(Types.applicationUpdate, updateOneApplication),
         takeLatest(Types.applicationChangeDeleteOption, changeDeleteOptionInPlan),
-        takeLatest(Types.applicationDel, removeOneApplication),
         takeLatest(SpecTypes.specialityAdd, addSpeciality),
         takeLatest(SpecTypes.specialityGet, fetchSpeciality),
         takeLatest(SpecTypes.specialityDel, removeSpeciality),
