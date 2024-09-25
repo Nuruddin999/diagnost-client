@@ -25,7 +25,7 @@ const ReportList = (): React.ReactElement => {
         isModalOpened, status, errorMessage,
         isManagerChangeModalOpened
     } = useSelector((state: RootState) => state.ui)
-    const {appls, isLoading, fetchApp, error, id, role} = useFetchApplications()
+    const {appls, isLoading, fetchApp, error, id, role, deleteAppl} = useFetchApplications()
     const count = useSelector((state: RootState) => state.application.count)
     const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
     const [page, setPage] = React.useState(1);
@@ -38,9 +38,10 @@ const ReportList = (): React.ReactElement => {
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
-    const deleteAppl = (value: number) => {
-        dispatch(deleteOneApplication(value.toString()));
+    const removeAppl = async (value: number) => {
+        await deleteAppl(value)
     };
+
     const tableData = ['№', {
         title: 'ФИО пациента',
         field: patientName,
@@ -151,7 +152,7 @@ const ReportList = (): React.ReactElement => {
                     {(rights.processedRights.applications?.delete) &&
                         <td><IconButton className='delete-button' onClick={(e: any) => {
                             e.stopPropagation()
-                            appl.id && deleteAppl(appl.id)
+                            appl.id && removeAppl(appl.id)
                         }}>
                             <DeleteOutlineIcon/>
                         </IconButton></td>}

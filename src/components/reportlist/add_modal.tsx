@@ -1,4 +1,4 @@
-import {Button, Typography, TextField,} from "@mui/material";
+import {Button, Typography, TextField, CircularProgress,} from "@mui/material";
 import React, {useState} from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import {DatePicker, LocalizationProvider} from "@mui/lab"
@@ -71,7 +71,7 @@ const AddModal = ({fetchApp}: { fetchApp: (page: number, limit: number, manager:
     }
     return <div className='add-modal-container'>
         <div className="add-form-wrapper">
-            <form onSubmit={handleSubmit} data-testid='addrequest-form'>
+            {!isLoading ? <form onSubmit={handleSubmit} data-testid='addrequest-form'>
                 <div className='close-ic' onClick={() => dispatch(openModal(false))}>
                     <CloseIcon/>
                 </div>
@@ -147,7 +147,8 @@ const AddModal = ({fetchApp}: { fetchApp: (page: number, limit: number, manager:
                 <Button size='small' variant='contained' className='add-button' type='submit'>
                     <Loader title='Добавить задание' isLoading={status === 'pending'}/>
                 </Button>
-            </form>
+            </form> : <CircularProgress />}
+
         </div>
     </div>
 
