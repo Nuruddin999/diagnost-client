@@ -6,10 +6,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import {openManagerChangeModal} from "../../reducers/ui";
-const ManagerChangeModal =(): React.ReactElement=>{
+const ManagerChangeModal =({appls}: { appls:Array<any> }): React.ReactElement=>{
 
     const {isManagerChangeModalOpened}=useSelector((state:RootState)=>state.ui)
-    const appl=useSelector((state:RootState)=>state.application.applications.find(el=>el.id===isManagerChangeModalOpened))
+    const appl=appls.find(el=>el.id===isManagerChangeModalOpened)
     const dispatch = useDispatch()
 
     return <div className='managerchange'>

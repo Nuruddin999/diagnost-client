@@ -1,19 +1,16 @@
 
-import { getListItemById } from './../common/api/api';
+import { getListItemById } from '../common/api/api';
 import {
   changeIsDeletedPlace,
   changeManagerApi,
   deleteOneApplicationApi,
-  getApplicationApi,
   updateOneApplicationApi
-} from './../api/application';
-import { applicationForAdd, getApplication, Types } from './../actions/application';
-import { call, put, select, all, race } from "redux-saga/effects"
-import { addApplicationApi } from '../api/application';
-import { saveApplicationsList } from '../reducers/applicationSlice';
+} from '../api/application';
+import { getApplication } from '../actions/application';
+import { call, put, select } from "redux-saga/effects"
 import { applicationInitialState, saveApplicationItem, saveCheckupPlanDeletedPlace, successUpdate } from '../reducers/applicationItemSlice';
 import { RootState } from '../app/store';
-import {openManagerChangeModal, setCircular, setError, setStatus} from '../reducers/ui';
+import {openManagerChangeModal, setCircular} from '../reducers/ui';
 type applicationAddResponse = {
   id: number,
   patientName: string,
@@ -30,10 +27,7 @@ type applicationAddResponse = {
   updatedAt: string,
   createdAt: string
 }
-type getAllApplicationsResponse = {
-  count: number,
-  rows: Array<applicationAddResponse>,
-}
+
 export type consiliumDoctor = {
   id?: number,
   name: string,
@@ -71,40 +65,8 @@ export type applicationItemResponse = applicationAddResponse & applicationItemFi
  * @param login .
  */
 
-export function* addApplication(addApplication: { type: 'application/add', payload: applicationForAdd }) {
-  try {
-    yield put(setStatus('pending'))
-    const { id: userId, role } = yield select((state: RootState) => state.user.user)
-    const response: getAllApplicationsResponse = yield call(addApplicationApi, addApplication.payload)
-    if (response) {
-      yield put(setStatus('success'))
-      yield put(getApplication(1, 10, '', '', '', '', '', role === 'doctor' ? userId : 'all'))
-    }
-  } catch (e: any) {
-    if (e.response) {
-    }
-    else {
-    }
-  }
-}
-/**
- * Сага получения списка заключений.
- * @param addApplication
- */
-export function* fetchApplication(getApplication: { type: 'application/get', payload: { page: number, limit: number, manager: string, patientName: string, patientRequest: string, fundName: string, fundRequest: string, creator: string } }) {
-  try {
-    yield put(setStatus('pending'))
-    const { page, limit, patientName, patientRequest, fundName, fundRequest, manager, creator } = getApplication.payload
-    const response: getAllApplicationsResponse = yield call(getApplicationApi, page, creator, limit, manager, patientName, patientRequest, fundName, fundRequest)
-    if (response) {
-      const { rows, count } = response
-      yield put(saveApplicationsList({ applications: rows, count }))
-      yield put(setStatus('ok'))
-    }
-  } catch (e: any) {
-    yield all([put(setStatus('no')), put(setError('Произошлав ошибка, повторите попозже'))])
-  }
-}
+
+
 /**
  * Получение заключения по Id.
  * @param {Object} getApplication .
@@ -125,7 +87,7 @@ export function* fetchOneApplication(getApplication: { type: 'application/getone
 }
 /**
  * Обновление  заключения.
- * @param {Object} getApplication .
+ * @param updateApplication
  */
 export function* updateOneApplication(updateApplication: { type: 'application/update' }) {
 
@@ -172,9 +134,9 @@ export function* changeDeleteOptionInPlan(body: {type: 'application/changedelopt
 
 
 /**
-* Удаление  заключения.
-* @param {Object} getApplication .
-*/
+ * Удаление  заключения.
+ * @param delApplication
+ */
 export function* removeOneApplication(delApplication: { type: 'application/deleteone', payload: { id: string } }) {
 
   try {

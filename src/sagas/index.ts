@@ -6,8 +6,6 @@ import {Types as CommonTypes} from '../common/actions/common'
 import {Types as SpecTypes} from '../actions/speciality'
 import { fetchListItem } from '../common/sagas/common';
 import {
-    addApplication,
-    fetchApplication,
     fetchOneApplication,
     removeOneApplication,
     updateOneApplication,
@@ -28,9 +26,7 @@ export default function* runSagas(){
         takeLatest(TYPES.userUpdateRights, updateUserRights),
         takeLatest(TYPES.userUpdatePrimary, updateUserPrimary),
         takeLatest(TYPES.userUpdateSignFile, updateUserSignFile),
-        takeLatest(Types.applicationAdd, addApplication),
         takeLatest(Types.updateManager, changeManagerSaga),
-        takeLatest(Types.applicationGet, fetchApplication),
         takeLatest(Types.applicationGetOne, fetchOneApplication),
         takeLatest(CommonTypes.getListItem, fetchListItem),
         takeLatest(Types.applicationUpdate, updateOneApplication),
