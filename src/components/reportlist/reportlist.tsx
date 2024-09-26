@@ -25,7 +25,6 @@ const ReportList = (): React.ReactElement => {
         isManagerChangeModalOpened
     } = useSelector((state: RootState) => state.ui)
     const {appls, isLoading, fetchApp, error, id, role, deleteAppl} = useFetchApplications()
-    const count = useSelector((state: RootState) => state.application.count)
     const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
     const [page, setPage] = React.useState(1);
     const [patientName, setPatientName] = React.useState('');
@@ -171,7 +170,7 @@ const ReportList = (): React.ReactElement => {
         {!isLoading && error && <Typography sx={{color: 'red'}}>{errorMessage}</Typography>}
         {appls.count > 10 && <div className="pagination">
             <Pagination
-                count={(Math.ceil(count / 10)) + 1}
+                count={(Math.ceil(appls.count / 10)) + 1}
                 variant="outlined"
                 shape="rounded"
                 onChange={handleChange}
