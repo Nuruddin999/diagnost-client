@@ -138,7 +138,7 @@ const ReportList = (): React.ReactElement => {
                 </tr>
                 </thead>
                 <tbody>
-                {!isLoading && appls.length > 0 && appls.map((appl: any, index: number) => <tr
+                {!isLoading && appls.rows.length > 0 && appls.rows.map((appl: any, index: number) => <tr
                     onClick={() => goToApplItem(appl.id)} key={appl.patientName}>
                     <td>{(page * 10 - 10) + 1 + index}</td>
                     <td>{appl.patientName}</td>
@@ -169,7 +169,7 @@ const ReportList = (): React.ReactElement => {
         {!isLoading && isEmpty(appls) && <div><BlockIcon sx={{fontSize: '40px', marginTop: '20px'}}/></div>}
         {isLoading && <div><CircularProgress/></div>}
         {!isLoading && error && <Typography sx={{color: 'red'}}>{errorMessage}</Typography>}
-        {count > 10 && <div className="pagination">
+        {appls.count > 10 && <div className="pagination">
             <Pagination
                 count={(Math.ceil(count / 10)) + 1}
                 variant="outlined"

@@ -26,7 +26,11 @@ export const Registration = ({notHaveSuperUser}: { notHaveSuperUser?: boolean })
     }
     const onSubmit = (event: React.SyntheticEvent) => {
         event.preventDefault();
-        if (!speciality) {
+        const nameParts = name.trim().split(/\s+/);
+        if (nameParts.length !== 3) {
+            errorDispatching('Введите фамилию, имя, отчество');
+            return;
+        } else if (!speciality) {
             errorDispatching('Введите специальность')
             return
         } else if (isEmpty(files)) {
@@ -45,7 +49,6 @@ export const Registration = ({notHaveSuperUser}: { notHaveSuperUser?: boolean })
     }
     /**
      * Действия после успешной регистрации.
-     * @param {boolean} isSuccess Является ли запрос на регистрацию успешным.
      */
     const fillRegistrationForm = () => {
         setEmail('')

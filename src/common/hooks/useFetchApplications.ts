@@ -1,9 +1,7 @@
-import {useDispatch, useSelector} from "react-redux";
-import React, {useEffect, useState} from "react";
-import {getSpecialityAction} from "../../actions/speciality";
+import { useSelector} from "react-redux";
+import React, {useState} from "react";
 import {RootState} from "../../app/store";
 import {deleteOneApplicationApi, getApplicationApi} from "../../api/application";
-import {deleteOneApplication} from "../../actions/application";
 
 export const useFetchApplications = () => {
     const [appls, setAppls] = React.useState<any>([])
@@ -13,7 +11,7 @@ export const useFetchApplications = () => {
 
     const fetchApplications = async (page: number, limit: number, manager: string, patientName: string, patientRequest: string, fundName: string, fundRequest: string) => {
         const resp = await getApplicationApi(page, role === 'doctor' ? id : 'all', 10, manager, patientName, patientRequest, fundName, fundRequest)
-        setAppls(resp.rows)
+        setAppls(resp)
     }
 
     const fetchApp = async (page: number, limit: number, manager: string, patientName: string, patientRequest: string, fundName: string, fundRequest: string) => {
