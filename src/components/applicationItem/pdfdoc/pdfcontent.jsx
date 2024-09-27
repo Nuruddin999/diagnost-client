@@ -351,8 +351,14 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                             underText={'Дата рождения'}
                         />
                     </View>
-                    {patientPromoter ? <Text style={styles.complaintTitle} wrap={false}><Text
-                        style={styles.complaintTitleFirstWord}>Представитель: </Text>{patientPromoter}</Text> : null}
+
+                    {patientPromoter ?
+                        <View style={{...styles.commonSize, marginTop: '8px'}}>
+                            <Text style={styles.complaintTitle} wrap={false}><Text
+                                style={styles.complaintTitleFirstWord}>Представитель: </Text>{patientPromoter}
+                            </Text>
+                        </View> : null}
+
                     <Text style={styles.reasonTitle}>На основании: </Text>
                     <Text style={styles.reasonSubTitle}> (указать основания: жалобы, симптомы, синдромы, подозрения
                         врача и пр.): </Text>
