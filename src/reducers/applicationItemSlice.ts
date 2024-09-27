@@ -1,6 +1,7 @@
 import {consiliumDoctor} from '../sagas/application';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {applicationItemResponse} from '../sagas/application';
+import {CheckupPlanDetailType} from "../common/types";
 
 
 export type applicationInitialState = {
@@ -32,6 +33,10 @@ export type applicationInitialState = {
         kind?: string,
         place?: string,
         target?: string
+        supplier?: string,
+        address?:string,
+        phone?:string,
+        price?:string
     }>,
     comments: Array<{
         title?: string,
@@ -140,17 +145,15 @@ export const applicationItemSlice = createSlice({
         saveCheckupPlan: (state, action: PayloadAction<{
             kind?: string,
             place?: string,
-            target?: string
+            target?: string,
+            supplier?: string,
+            address?:string,
+            phone?:string,
+            price?:string
         }>) => {
             state.checkupPlans = [...state.checkupPlans, {...action.payload}]
         },
-        changeCheckupPlan: (state, action: PayloadAction<{
-            index: number, checkupPlan: {
-                kind?: string,
-                place?: string,
-                target?: string
-            }
-        }>) => {
+        changeCheckupPlan: (state, action: PayloadAction<CheckupPlanDetailType>) => {
             state.checkupPlans = state.checkupPlans.map((checkupPlanEl, checkupPlanIndex) => checkupPlanIndex === action.payload.index ? {...action.payload.checkupPlan} : checkupPlanEl)
         },
         deleteCheckupPlan: (state, action: PayloadAction<number>) => {

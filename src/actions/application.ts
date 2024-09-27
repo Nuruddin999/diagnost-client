@@ -47,21 +47,7 @@ export const changeDeleteOptionAction = createAction(Types.applicationChangeDele
     }
 })
 
-export const getOneApplication = createAction(Types.applicationGetOne, function prepare(id: string) {
-    return {
-        payload: {
-            id
-        },
-    }
-})
 
-export const deleteOneApplication = createAction(Types.applicationDel, function prepare(id: string) {
-    return {
-        payload: {
-            id
-        },
-    }
-})
 /**
  * экш обновления заключения
  */
