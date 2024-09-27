@@ -21,17 +21,19 @@ const CheckupPlanForm = (): React.ReactElement => {
         checkupPlanPlace
     } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
     const [kind, setKind] = useState('')
-    const [place, setPlace] = useState('')
-    const [target, setTarget] = useState('')
     const [supplier, setSupplier] = useState('')
+    const [target, setTarget] = useState('')
     const [placeAddress, setPlaceAddress] = useState('')
     const [placePhone, setPlacePhone] = useState('')
     const [placePrice, setPlacePrice] = useState('')
     const bc = useMemo(() => new BroadcastChannel('pdf_channel'), []);
     const addConsliliumDoctor = () => {
-        dispatch(saveCheckupPlan({kind, place, target}))
+        dispatch(saveCheckupPlan({kind, supplier, target, address: placeAddress, price: placePrice, phone: placePhone}))
         setKind('')
-        setPlace('')
+        setSupplier('')
+        setPlacePrice('')
+        setPlaceAddress('')
+        setPlacePhone('')
         setTarget('')
     }
     const deletePlan = (index: number) => {
@@ -70,11 +72,12 @@ const CheckupPlanForm = (): React.ReactElement => {
             Вид обследования
           </span>
                 </th>
-                {!checkUpPlaceIsDeleted && <Fragment><th>
+                {!checkUpPlaceIsDeleted && <Fragment>
+                    <th>
           <span>
             Поставщик
           </span>
-                </th>
+                    </th>
                     <th>
           <span>
             Адрес
@@ -106,18 +109,12 @@ const CheckupPlanForm = (): React.ReactElement => {
                     multiline
                     maxRows={15}
                     placeholder='Вид обследования'
-                    onChange={(e) => {
-                        const {price, phone, target, place, supplier, address} = checkupPlan
-                        applications?.update && dispatch(changeCheckupPlan({
-                            index,
-                            checkupPlan: {kind: e.target.value, place, target, supplier, address, price, phone}
-                        }))
-                    }}
+                    onChange={(e) => handleCheckupDetails(e, {index, checkupPlan}, 'kind')}
 
                 /></td>
-                {["supplier", "price",
+                {!checkUpPlaceIsDeleted && ["supplier", "address",
                     "phone",
-                    "address"].map(el => <td>
+                    "price"].map(el => <td>
                     <TextField
                         value={checkupPlan[el as keyof typeof checkupPlan]}
                         variant='standard'
@@ -136,10 +133,7 @@ const CheckupPlanForm = (): React.ReactElement => {
                     multiline
                     maxRows={15}
                     placeholder='Цель проведения обследования'
-                    onChange={(e) => applications?.update && dispatch(changeCheckupPlan({
-                        index,
-                        checkupPlan: {kind: checkupPlan.kind, place: checkupPlan.place, target: e.target.value}
-                    }))}
+                    onChange={(e) => handleCheckupDetails(e, {index, checkupPlan}, 'target')}
                 /></td>
                 <td><IconButton disabled={!applications?.update} className='delete-button'
                                 onClick={() => deletePlan(index)}>
@@ -168,54 +162,47 @@ const CheckupPlanForm = (): React.ReactElement => {
                     </div>
                 }
                 {!checkUpPlaceIsDeleted ?
-                    <Fragment>
-                        <div>
-                            <TextField
-                                value={supplier}
-                                variant='outlined'
-                                size='small'
-                                fullWidth
-                                placeholder='Поставщик'
-                                multiline
-                                maxRows={15}
-                                onChange={(e) => setSupplier(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <TextField
-                                value={placeAddress}
-                                variant='outlined'
-                                size='small'
-                                fullWidth
-                                placeholder='Адрес'
-                                multiline
-                                maxRows={15}
-                                onChange={(e) => setPlaceAddress(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <TextField
-                                value={placePhone}
-                                variant='outlined'
-                                size='small'
-                                fullWidth
-                                placeholder='Телефон'
-                                onChange={(e) => setPlacePhone(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <TextField
-                                value={placePrice}
-                                variant='outlined'
-                                size='small'
-                                fullWidth
-                                placeholder='Цена'
-                                onChange={(e) => setPlacePrice(e.target.value)}
-                            />
-                        </div>
-                    </Fragment>
-                    : <Button disabled={!checkupPlanPlace?.delete} onClick={sendBroadcastMessage}>показать</Button>}
+                <TextField
+                    value={supplier}
+                    variant='outlined'
+                    size='small'
+                    fullWidth
+                    placeholder='Поставщик'
+                    multiline
+                    maxRows={15}
+                    onChange={(e) => setSupplier(e.target.value)}
+                />  : <Button disabled={!checkupPlanPlace?.delete} onClick={sendBroadcastMessage}>показать</Button>}
             </div>
+            {!checkUpPlaceIsDeleted &&
+                <Fragment>
+                        <TextField
+                            value={placeAddress}
+                            variant='outlined'
+                            size='small'
+                            fullWidth
+                            placeholder='Адрес'
+                            multiline
+                            maxRows={15}
+                            onChange={(e) => setPlaceAddress(e.target.value)}
+                        />
+                        <TextField
+                            value={placePhone}
+                            variant='outlined'
+                            size='small'
+                            fullWidth
+                            placeholder='Телефон'
+                            onChange={(e) => setPlacePhone(e.target.value)}
+                        />
+                        <TextField
+                            value={placePrice}
+                            variant='outlined'
+                            size='small'
+                            fullWidth
+                            placeholder='Цена'
+                            onChange={(e) => setPlacePrice(e.target.value)}
+                        />
+
+                </Fragment>}
             <TextField
                 value={target}
                 variant='outlined'
