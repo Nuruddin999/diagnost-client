@@ -2,7 +2,6 @@ import { Text, View } from '@react-pdf/renderer'
 import hyphen from 'hyphen';
 import pattern from 'hyphen/patterns/ru';
 
-
 const hyphenator = hyphen(pattern);
 
 const hyphenationCallback = (word) => {
@@ -10,6 +9,12 @@ const hyphenationCallback = (word) => {
 }
 
 const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, isDeletedPlace }) => {
+   const processedDataContent = dataContent.map(el=>{
+     return {
+         ...el,
+         place:  `${[el.supplier, el.address, el.phone, el.price].filter(el=>el).join(', ')}`
+     }
+   })
   const renderPlaceView = (hdr) => {
     const hdrView = <View
     style={{
@@ -36,7 +41,7 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
     }
   }
   const renderPlaceContentView = (val, content) => {
-    const placeView = <View style={{
+    const placeView =  <View style={{
       flexBasis:  `${(status || isDeletedPlace) ? 95 / (headers.length - 2) : 95 / (headers.length - 1)}%`,
       flexWrap: 'wrap',
       fontSize: '12px',
@@ -47,10 +52,10 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
       alignItems: 'center',
       padding: '5px'
     }}>
-      <Text hyphenationCallback={hyphenationCallback}
-      >
-        {content}
-      </Text>
+        {content && <Text hyphenationCallback={hyphenationCallback}
+        >
+            {content}
+        </Text>}
     </View>
     if (val !== 'place') {
       return placeView
@@ -88,7 +93,7 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
             flexDirection: 'row',
             width: '100%',
           }}>
-          {headers.map((hdr, hdrIndex) =>
+          {headers.map((hdr) =>
             renderPlaceView(hdr))}
         </View>
         : null}
@@ -97,7 +102,7 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
         flexDirection: 'row',
         width: '100%',
       }} >
-         {dataContent && dataContent.length > 0 && contentKeys.length > 0 ? <View style={{
+         {processedDataContent && processedDataContent.length > 0 && contentKeys.length > 0 ? <View style={{
           flexBasis: '5%',
           height: '100%',
           border: '1px solid black',
@@ -108,16 +113,16 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
         }}>
           <Text style={{ fontFamily: "Times New Roman Reg", fontSize: '12px' }}>1</Text>
         </View> : null}
-        {dataContent && dataContent.length > 0 && contentKeys.length > 0 ? contentKeys.map((val, valIndex) => renderPlaceContentView(val, dataContent[0][val])) : null}
+        {processedDataContent && processedDataContent.length > 0 && contentKeys.length > 0 ? contentKeys.map((val) => renderPlaceContentView(val, processedDataContent[0][val])) : null}
       </View>
     </View>
-    {dataContent.length > 0 ?
+    {processedDataContent.length > 0 ?
       <View style={{
         display: 'flex',
         flexDirection: 'column',
         width: '100%'
       }} >
-        {dataContent && dataContent.length > 0 ? dataContent.map((dataObj, index) => index > 0 ?
+        {processedDataContent && processedDataContent.length > 0 ? processedDataContent.map((dataObj, index) => index > 0 ?
           <View style={{
             display: 'flex',
             flexDirection: 'row',
@@ -132,7 +137,7 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
             }}>
               <Text style={{ fontFamily: "Times New Roman Reg", fontSize: '12px' }}>{index + 1}</Text>
             </View>
-            {contentKeys.length > 0 ? contentKeys.map((val, valIndex) => renderPlaceContentView(val, dataObj[val])) : null}
+            {contentKeys.length > 0 ? contentKeys.map((val) => renderPlaceContentView(val, dataObj[val])) : null}
           </View> : null) : null}
       </View> : null}
   </View>
