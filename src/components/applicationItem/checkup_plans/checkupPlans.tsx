@@ -26,8 +26,13 @@ const CheckupPlanForm = (): React.ReactElement => {
     const [placeAddress, setPlaceAddress] = useState('')
     const [placePhone, setPlacePhone] = useState('')
     const [placePrice, setPlacePrice] = useState('')
+    const [error, setError] = useState('')
     const bc = useMemo(() => new BroadcastChannel('pdf_channel'), []);
     const addConsliliumDoctor = () => {
+        if (!kind.trim() || !supplier.trim() || !target.trim() || !placePhone.trim() || !placePrice.trim() || !placeAddress.trim()) {
+            setError('Все поля должны быть заполнены')
+            return
+        }
         dispatch(saveCheckupPlan({kind, supplier, target, address: placeAddress, price: placePrice, phone: placePhone}))
         setKind('')
         setSupplier('')
@@ -148,9 +153,15 @@ const CheckupPlanForm = (): React.ReactElement => {
                 value={kind}
                 variant='outlined'
                 size='small'
+                error={Boolean(error)}
                 fullWidth
                 placeholder='Вид обследования'
-                onChange={(e) => setKind(e.target.value)}
+                onChange={(e) => {
+                    if (error) {
+                        setError('')
+                    }
+                    setKind(e.target.value)
+                }}
             />
             <div className='place'>
                 {checkupPlanPlace?.delete &&
@@ -162,61 +173,93 @@ const CheckupPlanForm = (): React.ReactElement => {
                     </div>
                 }
                 {!checkUpPlaceIsDeleted ?
-                <TextField
-                    value={supplier}
-                    variant='outlined'
-                    size='small'
-                    fullWidth
-                    placeholder='Поставщик'
-                    multiline
-                    maxRows={15}
-                    onChange={(e) => setSupplier(e.target.value)}
-                />  : <Button disabled={!checkupPlanPlace?.delete} onClick={sendBroadcastMessage}>показать</Button>}
+                    <TextField
+                        value={supplier}
+                        variant='outlined'
+                        size='small'
+                        error={Boolean(error)}
+                        fullWidth
+                        placeholder='Поставщик'
+                        multiline
+                        maxRows={15}
+                        onChange={(e) => {
+                            if (error) {
+                                setError('')
+                            }
+                            setSupplier(e.target.value)
+                        }}
+                    /> : <Button disabled={!checkupPlanPlace?.delete} onClick={sendBroadcastMessage}>показать</Button>}
             </div>
             {!checkUpPlaceIsDeleted &&
                 <Fragment>
-                        <TextField
-                            value={placeAddress}
-                            variant='outlined'
-                            size='small'
-                            fullWidth
-                            placeholder='Адрес'
-                            multiline
-                            maxRows={15}
-                            onChange={(e) => setPlaceAddress(e.target.value)}
-                        />
-                        <TextField
-                            value={placePhone}
-                            variant='outlined'
-                            size='small'
-                            fullWidth
-                            placeholder='Телефон'
-                            onChange={(e) => setPlacePhone(e.target.value)}
-                        />
-                        <TextField
-                            value={placePrice}
-                            variant='outlined'
-                            size='small'
-                            fullWidth
-                            placeholder='Цена'
-                            onChange={(e) => setPlacePrice(e.target.value)}
-                        />
+                    <TextField
+                        value={placeAddress}
+                        variant='outlined'
+                        size='small'
+                        error={Boolean(error)}
+                        fullWidth
+                        placeholder='Адрес'
+                        multiline
+                        maxRows={15}
+                        onChange={(e) => {
+                            if (error) {
+                                setError('')
+                            }
+                            setPlaceAddress(e.target.value)
+                        }}
+                    />
+                    <TextField
+                        value={placePhone}
+                        variant='outlined'
+                        size='small'
+                        error={Boolean(error)}
+                        fullWidth
+                        placeholder='Телефон'
+                        onChange={(e) => {
+                            if (error) {
+                                setError('')
+                            }
+                            setPlacePhone(e.target.value)
+                        }}
+                    />
+                    <TextField
+                        value={placePrice}
+                        variant='outlined'
+                        size='small'
+                        error={Boolean(error)}
+                        fullWidth
+                        placeholder='Цена'
+                        onChange={(e) => {
+                            if (error) {
+                                setError('')
+                            }
+                            setPlacePrice(e.target.value)
+                        }}
+                    />
 
                 </Fragment>}
             <TextField
                 value={target}
                 variant='outlined'
                 size='small'
+                error={Boolean(error)}
                 fullWidth
                 maxRows={5}
                 multiline
                 placeholder='Цель проведения обследования'
-                onChange={(e) => setTarget(e.target.value)}
+                onChange={(e) => {
+                    if (error) {
+                        setError('')
+                    }
+                    setTarget(e.target.value)
+                }}
             /> <IconButton disabled={!applications?.update} onClick={addConsliliumDoctor}>
             <AddCircleIcon className='add-in-table-svg '/>
         </IconButton>
         </div>
-
+        {error && <Typography color='error'>
+            {error}
+        </Typography>}
     </div>
 }
 export default CheckupPlanForm
