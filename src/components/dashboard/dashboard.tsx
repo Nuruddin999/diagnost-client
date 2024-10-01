@@ -22,6 +22,7 @@ import UserItem from "../useritem";
 import { selectApplicationUserRights } from "../../common/selectors/user";
 import { RoundLoader } from "../../common/components/roundloader";
 import Specialities from "../specialities/Specialities";
+import Smetalist from "../smetalist/smetalist";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -94,6 +95,18 @@ const Dashboard = (): React.ReactElement => {
               </ListItemText>
             </Link>
           </div>
+            <div className='list-item'>
+                <Link to='/main/smetas'>
+                    <ListItemIcon>
+                        <BusinessCenterIcon />
+                    </ListItemIcon>
+                </Link>
+                <Link to='/main/smetas'>
+                    <ListItemText>
+                        Сметы
+                    </ListItemText>
+                </Link>
+            </div>
         </div>
         <div className="main-content">
           <Switch>
@@ -118,6 +131,9 @@ const Dashboard = (): React.ReactElement => {
             <Route path='/main/aboutme'>
               <UserItem isProfile />
             </Route>
+              <Route path='/main/smetas'>
+                  <Smetalist />
+              </Route>
           </Switch>
         </div>
       </div>

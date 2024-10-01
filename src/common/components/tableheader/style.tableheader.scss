@@ -1,0 +1,29 @@
+.table-header {
+
+  tr {
+    cursor: pointer;
+    &:hover {
+      background-color: #e9f3fc;
+      background-clip: padding-box;
+      border-top: 1px solid #9dc7f1;
+      border-bottom: 1px solid #9dc7f1;
+    }
+    th {
+      text-align: left;
+      padding: 10px 16px;
+      border-top: 1px solid #dbdbdb;
+      border-collapse: collapse;
+      background: #f0f0f0;
+    }
+
+  }
+  tr:nth-child(even) {
+    &:hover {
+
+    }
+  }
+
+  .delete-button {
+    color: crimson;
+  }
+}

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {Button, Typography, Pagination, TextField, CircularProgress} from "@mui/material";
-import React, {useEffect, useCallback} from "react";
+import {Button, Typography, Pagination, CircularProgress} from "@mui/material";
+import React, {useEffect} from "react";
 import './style.reportlist.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../app/store";
@@ -9,13 +9,13 @@ import {IconButton} from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {useHistory} from "react-router-dom";
 import {openModal, setStatus, openManagerChangeModal} from "../../reducers/ui";
-import isObject from "lodash/isObject";
-import {debounce, isEmpty} from "lodash";
+import {isEmpty} from "lodash";
 import {selectApplicationUserRights} from "../../common/selectors/user";
 import BlockIcon from '@mui/icons-material/Block';
 import EditIcon from '@mui/icons-material/Edit';
 import ManagerChangeModal from "./manager_change_modal";
 import {useFetchApplications} from "../../common/hooks/useFetchApplications";
+import TableHeader from "../../common/components/tableheader/tableHeader";
 
 const ReportList = (): React.ReactElement => {
     const dispatch = useDispatch()
@@ -53,18 +53,6 @@ const ReportList = (): React.ReactElement => {
         field: fundRequest,
         onChange: setFundRequest
     }, {title: 'Ответственный', field: manager, onChange: setManager}, 'Дата создания', 'Дата исполнения', 'Удалить']
-
-    const changeHandler = (e: any, field: string, callback: (title: string) => void) => {
-        if (e.target.value.length > 2) {
-            callback(e.target.value)
-        } else if (field.length > 2 && e.target.value.length === 0) {
-            callback('')
-        }
-    };
-
-    const debouncedChangeHandler = useCallback(
-        debounce(changeHandler, 300)
-        , []);
 
     useEffect(() => {
         if (id !== undefined && id !== '') {
@@ -104,37 +92,7 @@ const ReportList = (): React.ReactElement => {
         <div className="appl-table">
             <table>
                 <thead>
-                <tr>
-                    {tableData.map(el => {
-                            if (isObject(el) && el.title === 'Ответственный') {
-                                if (role === 'doctor') {
-                                    return null
-                                }
-                            }
-                            if (el !== 'Удалить' || rights.processedRights.applications?.delete) {
-                                return <th key={isObject(el) ? el.title : el}>
-                                    <div>
-                    <span>
-                      {isObject(el) ? el.title : el}
-                    </span>
-                                        {isObject(el) &&
-                                            <TextField
-                                                onChange={(e) => debouncedChangeHandler(e, el.field, el.onChange)}
-                                                type="text"
-                                                size="small"
-                                                placeholder="Поиск"
-                                            />
-                                        }
-                                    </div>
-                                </th>
-                            }
-                            return null
-                        }
-                    )}
-                    {role !== 'doctor' && <th>
-                        Поменять ответственного
-                    </th>}
-                </tr>
+                <TableHeader  tableData={tableData} role={role} isDeleteRights={rights.processedRights.applications?.delete} isManagerChange={role !== 'doctor'}/>
                 </thead>
                 <tbody>
                 {!isLoading && appls.rows.length > 0 && appls.rows.map((appl: any, index: number) => <tr

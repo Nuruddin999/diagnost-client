@@ -9,3 +9,18 @@ export type CheckupPlanDetailType = {
         price?:string
     }
 }
+
+export type SmetaItemType = {
+    applId: string
+    createdAt: string
+    diagnosis: string
+    id: number
+    patientBirthDate:string
+    patientName: string
+    patientPromoter:string
+    updatedAt:string
+}
+
+export type SmetasResponseType = {
+    count: number, rows: Array<SmetaItemType>
+}

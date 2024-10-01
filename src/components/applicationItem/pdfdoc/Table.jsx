@@ -52,9 +52,12 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
       alignItems: 'center',
       padding: '5px'
     }}>
-        {content && <Text hyphenationCallback={hyphenationCallback}
+        {content ? <Text hyphenationCallback={hyphenationCallback}
         >
             {content}
+        </Text>: <Text hyphenationCallback={hyphenationCallback}
+        >
+            {' '}
         </Text>}
     </View>
     if (val !== 'place') {
