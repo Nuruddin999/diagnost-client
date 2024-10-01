@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {Button, Typography, Pagination, CircularProgress} from "@mui/material";
+import {Typography, Pagination, CircularProgress} from "@mui/material";
 import React, {useEffect} from "react";
 import './style.reportlist.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import AddModal from "./add_modal";
-import {IconButton} from '@mui/material';
+import {IconButton, Box} from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {useHistory} from "react-router-dom";
 import {openModal, setStatus, openManagerChangeModal} from "../../reducers/ui";
@@ -16,6 +16,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import ManagerChangeModal from "./manager_change_modal";
 import {useFetchApplications} from "../../common/hooks/useFetchApplications";
 import TableHeader from "../../common/components/tableheader/tableHeader";
+import BasicModal from "../../common/components/modal/ConsiliumModal";
+import {CommonButton} from "../../common/components/button";
 
 const ReportList = (): React.ReactElement => {
     const dispatch = useDispatch()
@@ -32,12 +34,14 @@ const ReportList = (): React.ReactElement => {
     const [fundRequest, setFundRequest] = React.useState('');
     const [fundName, setFundName] = React.useState('');
     const [manager, setManager] = React.useState('');
+    const [deleteModalId, setDeleteModal] = React.useState<boolean | number>(false);
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
     const removeAppl = async (value: number) => {
         await deleteAppl(value)
+        setDeleteModal(false)
     };
 
     const tableData = ['№', {
@@ -84,15 +88,17 @@ const ReportList = (): React.ReactElement => {
         {isManagerChangeModalOpened && <ManagerChangeModal appls={appls}/>}
         <div className='add-button-wrapper'>
             {isManagerChangeModalOpened === undefined && rights.processedRights.applications?.create &&
-                <Button size='small' variant='contained' className='add-button'
-                        onClick={() => dispatch(openModal(true))}>
-                    <Typography>Новое заключение</Typography>
-                </Button>}
+                <CommonButton
+                    onClick={() => dispatch(openModal(true))}
+                    title={'Новое заключение'}/>}
+
         </div>
         <div className="appl-table">
             <table>
                 <thead>
-                <TableHeader  tableData={tableData} role={role} isDeleteRights={rights.processedRights.applications?.delete} isManagerChange={role !== 'doctor'}/>
+                <TableHeader tableData={tableData} role={role}
+                             isDeleteRights={rights.processedRights.applications?.delete}
+                             isManagerChange={role !== 'doctor'}/>
                 </thead>
                 <tbody>
                 {!isLoading && appls.rows.length > 0 && appls.rows.map((appl: any, index: number) => <tr
@@ -109,7 +115,7 @@ const ReportList = (): React.ReactElement => {
                     {(rights.processedRights.applications?.delete) &&
                         <td><IconButton className='delete-button' onClick={(e: any) => {
                             e.stopPropagation()
-                            appl.id && removeAppl(appl.id)
+                            appl.id && setDeleteModal(appl.id)
                         }}>
                             <DeleteOutlineIcon/>
                         </IconButton></td>}
@@ -126,6 +132,25 @@ const ReportList = (): React.ReactElement => {
         {!isLoading && isEmpty(appls) && <div><BlockIcon sx={{fontSize: '40px', marginTop: '20px'}}/></div>}
         {isLoading && <div><CircularProgress/></div>}
         {!isLoading && error && <Typography sx={{color: 'red'}}>{errorMessage}</Typography>}
+        <BasicModal
+            open={(deleteModalId as boolean)}
+            onClose={() => setDeleteModal(false)}
+            className='delete-modal-block'
+            body={<Box className='delete-modal-block'>
+                <Typography variant='h5'>
+                    Удалить заключение ?
+                </Typography>
+                <div className='delete-modal-btns'>
+                    <CommonButton
+                        onClick={() => removeAppl(deleteModalId as number)}
+                        color='error'
+                        title='Да'/>
+                    <CommonButton
+                        title='Нет'
+                        onClick={() => setDeleteModal(false)}/>
+                </div>
+            </Box>}/>
+        {/*</BasicModal>*/}
         {appls.count > 10 && <div className="pagination">
             <Pagination
                 count={(Math.ceil(appls.count / 10)) + 1}

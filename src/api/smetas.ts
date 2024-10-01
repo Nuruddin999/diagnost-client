@@ -15,3 +15,9 @@ export const getSmetasApi = async (page: number,
     })
     return response.data
 }
+export const makeSmetaReadyForCoordApi = async (id: string):Promise<{ success:boolean, message?:string }> => {
+    const response = await diagnostApi.post('/smetas-mkrd', {
+        id
+    }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
+    return response.data
+}

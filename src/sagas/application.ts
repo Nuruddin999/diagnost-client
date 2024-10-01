@@ -13,7 +13,7 @@ import {
     successUpdate
 } from '../reducers/applicationItemSlice';
 import {RootState} from '../app/store';
-import {openManagerChangeModal, setCircular} from '../reducers/ui';
+import {openManagerChangeModal, setCircular, setError, setUserItemStatus} from '../reducers/ui';
 
 type applicationAddResponse = {
     id: number,
@@ -59,9 +59,9 @@ type applicationItemFields = {
         place?: string,
         target?: string
         supplier?: string,
-        address?:string,
-        phone?:string,
-        price?:string
+        address?: string,
+        phone?: string,
+        price?: string
     }>
     Comments: Array<{
         title?: string,
@@ -84,7 +84,6 @@ export function* fetchOneApplication(getApplication: { type: 'application/getone
     try {
         const {id} = getApplication.payload
         const response: applicationItemResponse = yield call(getListItemById, id, 'applications')
-        console.log('response',response)
         if (response) {
             yield put(saveApplicationItem({...response}))
         }
@@ -115,14 +114,12 @@ export function* updateOneApplication(updateApplication: { type: 'application/up
         })
         if (response) {
             yield put(setCircular(false))
-            yield put(successUpdate('success'))
+            yield put(setUserItemStatus('updated'))
         }
     } catch (e: any) {
-        if (e.response) {
-            yield put(setCircular(false))
-        } else {
-            yield put(setCircular(false))
-        }
+        yield put(setCircular(false))
+        yield put(setUserItemStatus('no'))
+        yield put(setError('Произошла ошибка'))
     }
 }
 
