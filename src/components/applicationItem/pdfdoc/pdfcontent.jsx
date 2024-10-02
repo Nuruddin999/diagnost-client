@@ -372,7 +372,7 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                             style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}
                         </Text> : null}
                     </View>
-                    <View style={{...styles.commonSize, marginTop: 10}}>
+                    {consiliumDoctors.length > 0 ? <View style={{...styles.commonSize, marginTop: 10}}>
                         <Table
                             title='Проведен дистанционный врачебный консилиум в составе:'
                             subTitle='(указать ФИО и специальности врачей, которые участвовали в формировании заключения):'
@@ -380,8 +380,8 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                             dataContent={consiliumDoctors}
                             contentKeys={['name', 'speciality']}
                         />
-                    </View>
-                    <View style={{marginTop: 14, ...styles.commonSize}}>
+                    </View>:null}
+                    {diagnostic.length > 0 ? <View style={{marginTop: 14, ...styles.commonSize}}>
                         <Table
                             title='С целью проведения дифференциальной диагностики между'
                             subTitle='(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)'
@@ -389,7 +389,7 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                             dataContent={diagnostic}
                             contentKeys={['diagnosis']}
                         />
-                    </View>
+                    </View> : null}
                     <View style={{marginTop: 44, ...styles.commonSize}}>
                         <View style={{
                             display: 'flex',
