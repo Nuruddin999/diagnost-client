@@ -1,148 +1,137 @@
-import { Text, View } from '@react-pdf/renderer'
+import {Text, View} from '@react-pdf/renderer'
 import hyphen from 'hyphen';
 import pattern from 'hyphen/patterns/ru';
+import TableContent from "./TableContent";
 
 const hyphenator = hyphen(pattern);
 
 const hyphenationCallback = (word) => {
-  return hyphenator(word).split('\u00AD');
+    return hyphenator(word).split('\u00AD');
 }
 
-const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, isDeletedPlace }) => {
-   const processedDataContent = dataContent.map(el=>{
-     return {
-         ...el,
-         place:  `${[el.supplier, el.address, el.phone, el.price].filter(el=>el).join(', ')}`
-     }
-   })
-  const renderPlaceView = (hdr) => {
-    const hdrView = <View
-    style={{
-      flexBasis: hdr === '№' ? '5%' : `${(status || isDeletedPlace) ? 95 / (headers.length - 2) : 95 / (headers.length - 1)}%`,
-      height: '100%',
-      border: '1px solid black',
-      padding:'7px'
-    }}>
-    <Text hyphenationCallback={hyphenationCallback} style={{ fontFamily: "Times New Roman Bold", fontSize: '12px' }}>
-      {hdr}
-    </Text>
-  </View>
-    if (hdr !== 'Место') {
-      return  hdrView
+const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, isDeletedPlace}) => {
+    const processedDataContent = dataContent.map(el => {
+        return {
+            ...el,
+            place: `${[el.supplier, el.address, el.phone, el.price].filter(el => el).join(', ')}`
+        }
+    })
+
+    const calcHeaderWidth = (hdr, status) => {
+        let calcVal;
+        if (hdr === '№') {
+            calcVal = '5%'
+        } else if (status === undefined) {
+            calcVal = isDeletedPlace ? `${95 / 2}%` : `${95 / 6}%`
+        } else {
+            calcVal = status ? `${95 / 2}%` : `${95 / 6}%`
+        }
+        return calcVal
     }
-    else if (status !== undefined && !status) {
-      return  hdrView
-    }
-    else if (!isDeletedPlace) {
-      return  hdrView
-    }
-    else {
-      return null
-    }
-  }
-  const renderPlaceContentView = (val, content) => {
-    const placeView =  <View style={{
-      flexBasis:  `${(status || isDeletedPlace) ? 95 / (headers.length - 2) : 95 / (headers.length - 1)}%`,
-      flexWrap: 'wrap',
-      fontSize: '12px',
-      fontFamily: 'Times New Roman Reg',
-      border: '1px solid black',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: '5px'
-    }}>
-        {content ? <Text hyphenationCallback={hyphenationCallback}
-        >
-            {content}
-        </Text>: <Text hyphenationCallback={hyphenationCallback}
-        >
-            {' '}
-        </Text>}
-    </View>
-    if (val !== 'place') {
-      return placeView
-    }
-    else if (status !== undefined && !status) {
-      return placeView
-    }
-    else if (!isDeletedPlace) {
-      return placeView
-    }
-    else {
-      return null
-    }
-  }
-  return <View>
-    <View
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%'
-      }}
-      wrap={false}>
-      <Text
-        style={{ fontFamily: "Times New Roman Bold", fontSize: '12px' }}>
-        {title}
-      </Text>
-      <Text
-        style={{ fontSize: '7px', marginBottom: 10, fontFamily: "Times New Roman Bold", }}>
-        {subTitle}
-      </Text>
-      {headers.length > 0 ?
+
+    const isFalseStatus = status !== undefined && !status
+    const isDeleted = isDeletedPlace === false
+
+    return <View>
         <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            width: '100%',
-          }}>
-          {headers.map((hdr) =>
-            renderPlaceView(hdr))}
-        </View>
-        : null}
-      <View style={{
-        display: 'flex',
-        flexDirection: 'row',
-        width: '100%',
-      }} >
-         {processedDataContent && processedDataContent.length > 0 && contentKeys.length > 0 ? <View style={{
-          flexBasis: '5%',
-          height: '100%',
-          border: '1px solid black',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '5px'
-        }}>
-          <Text style={{ fontFamily: "Times New Roman Reg", fontSize: '12px' }}>1</Text>
-        </View> : null}
-        {processedDataContent && processedDataContent.length > 0 && contentKeys.length > 0 ? contentKeys.map((val) => renderPlaceContentView(val, processedDataContent[0][val])) : null}
-      </View>
-    </View>
-    {processedDataContent.length > 0 ?
-      <View style={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%'
-      }} >
-        {processedDataContent && processedDataContent.length > 0 ? processedDataContent.map((dataObj, index) => index > 0 ?
-          <View style={{
-            display: 'flex',
-            flexDirection: 'row',
-            width: '100%',
-          }}
-            wrap={false} >
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: '100%'
+            }}
+            wrap={false}>
+            <Text
+                style={{fontFamily: "Times New Roman Bold", fontSize: '12px'}}>
+                {title}
+            </Text>
+            <Text
+                style={{fontSize: '7px', marginBottom: 10, fontFamily: "Times New Roman Bold",}}>
+                {subTitle}
+            </Text>
+            {headers.length > 0 ?
+                <View
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '100%',
+                    }}>
+                    {headers.map((hdr) => {
+                        const isNotForHideFileds = !['Поставщик', 'Телефон', 'Адрес', 'Цена'].includes(hdr)
+                        if (isNotForHideFileds || isFalseStatus || isDeleted) {
+                            return <View
+                                style={{
+                                    flexBasis: calcHeaderWidth(hdr, status),
+                                    height: '100%',
+                                    border: '1px solid black',
+                                    padding: '7px'
+                                }}>
+                                <Text hyphenationCallback={hyphenationCallback}
+                                      style={{fontFamily: "Times New Roman Bold", fontSize: '12px'}}>
+                                    {hdr}
+                                </Text>
+                            </View>
+                        }
+                        return null
+                    })}
+                </View>
+                : null}
             <View style={{
-              flexBasis: '5%', border: '1px solid black', display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '5px'
+                display: 'flex',
+                flexDirection: 'row',
+                width: '100%',
             }}>
-              <Text style={{ fontFamily: "Times New Roman Reg", fontSize: '12px' }}>{index + 1}</Text>
+                {processedDataContent && processedDataContent.length > 0 && contentKeys.length > 0 ? <View style={{
+                    flexBasis: '5%',
+                    height: '100%',
+                    border: '1px solid black',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '5px'
+                }}>
+                    <Text style={{fontFamily: "Times New Roman Reg", fontSize: '12px'}}>1</Text>
+                </View> : null}
+                {processedDataContent && processedDataContent.length > 0 && contentKeys.length > 0 ? contentKeys.map((val) => {
+                    const isNotForHideFileds = !['supplier', 'phone', 'address', 'price'].includes(val)
+                    if (isNotForHideFileds || isFalseStatus || isDeleted) {
+                        return <TableContent flexBasis={calcHeaderWidth(null,status)} content={processedDataContent[0][val]} hyphenationCallback={hyphenationCallback} />
+                    } else {
+                        return null
+                    }
+                }) : null}
             </View>
-            {contentKeys.length > 0 ? contentKeys.map((val) => renderPlaceContentView(val, dataObj[val])) : null}
-          </View> : null) : null}
-      </View> : null}
-  </View>
+        </View>
+        {processedDataContent.length > 0 ?
+            <View style={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: '100%'
+            }}>
+                {processedDataContent && processedDataContent.length > 0 ? processedDataContent.map((dataObj, index) => index > 0 ?
+                    <View style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '100%',
+                    }}
+                          wrap={false}>
+                        <View style={{
+                            flexBasis: '5%', border: '1px solid black', display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            padding: '5px'
+                        }}>
+                            <Text style={{fontFamily: "Times New Roman Reg", fontSize: '12px'}}>{index + 1}</Text>
+                        </View>
+                        {contentKeys.length > 0 ? contentKeys.map((val) => {
+                            const isNotForHideFileds = !['supplier', 'phone', 'address', 'price'].includes(val)
+                            if (isNotForHideFileds || isFalseStatus || isDeleted) {
+                                return <TableContent flexBasis={calcHeaderWidth(null,status)} content={processedDataContent[0][val]} hyphenationCallback={hyphenationCallback} />
+                            } else {
+                                return null
+                            }
+                        }) : null}
+                    </View> : null) : null}
+            </View> : null}
+    </View>
 }
 export default TablePdf
