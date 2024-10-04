@@ -23,6 +23,7 @@ import { selectApplicationUserRights } from "../../common/selectors/user";
 import { RoundLoader } from "../../common/components/roundloader";
 import Specialities from "../specialities/Specialities";
 import Smetalist from "../smetalist/smetalist";
+import SmetaItem from "../smetaItem";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -132,7 +133,10 @@ const Dashboard = (): React.ReactElement => {
               <UserItem isProfile />
             </Route>
               <Route path='/main/smetas'>
-                  <Smetalist />
+                  {rights.processedRights.smetas?.read ? <Smetalist/> : <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography></div>}
+              </Route>
+              <Route path='/main/smeta/:id'>
+                  {rights.processedRights.smetas?.read ? <SmetaItem /> : <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography></div>}
               </Route>
           </Switch>
         </div>

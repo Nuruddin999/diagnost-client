@@ -6,6 +6,7 @@ import {SmetasResponseType} from "../../common/types";
 import TableHeader from "../../common/components/tableheader/tableHeader";
 import "./style.smetalist.scss"
 import {selectApplicationUserRights} from "../../common/selectors/user";
+import {useHistory} from "react-router-dom";
 
 const Smetalist = (): React.ReactElement => {
     const [smetas, setSmetas] = React.useState<SmetasResponseType>()
@@ -18,6 +19,7 @@ const Smetalist = (): React.ReactElement => {
     const [patientName, setPatientName] = React.useState('');
     const [diagnosis, setDiagnosis] = React.useState('');
     const [patientPromoter, setPatientPromoter] = React.useState('');
+    const history = useHistory()
 
     const fetchSmetas = async (page: number, limit: number) => {
         const resp = await getSmetasApi(page, 10)
@@ -55,6 +57,10 @@ const Smetalist = (): React.ReactElement => {
             onChange: setPatientPromoter
         },'Удалить']
 
+    const goSmetaItem = (id: number | undefined) => {
+        history.push(`smeta/${id}`)
+    }
+
     const fetchApp = async (page: number, limit: number) => {
         setIsLoading(true)
         try {
@@ -79,7 +85,7 @@ const Smetalist = (): React.ReactElement => {
                 </thead>
                 <tbody>
                 {smetas?.rows.map((el,index) =>
-                    <tr>
+                    <tr   onClick={() => goSmetaItem(el.id)} key={el.patientName}>
                         <td>{(page * 10 - 10) + 1 + index}</td>
                         <td>{el.patientName}</td>
                         <td>{new Date(el.patientBirthDate).toLocaleString()}</td>
