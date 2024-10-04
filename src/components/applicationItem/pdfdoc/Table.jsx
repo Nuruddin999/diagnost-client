@@ -18,13 +18,14 @@ const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, i
     })
 
     const calcHeaderWidth = (hdr, status) => {
+        const hdrLength = headers.length - 1
         let calcVal;
         if (hdr === '№') {
             calcVal = '5%'
         } else if (status === undefined) {
-            calcVal = isDeletedPlace ? `${95 / 2}%` : `${95 / 6}%`
+            calcVal = isDeletedPlace ? `${95 / 2}%` : `${95 / hdrLength}%`
         } else {
-            calcVal = status ? `${95 / 2}%` : `${95 / 6}%`
+            calcVal = status ? `${95 / 2}%` : `${95 / hdrLength}%`
         }
         return calcVal
     }
