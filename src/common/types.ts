@@ -17,7 +17,12 @@ export type SmetaItemType = {
     id: number
     patientBirthDate:string
     patientName: string
-    patientPromoter:string
+    patientPromoter:string,
+    patientRequest:string,
+    fundRequest:string,
+    status:string,
+    customer:string,
+    patientPhone:string,
     updatedAt:string
 }
 

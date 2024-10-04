@@ -28,15 +28,32 @@ const Smetalist = (): React.ReactElement => {
         title: 'ФИО пациента',
         field: patientName,
         onChange: setPatientName
-    }, 'Дата рождения', {
-        title: 'Диагноз',
-        field: diagnosis,
-        onChange: setDiagnosis
-    }, {
+    }, 'Дата рождения',{
+        title: 'Телефон',
+        field: patientPromoter,
+        onChange: setPatientPromoter
+    },
+        {
         title: 'Представитель',
         field: patientPromoter,
         onChange: setPatientPromoter
-    }, 'Дата создания', 'Дата исполнения', 'Удалить']
+    }, {
+            title: 'Запрос пациента',
+            field: patientPromoter,
+            onChange: setPatientPromoter
+        }, {
+            title: 'Запрос фонда',
+            field: patientPromoter,
+            onChange: setPatientPromoter
+        },{
+            title: 'Статус',
+            field: patientPromoter,
+            onChange: setPatientPromoter
+        }, {
+            title: 'Заказчик',
+            field: patientPromoter,
+            onChange: setPatientPromoter
+        },'Удалить']
 
     const fetchApp = async (page: number, limit: number) => {
         setIsLoading(true)
@@ -66,8 +83,14 @@ const Smetalist = (): React.ReactElement => {
                         <td>{(page * 10 - 10) + 1 + index}</td>
                         <td>{el.patientName}</td>
                         <td>{new Date(el.patientBirthDate).toLocaleString()}</td>
-                        <td>{el.diagnosis}</td>
+                        <td>{el.patientPhone}</td>
                         <td>{el.patientPromoter}</td>
+                        <td>{el.patientRequest}</td>
+                        <td>{el.fundRequest}</td>
+                        <td>{el.status}</td>
+                        <td>{el.customer}</td>
+                        <td></td>
+
                         {/*{role !== 'doctor' && <td>{appl.manager}</td>}*/}
                         {/*<td>{new Date(appl.creationDate).toLocaleString()}</td>*/}
                     </tr>)}

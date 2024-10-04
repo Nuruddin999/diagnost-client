@@ -111,6 +111,7 @@ export const applicationItemSlice = createSlice({
             state.managerSignUrlPath = action.payload.managerSignUrlPath
             state.diagnosticData = action.payload.diagnosticData
             state.checkUpPlaceIsDeleted = action.payload.checkUpPlaceIsDeleted
+            state.fundName=action.payload.fundName
         },
         saveConsiliumDoctors: (state, action: PayloadAction<consiliumDoctor>) => {
             state.consiliumDoctors = [...state.consiliumDoctors, {
