@@ -3,7 +3,8 @@ export const specialities: string[] = ["Акушер-гинеколог","Алл
 export const entitiesForRights = {
     applications: 'Заявления',
     users: 'Пользователи',
-    checkupPlanPlace: 'План обследования , место:'
+    checkupPlanPlace: 'План обследования , место:',
+    smetas:'Сметы'
 }
 
-export const initialRights =  [{ entity: 'applications', create: false, update: false, read: true, delete: false }, { entity: 'users', create: false, update: false, read: false, delete: false }, { entity: 'checkupPlanPlace', create: false, update: false, read: false, delete: false }]
+export const initialRights =  [{ entity: 'applications', create: false, update: false, read: true, delete: false }, { entity: 'users', create: false, update: false, read: false, delete: false }, { entity: 'checkupPlanPlace', create: false, update: false, read: false, delete: false},{entity: 'smetas', create: false, update: false, read: false, delete: false } ]
