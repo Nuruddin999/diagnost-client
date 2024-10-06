@@ -32,6 +32,8 @@ const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, i
 
     const isFalseStatus = status !== undefined && !status
     const isDeleted = isDeletedPlace === false
+    const hiddenFields = ['supplier', 'phone', 'address', 'price','medicine','qty','totalPrice']
+    const hiddenHeaders = ['Поставщик', 'Телефон', 'Адрес', 'Цена','Медикаменты','Кол-во','Общая стоимость']
 
     return <View>
         <View
@@ -57,7 +59,7 @@ const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, i
                         width: '100%',
                     }}>
                     {headers.map((hdr) => {
-                        const isNotForHideFileds = !['Поставщик', 'Телефон', 'Адрес', 'Цена'].includes(hdr)
+                        const isNotForHideFileds = !hiddenHeaders.includes(hdr)
                         if (isNotForHideFileds || isFalseStatus || isDeleted) {
                             return <View
                                 style={{
@@ -93,7 +95,7 @@ const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, i
                     <Text style={{fontFamily: "Times New Roman Reg", fontSize: '12px'}}>1</Text>
                 </View> : null}
                 {processedDataContent && processedDataContent.length > 0 && contentKeys.length > 0 ? contentKeys.map((val) => {
-                    const isNotForHideFileds = !['supplier', 'phone', 'address', 'price'].includes(val)
+                    const isNotForHideFileds = !hiddenFields.includes(val)
                     if (isNotForHideFileds || isFalseStatus || isDeleted) {
                         return <TableContent flexBasis={calcHeaderWidth(null,status)} content={processedDataContent[0][val]} hyphenationCallback={hyphenationCallback} />
                     } else {
@@ -124,7 +126,7 @@ const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, i
                             <Text style={{fontFamily: "Times New Roman Reg", fontSize: '12px'}}>{index + 1}</Text>
                         </View>
                         {contentKeys.length > 0 ? contentKeys.map((val) => {
-                            const isNotForHideFileds = !['supplier', 'phone', 'address', 'price'].includes(val)
+                            const isNotForHideFileds = !hiddenFields.includes(val)
                             if (isNotForHideFileds || isFalseStatus || isDeleted) {
                                 return <TableContent flexBasis={calcHeaderWidth(null,status)} content={processedDataContent[0][val]} hyphenationCallback={hyphenationCallback} />
                             } else {

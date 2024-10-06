@@ -26,6 +26,9 @@ const CheckupPlanForm = (): React.ReactElement => {
     const [placeAddress, setPlaceAddress] = useState('')
     const [placePhone, setPlacePhone] = useState('')
     const [placePrice, setPlacePrice] = useState('')
+    const [placeMedicine, setPlaceMedicine] = useState('')
+    const [placeQty, setPlaceQty] = useState('')
+    const [placeTotalPrice, setPlaceTotalPrice] = useState('')
     const [error, setError] = useState('')
     const bc = useMemo(() => new BroadcastChannel('pdf_channel'), []);
     const addConsliliumDoctor = () => {
@@ -51,10 +54,10 @@ const CheckupPlanForm = (): React.ReactElement => {
 
 
     const handleCheckupDetails = (e: any, checkupPlanDetail: CheckupPlanDetailType, field: string) => {
-        const {price, phone, target, place, address, kind, supplier} = checkupPlanDetail.checkupPlan
+        const {price, phone, target, place, address, kind, supplier, medicine, qty} = checkupPlanDetail.checkupPlan
         applications?.update && dispatch(changeCheckupPlan({
             index: checkupPlanDetail.index,
-            checkupPlan: {supplier, kind, place, target, price, phone, address, [field]: e.target.value,}
+            checkupPlan: {supplier, kind, place, target, price, phone, address, medicine, qty, [field]: e.target.value,}
         }))
     }
 
@@ -64,6 +67,16 @@ const CheckupPlanForm = (): React.ReactElement => {
             bc.close();
         };
     }, [bc]);
+
+    useEffect(() => {
+       if (parseInt(placeQty) && parseInt(placePrice)) {
+           const total = parseInt(placeQty) * parseInt(placePrice)
+           setPlaceTotalPrice(total.toString())
+       } else {
+           setPlaceTotalPrice('')
+       }
+    }, [placePrice,placeQty]);
+
     return <div className="checkup-section">
         {checkupPlans.length > 0 ? <table>
             <tr>
@@ -78,26 +91,11 @@ const CheckupPlanForm = (): React.ReactElement => {
           </span>
                 </th>
                 {!checkUpPlaceIsDeleted && <Fragment>
-                    <th>
+                    {['Поставщик','Адрес','Телефон','Медикаменты','Кол-во','Цена','Общая стоимость'].map(el=><th>
           <span>
-            Поставщик
+            {el}
           </span>
-                    </th>
-                    <th>
-          <span>
-            Адрес
-          </span>
-                    </th>
-                    <th>
-          <span>
-            Телефон
-          </span>
-                    </th>
-                    <th>
-          <span>
-            Цена
-          </span>
-                    </th>
+                    </th>)}
                 </Fragment>}
                 <th>Цель проведения обследования</th>
                 <th>
@@ -118,8 +116,9 @@ const CheckupPlanForm = (): React.ReactElement => {
 
                 /></td>
                 {!checkUpPlaceIsDeleted && ["supplier", "address",
-                    "phone",
-                    "price"].map(el => <td>
+                    "phone","medicine","qty",
+
+                    "price","totalPrice"].map(el => <td>
                     <TextField
                         value={checkupPlan[el as keyof typeof checkupPlan]}
                         variant='standard'
@@ -223,6 +222,34 @@ const CheckupPlanForm = (): React.ReactElement => {
                         }}
                     />
                     <TextField
+                        value={placeMedicine}
+                        variant='outlined'
+                        size='small'
+                        error={Boolean(error)}
+                        fullWidth
+                        placeholder='Медикаменты'
+                        onChange={(e) => {
+                            if (error) {
+                                setError('')
+                            }
+                            setPlaceMedicine(e.target.value)
+                        }}
+                    />
+                    <TextField
+                        value={placeQty}
+                        variant='outlined'
+                        size='small'
+                        error={Boolean(error)}
+                        fullWidth
+                        placeholder='Количество'
+                        onChange={(e) => {
+                            if (error) {
+                                setError('')
+                            }
+                            setPlaceQty(e.target.value)
+                        }}
+                    />
+                    <TextField
                         value={placePrice}
                         variant='outlined'
                         size='small'
@@ -234,6 +261,20 @@ const CheckupPlanForm = (): React.ReactElement => {
                                 setError('')
                             }
                             setPlacePrice(e.target.value)
+                        }}
+                    />
+                    <TextField
+                        value={placeTotalPrice}
+                        variant='outlined'
+                        size='small'
+                        error={Boolean(error)}
+                        fullWidth
+                        placeholder='Общая стоимость'
+                        onChange={(e) => {
+                            if (error) {
+                                setError('')
+                            }
+                            setPlaceTotalPrice(e.target.value)
                         }}
                     />
 

@@ -1,7 +1,7 @@
 import {consiliumDoctor} from '../sagas/application';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {applicationItemResponse} from '../sagas/application';
-import {CheckupPlanDetailType} from "../common/types";
+import {CheckupPlanDetailType, CheckupPlanItem} from "../common/types";
 
 
 export type applicationInitialState = {
@@ -28,16 +28,7 @@ export type applicationInitialState = {
     patientBirthDate: string,
     mostProblDiagnosis: string,
     secondaryDiagnosis: string,
-    checkupPlans: Array<{
-        id?: number,
-        kind?: string,
-        place?: string,
-        target?: string
-        supplier?: string,
-        address?:string,
-        phone?:string,
-        price?:string
-    }>,
+    checkupPlans: Array<CheckupPlanItem>,
     comments: Array<{
         title?: string,
         comment: string,
@@ -90,7 +81,6 @@ export const initialState: applicationInitialState = {
 export const applicationItemSlice = createSlice({
     name: 'applicationItem',
     initialState,
-    // The `reducers` field lets us define reducers and generate associated actions
     reducers: {
         saveApplicationItem: (state, action: PayloadAction<applicationItemResponse>) => {
             state.id = action.payload.id
@@ -143,19 +133,14 @@ export const applicationItemSlice = createSlice({
         changeSecondaryDiagnosis: (state, action: PayloadAction<string>) => {
             state.secondaryDiagnosis = action.payload
         },
-        saveCheckupPlan: (state, action: PayloadAction<{
-            kind?: string,
-            place?: string,
-            target?: string,
-            supplier?: string,
-            address?:string,
-            phone?:string,
-            price?:string
-        }>) => {
+        saveCheckupPlan: (state, action: PayloadAction<CheckupPlanItem>) => {
             state.checkupPlans = [...state.checkupPlans, {...action.payload}]
         },
         changeCheckupPlan: (state, action: PayloadAction<CheckupPlanDetailType>) => {
-            state.checkupPlans = state.checkupPlans.map((checkupPlanEl, checkupPlanIndex) => checkupPlanIndex === action.payload.index ? {...action.payload.checkupPlan} : checkupPlanEl)
+            const {qty,price}=action.payload.checkupPlan
+            const isValidData = qty && price && parseInt(qty) && parseInt(price)
+            const totalCalc = isValidData ? (parseInt(qty as string) * parseInt(price as string)).toString():''
+            state.checkupPlans = state.checkupPlans.map((checkupPlanEl, checkupPlanIndex) => checkupPlanIndex === action.payload.index ? {...action.payload.checkupPlan, totalPrice:totalCalc} : checkupPlanEl)
         },
         deleteCheckupPlan: (state, action: PayloadAction<number>) => {
             state.checkupPlans = state.checkupPlans.filter((checkupPlan, index) => index !== action.payload)

@@ -14,6 +14,7 @@ import {
 } from '../reducers/applicationItemSlice';
 import {RootState} from '../app/store';
 import {openManagerChangeModal, setCircular, setError, setUserItemStatus} from '../reducers/ui';
+import {CheckupPlanItem} from "../common/types";
 
 type applicationAddResponse = {
     id: number,
@@ -53,16 +54,7 @@ type applicationItemFields = {
     managerSignUrlPath: string,
     diagnosticData: string,
     patientBirthDate: string,
-    CheckupPlans: Array<{
-        id?: number,
-        kind?: string,
-        place?: string,
-        target?: string
-        supplier?: string,
-        address?: string,
-        phone?: string,
-        price?: string
-    }>
+    CheckupPlans: Array<CheckupPlanItem>
     Comments: Array<{
         title?: string,
         comment: string,
