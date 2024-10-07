@@ -137,9 +137,15 @@ export const applicationItemSlice = createSlice({
             state.checkupPlans = [...state.checkupPlans, {...action.payload}]
         },
         changeCheckupPlan: (state, action: PayloadAction<CheckupPlanDetailType>) => {
-            const {qty,price}=action.payload.checkupPlan
-            const isValidData = qty && price && parseInt(qty) && parseInt(price)
-            const totalCalc = isValidData ? (parseInt(qty as string) * parseInt(price as string)).toString():''
+            let totalCalc: string | undefined;
+            const {qty,price, totalPrice}=action.payload.checkupPlan
+            if (!action.payload.isTotalPriceEdit) {
+                const isValidData = qty && price && parseInt(qty) && parseInt(price)
+                totalCalc = isValidData ? (parseInt(qty as string) * parseInt(price as string)).toString():''
+            }
+            else {
+                totalCalc = totalPrice
+            }
             state.checkupPlans = state.checkupPlans.map((checkupPlanEl, checkupPlanIndex) => checkupPlanIndex === action.payload.index ? {...action.payload.checkupPlan, totalPrice:totalCalc} : checkupPlanEl)
         },
         deleteCheckupPlan: (state, action: PayloadAction<number>) => {

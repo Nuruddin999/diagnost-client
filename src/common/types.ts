@@ -13,7 +13,7 @@ export type CheckupPlanItem = {
     totalPrice?:string,
 }
 export type CheckupPlanDetailType = {
-    index: number, checkupPlan:CheckupPlanItem
+    index: number, checkupPlan:CheckupPlanItem, isTotalPriceEdit?:boolean
 }
 
 export type SmetaItemType = {

@@ -57,7 +57,8 @@ const CheckupPlanForm = (): React.ReactElement => {
         const {price, phone, target, place, address, kind, supplier, medicine, qty} = checkupPlanDetail.checkupPlan
         applications?.update && dispatch(changeCheckupPlan({
             index: checkupPlanDetail.index,
-            checkupPlan: {supplier, kind, place, target, price, phone, address, medicine, qty, [field]: e.target.value,}
+            checkupPlan: {supplier, kind, place, target, price, phone, address, medicine, qty, [field]: e.target.value,},
+            isTotalPriceEdit: field === 'totalPrice'
         }))
     }
 
