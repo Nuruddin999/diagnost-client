@@ -1,0 +1,103 @@
+.patient-doctor-block {
+  label {
+    width: 100%;
+    display: inline-block;
+    text-align: left;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  .patient-title {
+    border-bottom: 1px solid black;
+    padding-bottom: 15px;
+    text-align: start;
+  }
+
+  .name-manager {
+    margin-top: 20px;
+
+    .name-birth-section {
+      display: flex;
+      gap: 10px;
+
+      .name-section {
+        flex: 1;
+      }
+
+      .birth {
+        flex: 1;
+        text-align: left;
+      }
+    }
+
+    .diagnosis-section {
+      margin-top: 50px;
+      display: flex;
+      div {
+        flex: 0.5;
+      }
+    }
+  }
+
+  .diagnosis-table {
+    margin-top: 40px;
+    .table-section {
+      max-height: 350px;
+      table {
+        thead {
+          tr {
+            border-color: #EAEAEA;
+            background: #F8FAFC;
+            font-weight: 400;
+            color: #526069;
+
+            th {
+              padding: 8px;
+              border-bottom: 2px solid #ddd;
+            }
+            .del-btn {
+              width: 65px;
+            }
+          }
+        }
+
+        tbody {
+          tr {
+            td {
+              padding: 8px;
+              border-bottom: 1px solid #ddd;
+            }
+          }
+        }
+      }
+    }
+    .add-index {
+      width: 174.19px;
+    }
+    .add-add-btn {
+      width: 65px;
+    }
+    tr {
+      td {
+        padding: 8px;
+      }
+    }
+  }
+  .manager-section {
+    margin-top: 20px;
+    .fio-exec-date {
+      display: flex;
+      gap: 10px;
+      .manager-name, .birth {
+        flex: 1;
+      }
+    }
+    .manager-speciality {
+      margin-top: 10px;
+      display: flex;
+      justify-content: left;
+      div {
+        flex: 0.5;
+      }
+    }
+  }
+}

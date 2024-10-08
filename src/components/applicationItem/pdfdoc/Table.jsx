@@ -128,7 +128,7 @@ const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, i
                         {contentKeys.length > 0 ? contentKeys.map((val) => {
                             const isNotForHideFileds = !hiddenFields.includes(val)
                             if (isNotForHideFileds || isFalseStatus || isDeleted) {
-                                return <TableContent flexBasis={calcHeaderWidth(null,status)} content={processedDataContent[0][val]} hyphenationCallback={hyphenationCallback} />
+                                return <TableContent flexBasis={calcHeaderWidth(null,status)} content={dataObj[val]} hyphenationCallback={hyphenationCallback} />
                             } else {
                                 return null
                             }
