@@ -88,7 +88,6 @@ const AddModal = ({fetchApp}: { fetchApp: (page: number, limit: number, manager:
                         size='small'
                         value={patientPromoter}
                         onChange={(event: any) => setPatientPromoter(event.target.value)}
-                        required
                     />
                     <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
                         <div>
