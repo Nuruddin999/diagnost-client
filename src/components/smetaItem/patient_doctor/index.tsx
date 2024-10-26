@@ -10,7 +10,7 @@ type PatientDoctorType = {
     diagnosis: string,
     patientBirthDate: string,
     patientName: string,
-    smetasecdiags?: Array<string>,
+    smetasecdiags?: Array<{ name:string }>,
     manager?: string,
     managerSpeciality?:string,
     handleChangeSmetaItem: (field: string, payload: any) => void,
@@ -25,21 +25,21 @@ const PatientDoctor: FC<PatientDoctorType> = ({
                                               }) => {
 
     const [tableDiagnosis, setTableDiagnosis] = useState('')
-
     const addDiagnosisToTable = () => {
         if (smetasecdiags && tableDiagnosis) {
-            const newList = smetasecdiags.indexOf(tableDiagnosis) < 0 ? [...smetasecdiags, tableDiagnosis] : smetasecdiags
+            const hasSameName = smetasecdiags.some((obj) => obj.name === tableDiagnosis);
+            const newList = !hasSameName ? [...smetasecdiags, {name:tableDiagnosis}] : smetasecdiags
             handleChangeSmetaItem('Smetasecdiags', newList)
         }
     }
 
-    const removeDiagnosisToTable = (el: string) => {
-        const newList = smetasecdiags.filter(filteredEl => el !== filteredEl)
+    const removeDiagnosisToTable = (index: number) => {
+        const newList = smetasecdiags.filter((filteredEl, fIndex) => index !== fIndex)
         handleChangeSmetaItem('Smetasecdiags', newList)
     }
 
     const changeDiagnosis = (index: number, val: string) => {
-        const newList = smetasecdiags.map((el, elIndex) => elIndex === index ? val : el)
+        const newList = smetasecdiags.map((el, elIndex) => elIndex === index ? {...el,name:val} : el)
         handleChangeSmetaItem('Smetasecdiags', newList)
     }
 
@@ -105,7 +105,7 @@ const PatientDoctor: FC<PatientDoctorType> = ({
                                 {index + 1}
                             </td>
                             <td>
-                                <TextField size={'small'} value={el}
+                                <TextField size={'small'} value={el.name}
                                            onChange={(e) => changeDiagnosis(index, e.target.value)} variant={'outlined'}
                                            fullWidth
                                            sx={{
@@ -114,7 +114,7 @@ const PatientDoctor: FC<PatientDoctorType> = ({
                                 />
                             </td>
                             <td>
-                                <Button onClick={() => removeDiagnosisToTable(el)} title={'-'} color={'error'}/>
+                                <Button onClick={() => removeDiagnosisToTable(index)} title={'-'} color={'error'}/>
                             </td>
                         </tr>
                     )}
