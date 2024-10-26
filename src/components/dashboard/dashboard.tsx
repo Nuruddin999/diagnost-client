@@ -15,6 +15,7 @@ import { checkUser, logOutUser } from "../../actions/user";
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import CalculateIcon from '@mui/icons-material/Calculate';
 import ApplicationItem from "../applicationItem";
 import { Registration } from "../../common/components/registration/registration";
 import UsersList from "../userslist/userslist";
@@ -99,7 +100,7 @@ const Dashboard = (): React.ReactElement => {
             <div className='list-item'>
                 <Link to='/main/smetas'>
                     <ListItemIcon>
-                        <BusinessCenterIcon />
+                        <CalculateIcon />
                     </ListItemIcon>
                 </Link>
                 <Link to='/main/smetas'>
