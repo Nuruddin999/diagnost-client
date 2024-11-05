@@ -1,21 +1,21 @@
-import React, {useState, useEffect, useMemo, Fragment} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../../app/store";
-import {Button, IconButton, TextField, Typography} from "@mui/material";
+import React, { useState, useEffect, useMemo, Fragment } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../app/store";
+import { Button, IconButton, TextField, Typography } from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import {changeCheckupPlan, saveCheckupPlan, deleteCheckupPlan} from "../../../reducers/applicationItemSlice";
+import { changeCheckupPlan, saveCheckupPlan, deleteCheckupPlan } from "../../../reducers/applicationItemSlice";
 import './style.checkupplans.scss'
 import NoResult from "../../no-result/no-result";
 import CloseIcon from '@mui/icons-material/Close';
-import {selectApplicationUserRights} from "../../../common/selectors/user";
-import {changeDeleteOptionAction} from "../../../actions/application";
-import {CheckupPlanDetailType} from "../../../common/types";
+import { selectApplicationUserRights } from "../../../common/selectors/user";
+import { changeDeleteOptionAction } from "../../../actions/application";
+import { CheckupPlanDetailType } from "../../../common/types";
 
 
 const CheckupPlanForm = (): React.ReactElement => {
     const dispatch = useDispatch()
-    const {checkupPlans, id, checkUpPlaceIsDeleted} = useSelector((state: RootState) => state.applicationItem)
+    const { checkupPlans, id, checkUpPlaceIsDeleted } = useSelector((state: RootState) => state.applicationItem)
     const {
         applications,
         checkupPlanPlace
@@ -36,7 +36,7 @@ const CheckupPlanForm = (): React.ReactElement => {
             setError('Все поля должны быть заполнены')
             return
         }
-        dispatch(saveCheckupPlan({kind, supplier, target, address: placeAddress, price: placePrice, phone: placePhone}))
+        dispatch(saveCheckupPlan({ kind, supplier, target, address: placeAddress, price: placePrice, phone: placePhone, qty: placeQty, totalPrice: placeTotalPrice }))
         setKind('')
         setSupplier('')
         setPlacePrice('')
@@ -54,10 +54,10 @@ const CheckupPlanForm = (): React.ReactElement => {
 
 
     const handleCheckupDetails = (e: any, checkupPlanDetail: CheckupPlanDetailType, field: string) => {
-        const {price, phone, target, place, address, kind, supplier, medicine, qty} = checkupPlanDetail.checkupPlan
+        const { price, phone, target, place, address, kind, supplier, medicine, qty } = checkupPlanDetail.checkupPlan
         applications?.update && dispatch(changeCheckupPlan({
             index: checkupPlanDetail.index,
-            checkupPlan: {supplier, kind, place, target, price, phone, address, medicine, qty, [field]: e.target.value,},
+            checkupPlan: { supplier, kind, place, target, price, phone, address, medicine, qty, [field]: e.target.value, },
             isTotalPriceEdit: field === 'totalPrice'
         }))
     }
@@ -70,32 +70,32 @@ const CheckupPlanForm = (): React.ReactElement => {
     }, [bc]);
 
     useEffect(() => {
-       if (parseInt(placeQty) && parseInt(placePrice)) {
-           const total = parseInt(placeQty) * parseInt(placePrice)
-           setPlaceTotalPrice(total.toString())
-       } else {
-           setPlaceTotalPrice('')
-       }
-    }, [placePrice,placeQty]);
+        if (parseInt(placeQty) && parseInt(placePrice)) {
+            const total = parseInt(placeQty) * parseInt(placePrice)
+            setPlaceTotalPrice(total.toString())
+        } else {
+            setPlaceTotalPrice('')
+        }
+    }, [placePrice, placeQty]);
 
     return <div className="checkup-section">
         {checkupPlans.length > 0 ? <table>
             <tr>
                 <th>
-          <span>
-            №
-          </span>
+                    <span>
+                        №
+                    </span>
                 </th>
                 <th>
-          <span>
-            Вид обследования
-          </span>
+                    <span>
+                        Вид обследования
+                    </span>
                 </th>
                 {!checkUpPlaceIsDeleted && <Fragment>
-                    {['Поставщик','Адрес','Телефон','Медикаменты','Кол-во','Цена','Общая стоимость'].map(el=><th>
-          <span>
-            {el}
-          </span>
+                    {['Поставщик', 'Адрес', 'Телефон', 'Медикаменты', 'Кол-во', 'Цена', 'Общая стоимость'].map(el => <th>
+                        <span>
+                            {el}
+                        </span>
                     </th>)}
                 </Fragment>}
                 <th>Цель проведения обследования</th>
@@ -103,50 +103,50 @@ const CheckupPlanForm = (): React.ReactElement => {
                 </th>
             </tr>
             <tbody>
-            {checkupPlans.length > 0 && checkupPlans.map((checkupPlan, index) => <tr>
-                <td>{index + 1}</td>
-                <td align="left"><TextField
-                    value={checkupPlan.kind}
-                    variant='standard'
-                    size='small'
-                    fullWidth
-                    multiline
-                    maxRows={15}
-                    placeholder='Вид обследования'
-                    onChange={(e) => handleCheckupDetails(e, {index, checkupPlan}, 'kind')}
-
-                /></td>
-                {!checkUpPlaceIsDeleted && ["supplier", "address",
-                    "phone","medicine","qty",
-
-                    "price","totalPrice"].map(el => <td>
-                    <TextField
-                        value={checkupPlan[el as keyof typeof checkupPlan]}
+                {checkupPlans.length > 0 && checkupPlans.map((checkupPlan, index) => <tr>
+                    <td>{index + 1}</td>
+                    <td align="left"><TextField
+                        value={checkupPlan.kind}
                         variant='standard'
                         size='small'
                         fullWidth
                         multiline
                         maxRows={15}
-                        onChange={(e) => handleCheckupDetails(e, {index, checkupPlan}, el)}
-                    />
-                </td>)}
-                <td><TextField
-                    value={checkupPlan.target}
-                    variant='standard'
-                    size='small'
-                    fullWidth
-                    multiline
-                    maxRows={15}
-                    placeholder='Цель проведения обследования'
-                    onChange={(e) => handleCheckupDetails(e, {index, checkupPlan}, 'target')}
-                /></td>
-                <td><IconButton disabled={!applications?.update} className='delete-button'
-                                onClick={() => deletePlan(index)}>
-                    <DeleteOutlineIcon/>
-                </IconButton></td>
-            </tr>)}
+                        placeholder='Вид обследования'
+                        onChange={(e) => handleCheckupDetails(e, { index, checkupPlan }, 'kind')}
+
+                    /></td>
+                    {!checkUpPlaceIsDeleted && ["supplier", "address",
+                        "phone", "medicine", "qty",
+
+                        "price", "totalPrice"].map(el => <td>
+                            <TextField
+                                value={checkupPlan[el as keyof typeof checkupPlan]}
+                                variant='standard'
+                                size='small'
+                                fullWidth
+                                multiline
+                                maxRows={15}
+                                onChange={(e) => handleCheckupDetails(e, { index, checkupPlan }, el)}
+                            />
+                        </td>)}
+                    <td><TextField
+                        value={checkupPlan.target}
+                        variant='standard'
+                        size='small'
+                        fullWidth
+                        multiline
+                        maxRows={15}
+                        placeholder='Цель проведения обследования'
+                        onChange={(e) => handleCheckupDetails(e, { index, checkupPlan }, 'target')}
+                    /></td>
+                    <td><IconButton disabled={!applications?.update} className='delete-button'
+                        onClick={() => deletePlan(index)}>
+                        <DeleteOutlineIcon />
+                    </IconButton></td>
+                </tr>)}
             </tbody>
-        </table> : <NoResult/>}
+        </table> : <NoResult />}
         <Typography>Добавить план обследования в таблицу</Typography>
         <div className="add-in-table-section">
             <TextField
@@ -168,7 +168,7 @@ const CheckupPlanForm = (): React.ReactElement => {
                     <div>
                         {!checkUpPlaceIsDeleted &&
                             <IconButton size='small' className='hide-place' onClick={sendBroadcastMessage}>
-                                <CloseIcon/>
+                                <CloseIcon />
                             </IconButton>}
                     </div>
                 }
@@ -296,8 +296,8 @@ const CheckupPlanForm = (): React.ReactElement => {
                     setTarget(e.target.value)
                 }}
             /> <IconButton disabled={!applications?.update} onClick={addConsliliumDoctor}>
-            <AddCircleIcon className='add-in-table-svg '/>
-        </IconButton>
+                <AddCircleIcon className='add-in-table-svg ' />
+            </IconButton>
         </div>
         {error && <Typography color='error'>
             {error}
