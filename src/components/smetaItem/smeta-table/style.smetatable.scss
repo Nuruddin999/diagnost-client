@@ -1,8 +1,11 @@
 .smeta-table {
   .diagnosis-table {
     margin-top: 20px;
+
     .table-section {
-      max-height: 350px;
+      max-height: 450px;
+      overflow-y: scroll;
+
       table {
         thead {
           tr {
@@ -15,6 +18,7 @@
               padding: 8px;
               border-bottom: 2px solid #ddd;
             }
+
             .del-btn {
               width: 65px;
             }
@@ -31,12 +35,15 @@
         }
       }
     }
+
     .add-index {
       width: 174.19px;
     }
+
     .add-add-btn {
       width: 65px;
     }
+
     tr {
       td {
         padding: 8px;

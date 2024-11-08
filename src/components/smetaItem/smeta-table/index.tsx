@@ -66,6 +66,8 @@ const SmetaTable: FC<{
                                         }}
                                         error={error}
                                         fullWidth
+                                        multiline
+                                        maxRows={5}
                                         sx={{
                                             "& fieldset": { border: 'none' },
                                         }}
@@ -146,6 +148,8 @@ const SmetaTable: FC<{
                                                 error={error}
                                                 placeholder={el.hdr}
                                                 fullWidth
+                                                multiline
+                                                maxRows={5}
                                             />
                                         </td>
                                 })}
