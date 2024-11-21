@@ -1,7 +1,8 @@
-import {Text, View} from '@react-pdf/renderer'
+import { Text, View } from '@react-pdf/renderer'
 import hyphen from 'hyphen';
 import pattern from 'hyphen/patterns/ru';
 import TableContent from "./TableContent";
+import { BASIC_FONT, BASIC_FONT_BOLD } from './pdfcontent';
 
 const hyphenator = hyphen(pattern);
 
@@ -9,7 +10,7 @@ const hyphenationCallback = (word) => {
     return hyphenator(word).split('\u00AD');
 }
 
-const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, isDeletedPlace}) => {
+const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, isDeletedPlace }) => {
     const processedDataContent = dataContent.map(el => {
         return {
             ...el,
@@ -32,8 +33,8 @@ const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, i
 
     const isFalseStatus = status !== undefined && !status
     const isDeleted = isDeletedPlace === false
-    const hiddenFields = ['supplier', 'phone', 'address', 'price','medicine','qty','totalPrice']
-    const hiddenHeaders = ['Поставщик', 'Телефон', 'Адрес', 'Цена','Медикаменты','Кол-во','Общая стоимость']
+    const hiddenFields = ['supplier', 'phone', 'address', 'price', 'medicine', 'qty', 'totalPrice']
+    const hiddenHeaders = ['Поставщик', 'Телефон', 'Адрес', 'Цена', 'Медикаменты', 'Кол-во', 'Общая стоимость']
 
     return <View>
         <View
@@ -44,11 +45,11 @@ const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, i
             }}
             wrap={false}>
             <Text
-                style={{fontFamily: "Times New Roman Bold", fontSize: '12px'}}>
+                style={{ fontFamily: BASIC_FONT_BOLD, fontSize: '12px' }}>
                 {title}
             </Text>
             <Text
-                style={{fontSize: '7px', marginBottom: 10, fontFamily: "Times New Roman Bold",}}>
+                style={{ fontSize: '7px', marginBottom: 10, fontFamily: BASIC_FONT_BOLD, }}>
                 {subTitle}
             </Text>
             {headers.length > 0 ?
@@ -69,7 +70,7 @@ const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, i
                                     padding: '7px'
                                 }}>
                                 <Text hyphenationCallback={hyphenationCallback}
-                                      style={{fontFamily: "Times New Roman Bold", fontSize: '12px'}}>
+                                    style={{ fontFamily: BASIC_FONT_BOLD, fontSize: '12px' }}>
                                     {hdr}
                                 </Text>
                             </View>
@@ -92,12 +93,12 @@ const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, i
                     alignItems: 'center',
                     padding: '5px'
                 }}>
-                    <Text style={{fontFamily: "Times New Roman Reg", fontSize: '12px'}}>1</Text>
+                    <Text style={{ fontFamily: BASIC_FONT, fontSize: '12px' }}>1</Text>
                 </View> : null}
                 {processedDataContent && processedDataContent.length > 0 && contentKeys.length > 0 ? contentKeys.map((val) => {
                     const isNotForHideFileds = !hiddenFields.includes(val)
                     if (isNotForHideFileds || isFalseStatus || isDeleted) {
-                        return <TableContent flexBasis={calcHeaderWidth(null,status)} content={processedDataContent[0][val]} hyphenationCallback={hyphenationCallback} />
+                        return <TableContent flexBasis={calcHeaderWidth(null, status)} content={processedDataContent[0][val]} hyphenationCallback={hyphenationCallback} />
                     } else {
                         return null
                     }
@@ -116,19 +117,19 @@ const TablePdf = ({headers, dataContent, contentKeys, title, subTitle, status, i
                         flexDirection: 'row',
                         width: '100%',
                     }}
-                          wrap={false}>
+                        wrap={false}>
                         <View style={{
                             flexBasis: '5%', border: '1px solid black', display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
                             padding: '5px'
                         }}>
-                            <Text style={{fontFamily: "Times New Roman Reg", fontSize: '12px'}}>{index + 1}</Text>
+                            <Text style={{ fontFamily: BASIC_FONT, fontSize: '12px' }}>{index + 1}</Text>
                         </View>
                         {contentKeys.length > 0 ? contentKeys.map((val) => {
                             const isNotForHideFileds = !hiddenFields.includes(val)
                             if (isNotForHideFileds || isFalseStatus || isDeleted) {
-                                return <TableContent flexBasis={calcHeaderWidth(null,status)} content={dataObj[val]} hyphenationCallback={hyphenationCallback} />
+                                return <TableContent flexBasis={calcHeaderWidth(null, status)} content={dataObj[val]} hyphenationCallback={hyphenationCallback} />
                             } else {
                                 return null
                             }

@@ -1,13 +1,15 @@
-import {Document, Page, PDFViewer, Text, StyleSheet, View, Font, Image} from '@react-pdf/renderer'
+import { Document, Page, PDFViewer, Text, StyleSheet, View, Font, Image } from '@react-pdf/renderer'
 import './style.pdfdoc.scss'
 import hopedoc from '../../../hopedoc.png'
 import sell from '../../../sign.jpeg'
 import TimesNewRomanFont from '../../../TimesNewRomanPSMT.ttf'
 import TimesNewRomanBoldFont from '../../../TimesNewRomanPS-BoldMT.ttf'
+import DejavuSansBold from '../../../DejaVuSans-Bold.ttf'
+import DejavuSansReg from '../../../DejaVuSans.ttf'
 import Table from './Table'
 import hyphen from 'hyphen';
 import pattern from 'hyphen/patterns/ru';
-import {declination} from '../../../helpers'
+import { declination } from '../../../helpers'
 import BirthBlock from './BirthBlock'
 
 
@@ -16,6 +18,8 @@ const hyphenationCallback = (word) => {
     return hyphenator(word).split('\u00AD');
 }
 
+export const BASIC_FONT = "Dejavu Sans Reg"
+export const BASIC_FONT_BOLD = "Dejavu Sans Bold"
 
 Font.register({
     family: "Roboto",
@@ -30,6 +34,14 @@ Font.register({
 Font.register({
     family: "Times New Roman Bold",
     src: TimesNewRomanBoldFont
+});
+Font.register({
+    family: BASIC_FONT,
+    src: DejavuSansReg
+});
+Font.register({
+    family: BASIC_FONT_BOLD,
+    src: DejavuSansBold
 });
 const probDiagns = {
     width: '100%',
@@ -68,12 +80,12 @@ const styles = StyleSheet.create({
         paddingBottom: '42px',
         fontSize: 14,
         textAlign: 'center',
-        fontFamily: "Times New Roman Reg"
+        fontFamily: BASIC_FONT
     },
     recomenTitle: {
         fontWeight: 700,
         fontSize: '12px',
-        fontFamily: "Times New Roman Bold",
+        fontFamily: BASIC_FONT_BOLD,
         marginTop: 12,
         marginBottom: 12,
     },
@@ -81,7 +93,7 @@ const styles = StyleSheet.create({
         fontSize: 8,
         marginTop: 8,
         fontWeight: 700,
-        fontFamily: "Times New Roman Bold",
+        fontFamily: BASIC_FONT_BOLD,
         textAlign: 'center',
         color: 'red',
         margin: '0 auto'
@@ -95,7 +107,7 @@ const styles = StyleSheet.create({
         margin: 12,
         fontSize: 14,
         textAlign: 'justify',
-        fontFamily: "Times New Roman Reg"
+        fontFamily: BASIC_FONT
     },
     image: {
         marginVertical: 15,
@@ -118,11 +130,11 @@ const styles = StyleSheet.create({
     },
     newbirth: {
         fontWeight: 700,
-        fontFamily: "Times New Roman Bold",
+        fontFamily: BASIC_FONT_BOLD,
         fontSize: '12px'
     },
     newbirthText: {
-        fontFamily: "Times New Roman Reg",
+        fontFamily: BASIC_FONT,
         fontSize: '8px'
     },
     anamnesisSection: {
@@ -131,13 +143,13 @@ const styles = StyleSheet.create({
     },
     reasonTitle: {
         fontWeight: 700,
-        fontFamily: "Times New Roman Bold",
+        fontFamily: BASIC_FONT_BOLD,
         fontSize: '12px',
         marginTop: '14px'
     },
     reasonSubTitle: {
         fontWeight: 700,
-        fontFamily: "Times New Roman Bold",
+        fontFamily: BASIC_FONT_BOLD,
         fontSize: 7
     },
     complaintTitle: {
@@ -152,7 +164,7 @@ const styles = StyleSheet.create({
     },
     complaintTitleFirstWord: {
         fontWeight: 700,
-        fontFamily: "Times New Roman Bold",
+        fontFamily: BASIC_FONT_BOLD,
     },
     tabl: {},
     tableRow: {
@@ -187,13 +199,13 @@ const styles = StyleSheet.create({
     probableDiagnosisText: {
         width: '750px',
         textAlign: 'justify',
-        fontFamily: "Times New Roman Reg",
+        fontFamily: BASIC_FONT,
         fontSize: '12px',
     },
     probableDiagnosisNum: {
         ...(examineStyle),
         borderRight: 'unset',
-        fontFamily: "Times New Roman Bold",
+        fontFamily: BASIC_FONT_BOLD,
         fontSize: '12px',
         width: '350px',
         textAlign: 'start'
@@ -201,19 +213,19 @@ const styles = StyleSheet.create({
     tablHeaderTypeExamine: {
         ...(examineStyle),
         height: '100%',
-        fontFamily: "Times New Roman Bold",
+        fontFamily: BASIC_FONT_BOLD,
         width: '100%',
         flex: '1'
     },
     tablHeaderPlaceExamine: {
         ...(examineStyle),
         height: '100%',
-        fontFamily: "Times New Roman Bold",
+        fontFamily: BASIC_FONT_BOLD,
         flex: '1'
     },
     tablHeaderTargetExamine: {
         ...(examineStyle),
-        fontFamily: "Times New Roman Bold",
+        fontFamily: BASIC_FONT_BOLD,
         flexWrap: 'wrap',
         flex: '1'
     },
@@ -228,7 +240,7 @@ const styles = StyleSheet.create({
     commentsSecText: {
         width: '100%',
         borderBottom: '1px solid black',
-        fontFamily: "Times New Roman Reg",
+        fontFamily: BASIC_FONT,
         fontSize: '12px',
         textAlign: 'justify'
     },
@@ -245,7 +257,7 @@ const styles = StyleSheet.create({
     finalDateAndFioText: {
         fontSize: '12px'
     },
-    exeDateText: {width: '150px', marginHorizontal: '10px', borderBottom: '1px solid black',},
+    exeDateText: { width: '150px', marginHorizontal: '10px', borderBottom: '1px solid black', },
     managerAndSpeciality: {
         display: 'flex',
         flexDirection: 'row',
@@ -268,7 +280,7 @@ const styles = StyleSheet.create({
 
 });
 
-function MyDocContent({applItem, isDeletedPlace, status}) {
+function MyDocContent({ applItem, isDeletedPlace, status }) {
     const {
         mostProblDiagnosis,
         secondaryDiagnosis,
@@ -311,9 +323,9 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
         <PDFViewer>
             <Document>
                 <Page style={styles.title}>
-                    <View style={{...styles.commonSize, ...styles.hdr, marginBottom: 15}} fixed>
-                        <Image src={hopedoc} style={styles.hdrimg}/>
-                        <View style={{fontSize: '10px', fontFamily: 'Times New Roman Reg'}}>
+                    <View style={{ ...styles.commonSize, ...styles.hdr, marginBottom: 15 }} fixed>
+                        <Image src={hopedoc} style={styles.hdrimg} />
+                        <View style={{ fontSize: '10px', fontFamily: BASIC_FONT }}>
                             <Text>г Махачкала, проспект А. Акушинского д.395</Text>
                             <Text>4 этаж, офис №5</Text>
                             <Text>Тел. +7(8722)98-96-97, +7(964)006-70-07</Text>
@@ -323,7 +335,7 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                     <Text style={styles.recomenTitle}>
                         РЕКОМЕНДАЦИИ ВРАЧА
                     </Text>
-                    <Text style={{...styles.commonSize, ...styles.subtitle}}>
+                    <Text style={{ ...styles.commonSize, ...styles.subtitle }}>
                         (ВНИМАНИЕ! ДОКУМЕНТ ИСКЛЮЧИТЕЛЬНО ДЛЯ ВНУТРЕННЕГО ПОЛЬЗОВАНИЯ ОРГАНИЗАЦИИ)
                     </Text>
                     <View style={{
@@ -353,7 +365,7 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                     </View>
 
                     {patientPromoter ?
-                        <View style={{...styles.commonSize, marginTop: '8px'}}>
+                        <View style={{ ...styles.commonSize, marginTop: '8px' }}>
                             <Text style={styles.complaintTitle} wrap={false}><Text
                                 style={styles.complaintTitleFirstWord}>Представитель: </Text>{patientPromoter}
                             </Text>
@@ -362,17 +374,17 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                     <Text style={styles.reasonTitle}>На основании: </Text>
                     <Text style={styles.reasonSubTitle}> (указать основания: жалобы, симптомы, синдромы, подозрения
                         врача и пр.): </Text>
-                    <View style={{...styles.commonSize, ...styles.anamnesisSection}}>
+                    <View style={{ ...styles.commonSize, ...styles.anamnesisSection }}>
                         {complaint ? <Text style={styles.complaintTitle} wrap={false}><Text
                             style={styles.complaintTitleFirstWord}>Жалоб: </Text>{complaint}</Text> : null}
-                        {anamnesis ? <Text style={{...styles.complaintTitle, marginTop: '10px'}} wrap={false}><Text
+                        {anamnesis ? <Text style={{ ...styles.complaintTitle, marginTop: '10px' }} wrap={false}><Text
                             style={styles.complaintTitleFirstWord}>Анамнеза: </Text>{anamnesis}
                         </Text> : null}
-                        {diagnosticData ? <Text style={{...styles.complaintTitle, marginTop: '10px'}} wrap={false}><Text
+                        {diagnosticData ? <Text style={{ ...styles.complaintTitle, marginTop: '10px' }} wrap={false}><Text
                             style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}
                         </Text> : null}
                     </View>
-                    {consiliumDoctors.length > 0 ? <View style={{...styles.commonSize, marginTop: 10}}>
+                    {consiliumDoctors.length > 0 ? <View style={{ ...styles.commonSize, marginTop: 10 }}>
                         <Table
                             title='Проведен дистанционный врачебный консилиум в составе:'
                             subTitle='(указать ФИО и специальности врачей, которые участвовали в формировании заключения):'
@@ -380,8 +392,8 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                             dataContent={consiliumDoctors}
                             contentKeys={['name', 'speciality']}
                         />
-                    </View>:null}
-                    {diagnostic.length > 0 ? <View style={{marginTop: 14, ...styles.commonSize}}>
+                    </View> : null}
+                    {diagnostic.length > 0 ? <View style={{ marginTop: 14, ...styles.commonSize }}>
                         <Table
                             title='С целью проведения дифференциальной диагностики между'
                             subTitle='(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)'
@@ -390,7 +402,7 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                             contentKeys={['diagnosis']}
                         />
                     </View> : null}
-                    <View style={{marginTop: 44, ...styles.commonSize}}>
+                    <View style={{ marginTop: 44, ...styles.commonSize }}>
                         <View style={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -398,19 +410,19 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                             borderBottom: '1px solid black',
                             width: '100%'
                         }} wrap={false}>
-                            <View style={{flexBasis: '450px', padding: '5px'}}>
-                                <Text style={{...styles.probableDiagnosisNum, width: '100%', padding: '0px'}}
-                                      hyphenationCallback={hyphenationCallback}>
+                            <View style={{ flexBasis: '450px', padding: '5px' }}>
+                                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }}
+                                    hyphenationCallback={hyphenationCallback}>
                                     Выявлен наиболее вероятный
                                 </Text>
-                                <Text style={{...styles.probableDiagnosisNum, width: '100%', padding: '0px'}}
-                                      hyphenationCallback={hyphenationCallback}>
+                                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }}
+                                    hyphenationCallback={hyphenationCallback}>
                                     основной диагноз:
                                 </Text>
                             </View>
                             <View style={styles.probDiagValue}>
-                                <Text style={{...styles.probableDiagnosisText, padding: 5}}
-                                      hyphenationCallback={hyphenationCallback}>
+                                <Text style={{ ...styles.probableDiagnosisText, padding: 5 }}
+                                    hyphenationCallback={hyphenationCallback}>
                                     {mostProblDiagnosis}
                                 </Text>
                             </View>
@@ -422,58 +434,58 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                             borderTop: '1px solid black',
                             width: '100%'
                         }} wrap={false}>
-                            <View style={{flexBasis: '450px', padding: '5px'}}>
-                                <Text style={{...styles.probableDiagnosisNum, width: '100%', padding: '0px'}}
-                                      hyphenationCallback={hyphenationCallback}>
+                            <View style={{ flexBasis: '450px', padding: '5px' }}>
+                                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }}
+                                    hyphenationCallback={hyphenationCallback}>
                                     Выявлены сопутствующие
                                 </Text>
-                                <Text style={{...styles.probableDiagnosisNum, width: '100%', padding: '0px'}}
-                                      hyphenationCallback={hyphenationCallback}>
+                                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }}
+                                    hyphenationCallback={hyphenationCallback}>
                                     диагнозы:
                                 </Text>
                             </View>
                             <View style={styles.probDiagValue}>
-                                <Text style={{...styles.probableDiagnosisText, padding: 5, flexWrap: 'wrap'}}
-                                      hyphenationCallback={hyphenationCallback}>
+                                <Text style={{ ...styles.probableDiagnosisText, padding: 5, flexWrap: 'wrap' }}
+                                    hyphenationCallback={hyphenationCallback}>
                                     {secondaryDiagnosis}
                                 </Text>
                             </View>
                         </View>
                     </View>
-                    <View style={{marginTop: 44, ...styles.commonSize}}>
+                    <View style={{ marginTop: 44, ...styles.commonSize }}>
                         <Table
-                             headers={['№', 'Вид обследования','Поставщик','Адрес','Телефон','Медикаменты','Кол-во','Цена', 'Общая стоимость','Цель проведения']}
+                            headers={['№', 'Вид обследования', 'Поставщик', 'Адрес', 'Телефон', 'Медикаменты', 'Кол-во', 'Цена', 'Общая стоимость', 'Цель проведения']}
                             dataContent={checkupPlans}
-                             contentKeys={['kind', 'supplier','address','phone','medicine','qty','price', 'totalPrice' ,'target']}
+                            contentKeys={['kind', 'supplier', 'address', 'phone', 'medicine', 'qty', 'price', 'totalPrice', 'target']}
                             title='На основании проведенного консилиума рекомендован план лечения (ПЛ):'
                             isDeletedPlace={isDeletedPlace}
                             status={status}
                         />
                         {comments ? <View wrap={false}>
                             <Text style={{
-                                fontFamily: 'Times New Roman Bold',
+                                fontFamily: BASIC_FONT_BOLD,
                                 marginTop: 14,
                                 textAlign: 'left',
                                 fontSize: '12px'
                             }}> Пояснения:</Text>
-                            <View style={{...styles.commentsWrapper, marginTop: 28}}>
-                                <View style={{width: '100%'}}>
-                                    <Text style={{...styles.commentsSecText}}
-                                          hyphenationCallback={hyphenationCallback}>{1} {comments[0].comment}</Text>
+                            <View style={{ ...styles.commentsWrapper, marginTop: 28 }}>
+                                <View style={{ width: '100%' }}>
+                                    <Text style={{ ...styles.commentsSecText }}
+                                        hyphenationCallback={hyphenationCallback}>{1} {comments[0].comment}</Text>
                                 </View>
                             </View>
                         </View> : null}
                         {/** разделил блоки комментариев, чтоб первый комментарий не оставался на заполненном листе и переносился на новый, сейчас это отменено, //todo написать один компонент без разделения  */}
                         {comments ? comments.map((comment, index) => index > 0 ?
-                            <View style={{...styles.commentsWrapper, marginTop: 28}}>
-                                <View style={{width: '100%'}}>
-                                    <Text style={{...styles.commentsSecText}}
-                                          hyphenationCallback={hyphenationCallback}>{index + 1} {comment.comment}</Text>
+                            <View style={{ ...styles.commentsWrapper, marginTop: 28 }}>
+                                <View style={{ width: '100%' }}>
+                                    <Text style={{ ...styles.commentsSecText }}
+                                        hyphenationCallback={hyphenationCallback}>{index + 1} {comment.comment}</Text>
                                 </View>
                             </View> : null) : null}
                     </View>
-                    <View style={{...styles.commonSize, position: 'relative'}} wrap={false}>
-                        <Image src={sell} style={{width: '150px', alignSelf: 'center', marginLeft: '20px'}}/>
+                    <View style={{ ...styles.commonSize, position: 'relative' }} wrap={false}>
+                        <Image src={sell} style={{ width: '150px', alignSelf: 'center', marginLeft: '20px' }} />
                         {execDate && manager ?
                             <View style={{
                                 ...styles.commonSize,
@@ -486,11 +498,11 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                                 <View
                                     style={styles.exeDateText}><Text>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
                                 </View>
-                                {managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg}/> : null}
+                                {managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg} /> : null}
                                 <View style={styles.managerAndSpeciality}>
                                     {managerSpeciality ?
                                         <Text>{isContainsDoctorWord ? managerSpeciality : `Врач-${managerSpeciality.toLowerCase()}`} /</Text> : null}
-                                    <Text style={{paddingLeft: '10px'}}>{managerFio}</Text>
+                                    <Text style={{ paddingLeft: '10px' }}>{managerFio}</Text>
                                 </View>
                             </View> : null}
                     </View>
