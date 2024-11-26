@@ -138,9 +138,7 @@ const SmetaItem: FC = () => {
         </div>
         <div className={'buttons-block'}>
             <Button title={"Сохранить"} onClick={handleupdate} />
-            {/* <PDFButton url={`http://188.68.220.210:12345/${smetaItem.id}`} /> */}
-            <PDFButton url={`http://localhost:9000/${smetaItem.id}`} />
-
+            <PDFButton url={`http://188.68.220.210:12345/${smetaItem.id}`} />
         </div>
         <BasicModal
             open={respStatus === 'ok' || error !== ""}
