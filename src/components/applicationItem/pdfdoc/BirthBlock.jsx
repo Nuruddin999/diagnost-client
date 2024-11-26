@@ -1,5 +1,6 @@
 
 import { Text, View } from '@react-pdf/renderer'
+import { BASIC_FONT } from './pdfcontent'
 
 
 
@@ -11,7 +12,7 @@ const BirthBlock = ({ patientName, flex, patientBirthDate,underText, text, style
       {text}
     </Text> : <Text></Text>}
   {patientBirthDate ?
-    <Text style={{ fontFamily: "Times New Roman Reg",
+    <Text style={{ fontFamily: BASIC_FONT,
     fontSize: '8px',}}>
       {underText}
     </Text> : <Text></Text>}

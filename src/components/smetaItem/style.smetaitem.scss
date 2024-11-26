@@ -2,9 +2,19 @@
   width: 90%;
   overflow: auto;
   margin: 45px auto 0;
+
   .entity-table {
     margin-top: 20px;
   }
+
+  .buttons-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin: 30px;
+  }
+
   .save-button {
     margin: 30px;
   }

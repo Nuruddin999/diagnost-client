@@ -1,17 +1,17 @@
-import {FC, useEffect} from "react";
-import {Typography} from "@mui/material";
+import { FC, useEffect } from "react";
+import { Typography } from "@mui/material";
 import SmetaTable from "../smeta-table";
-import {useSmetaItemTable} from "../../../common/hooks/useSmetaItemTable";
+import { useSmetaItemTable } from "../../../common/hooks/useSmetaItemTable";
 import {
     calculateLocalRoadCost,
     calculateMedCost,
 } from "../scripts/scripts";
 
 const SmetaMedCostItem: FC<{ data: any, handleChangeSmeta: (field: string, payload: any) => void, headers: Array<{ hdr: string, field: string, isDate?: boolean }> }> = ({
-                                                                                                                                                                                   data,
-                                                                                                                                                                                   handleChangeSmeta,
-                                                                                                                                                                                   headers,
-                                                                                                                                                                               }) => {
+    data,
+    handleChangeSmeta,
+    headers,
+}) => {
 
     const {
         addDataToTable,
@@ -44,7 +44,7 @@ const SmetaMedCostItem: FC<{ data: any, handleChangeSmeta: (field: string, paylo
     return <div>
         <div className='entity-table'>
             <Typography align='left' variant='h5'>
-               Мед услуги
+                Мед услуги
             </Typography>
             <SmetaTable
                 handleChangeCosts={handleChangeRoadCosts}
