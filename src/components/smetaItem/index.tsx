@@ -55,7 +55,7 @@ const SmetaItem: FC = () => {
         const totalTransportCosts = getAllCostsTotalSum(Smetatransportcosts, "totalCost")
         const totalAcommodationsCosts = getAllCostsTotalSum(Smetaroaccomodations, "totalCost")
         const totalSmetaplanCosts = getAllCostsTotalSum(Smetaplans, "totalPrice")
-        return totalAcommodationsCosts + totalSmetaplanCosts + totalMealCosts + totalTransportCosts + totalRoadCosts + totalAddCosts
+        return `  ${totalAcommodationsCosts + totalSmetaplanCosts + totalMealCosts + totalTransportCosts + totalRoadCosts + totalAddCosts}  `
 
 
     }
@@ -70,47 +70,47 @@ const SmetaItem: FC = () => {
             Формирование сметы др
         </Typography>
         <PatientDoctor handleChangeSmetaItem={handleChangeSmetaItem} patientName={patientName}
-            patientBirthDate={patientBirthDate} diagnosis={diagnosis} smetasecdiags={Smetasecdiags}
-            manager={managerName} managerSpeciality={managerSpeciality} />
+                       patientBirthDate={patientBirthDate} diagnosis={diagnosis} smetasecdiags={Smetasecdiags}
+                       manager={managerName} managerSpeciality={managerSpeciality}/>
         <SmetaMedCostItem
             data={Smetaplans}
             handleChangeSmeta={handleChangeSmetaItem}
             headers={[
-                { hdr: "Название", field: 'kind' },
-                { hdr: 'Поставщик', field: 'supplier' },
-                { hdr: 'Телефон', field: 'phone' },
-                { hdr: "Адрес", field: 'address' },
-                { hdr: "Кол-во", field: 'qty' },
-                { hdr: "Стоимость", field: 'price' },
-                { hdr: "Общая стоимость", field: 'totalPrice' },
-                { hdr: "Источник информации", field: 'infoSrc' }]}
+                {hdr: "Название", field: 'kind'},
+                {hdr: 'Поставщик', field: 'supplier'},
+                {hdr: 'Телефон', field: 'phone'},
+                {hdr: "Адрес", field: 'address'},
+                {hdr: "Кол-во", field: 'qty'},
+                {hdr: "Стоимость", field: 'price'},
+                {hdr: "Общая стоимость", field: 'totalPrice'},
+                {hdr: "Источник информации", field: 'infoSrc'}]}
         />
         <SmetaRoadCostItem
             data={Smetaroadcosts}
             handleChangeSmeta={handleChangeSmetaItem}
             headers={[
-                { hdr: "Вид транспорта", field: 'vehicle' },
-                { hdr: 'Откуда', field: 'directionFrom' },
-                { hdr: 'Куда', field: 'directionTo' },
-                { hdr: "Дата отправления", field: 'departureDate', isDate: true },
-                { hdr: "Кол-во билетов", field: 'ticketQty' },
-                { hdr: "Стоимость", field: 'cost' },
-                { hdr: "Общая стоимость", field: 'totalCost' },
-                { hdr: "Источник информации", field: 'infoSrc' }]}
+                {hdr: "Вид транспорта", field: 'vehicle'},
+                {hdr: 'Откуда', field: 'directionFrom'},
+                {hdr: 'Куда', field: 'directionTo'},
+                {hdr: "Дата отправления", field: 'departureDate', isDate: true},
+                {hdr: "Кол-во билетов", field: 'ticketQty'},
+                {hdr: "Стоимость", field: 'cost'},
+                {hdr: "Общая стоимость", field: 'totalCost'},
+                {hdr: "Источник информации", field: 'infoSrc'}]}
         />
         <div className='entity-table'>
             <SmetaAccomodationItem
                 data={Smetaroaccomodations}
                 handleChangeSmeta={handleChangeSmetaItem}
                 headers={[
-                    { hdr: "Название услуги", field: 'serviceName' },
-                    { hdr: 'Город', field: 'city' },
-                    { hdr: "Кол-во людей", field: 'peopleQty' },
-                    { hdr: "Вьезд", field: 'inData', isDate: true },
-                    { hdr: "Выезд", field: 'outData', isDate: true },
-                    { hdr: "Цена 1 дня", field: 'costPerDay' },
-                    { hdr: "Общая стоимость", field: 'totalCost' },
-                    { hdr: "Источник информации", field: 'infoSrc' }]}
+                    {hdr: "Название услуги", field: 'serviceName'},
+                    {hdr: 'Город', field: 'city'},
+                    {hdr: "Кол-во людей", field: 'peopleQty'},
+                    {hdr: "Вьезд", field: 'inData', isDate: true},
+                    {hdr: "Выезд", field: 'outData', isDate: true},
+                    {hdr: "Цена 1 дня", field: 'costPerDay'},
+                    {hdr: "Общая стоимость", field: 'totalCost'},
+                    {hdr: "Источник информации", field: 'infoSrc'}]}
             />
         </div>
         <div className='entity-table'>
@@ -118,13 +118,13 @@ const SmetaItem: FC = () => {
                 data={Smetamealcosts}
                 handleChangeSmeta={handleChangeSmetaItem}
                 headers={[
-                    { hdr: "Место питания", field: 'placeName' },
-                    { hdr: 'Город', field: 'city' },
-                    { hdr: "Кол-во людей", field: 'peopleQty' },
-                    { hdr: "Кол-во дней", field: 'daysQty' },
-                    { hdr: "Стоимость 1 дня", field: 'costPerDay' },
-                    { hdr: "Общая стоимость", field: 'totalCost' },
-                    { hdr: "Источник информации", field: 'infoSrc' }]}
+                    {hdr: "Место питания", field: 'placeName'},
+                    {hdr: 'Город', field: 'city'},
+                    {hdr: "Кол-во людей", field: 'peopleQty'},
+                    {hdr: "Кол-во дней", field: 'daysQty'},
+                    {hdr: "Стоимость 1 дня", field: 'costPerDay'},
+                    {hdr: "Общая стоимость", field: 'totalCost'},
+                    {hdr: "Источник информации", field: 'infoSrc'}]}
             />
         </div>
         <div className='entity-table'>
@@ -132,13 +132,13 @@ const SmetaItem: FC = () => {
                 data={Smetatransportcosts}
                 handleChangeSmeta={handleChangeSmetaItem}
                 headers={[
-                    { hdr: "Вид транспорта", field: 'transportKind' },
-                    { hdr: 'Откуда/Куда', field: 'fromTo' },
-                    { hdr: "Кол-во поездок", field: 'tripsQty' },
-                    { hdr: "Кол-во людей", field: 'peopleQty' },
-                    { hdr: "Стоимость поездки", field: 'costPerTrip' },
-                    { hdr: "Общая стоимость", field: 'totalCost' },
-                    { hdr: "Источник информации", field: 'infoSrc' }]}
+                    {hdr: "Вид транспорта", field: 'transportKind'},
+                    {hdr: 'Откуда/Куда', field: 'fromTo'},
+                    {hdr: "Кол-во поездок", field: 'tripsQty'},
+                    {hdr: "Кол-во людей", field: 'peopleQty'},
+                    {hdr: "Стоимость поездки", field: 'costPerTrip'},
+                    {hdr: "Общая стоимость", field: 'totalCost'},
+                    {hdr: "Источник информации", field: 'infoSrc'}]}
             />
         </div>
         <div className='entity-table'>
@@ -146,18 +146,26 @@ const SmetaItem: FC = () => {
                 data={Smetacosts}
                 handleChangeSmeta={handleChangeSmetaItem}
                 headers={[
-                    { hdr: "Наименование", field: 'name' },
-                    { hdr: 'Основание', field: 'reason' },
-                    { hdr: "Сумма", field: 'sum' },
+                    {hdr: "Наименование", field: 'name'},
+                    {hdr: 'Основание', field: 'reason'},
+                    {hdr: "Сумма", field: 'sum'},
                 ]}
             />
         </div>
+        <div className={"total-sum"}>
+            <h2>
+                Итого:
+                <span>
+                    {getSumOfAll() }
+                </span>
+               <span>
+                   руб.
+               </span>
+            </h2>
+        </div>
         <div className={'buttons-block'}>
-            <Button title={"Сохранить"} onClick={handleupdate} />
-            <PDFButton url={`http://188.68.220.210:12345/${smetaItem.id}`} />
-            <div>
-                Итого: {getSumOfAll()}
-            </div>
+            <Button title={"Сохранить"} onClick={handleupdate}/>
+            <PDFButton url={`http://188.68.220.210:12345/${smetaItem.id}`}/>
         </div>
         <BasicModal
             open={respStatus === 'ok' || error !== ""}
@@ -167,7 +175,7 @@ const SmetaItem: FC = () => {
             }}
             body={<Box>
                 <Typography id="modal-modal-title" variant="h6" component="h3" color={error ? 'error' : 'primary'}
-                    align={error ? 'left' : 'center'}>
+                            align={error ? 'left' : 'center'}>
                     {error !== "" && error}
                     {respStatus === 'ok' && 'Сохранено'}
                 </Typography>
