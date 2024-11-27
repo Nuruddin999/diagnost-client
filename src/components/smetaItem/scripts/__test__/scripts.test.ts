@@ -2,7 +2,8 @@ import {
     calculateAccommodationCost,
     calculateLocalAccommodationCost,
     calculateLocalRoadCost, calculateMealCost, calculateMealLocalCost,
-    calculateRoadCost
+    calculateRoadCost,
+    getAllCostsTotalSum
 } from "../scripts";
 
 const roadCostObj = {
@@ -479,5 +480,19 @@ describe('calculateMealLocalCost', () => {
         const result = calculateMealLocalCost({ daysQty: '1000', costPerDay: '500', peopleQty: '5' });
         expect(result).toBe('2500000');
     });
+
+});
+describe('calculate all costs', () => {
+
+    it('total all total cost', () => {
+        const result = getAllCostsTotalSum([{ totalCost: '2000'},{ totalCost: '2000'},{ totalCost: '7000'}],'totalCost');
+        expect(result).toBe(11000);
+    });
+
+    it('total all sum', () => {
+        const result = getAllCostsTotalSum([{ sum: '2000'},{ sum: '2000'},{ sum: '3000'}],"sum");
+        expect(result).toBe(7000);
+    });
+
 
 });

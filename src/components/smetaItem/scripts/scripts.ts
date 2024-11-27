@@ -145,10 +145,14 @@ export const calculateMedCost = (dataEl: any, keyVal: string, val: string) => {
     }
     if (['price', 'qty'].includes(keyVal)) {
         if (val.trim() === '') {
-            dataObj.totalCost = ''
+            dataObj.totalPrice = ''
         } else {
-            dataObj.totalCost = calculateLocalRoadCost(dataObj.qty,dataObj.price)
+            dataObj.totalPrice= calculateLocalRoadCost(dataObj.qty,dataObj.price)
         }
     }
     return dataObj
+}
+
+export const getAllCostsTotalSum = <T extends Record<string, any>>(data:Array<T>, key:keyof T) => {
+    return  data.reduce((acc, prev) =>  acc + parseInt(prev[key as any]),0)
 }

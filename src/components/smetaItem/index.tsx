@@ -13,6 +13,7 @@ import { CommonButton as Button } from "../../common/components/button"
 import { RoundLoader } from "../../common/components/roundloader";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import { PDFButton } from "../../common/components/pdf_icon_button";
+import {getAllCostsTotalSum} from "./scripts/scripts";
 
 
 
@@ -46,6 +47,21 @@ const SmetaItem: FC = () => {
         await updateSmetaItem()
     }
 
+
+    const getSumOfAll =()=>{
+        const totalAddCosts =  getAllCostsTotalSum(Smetacosts, "sum")
+        const totalRoadCosts =  getAllCostsTotalSum(Smetaroadcosts, "totalCost")
+        const totalMealCosts = getAllCostsTotalSum(Smetamealcosts, "totalCost")
+        const totalTransportCosts = getAllCostsTotalSum(Smetatransportcosts, "totalCost")
+        const totalAcommodationsCosts = getAllCostsTotalSum(Smetaroaccomodations, "totalCost")
+        const totalSmetaplanCosts = getAllCostsTotalSum(Smetaplans, "totalPrice")
+        return totalAcommodationsCosts + totalSmetaplanCosts + totalMealCosts + totalTransportCosts + totalRoadCosts + totalAddCosts
+
+
+    }
+
+
+
     if (isLoading) {
         return <RoundLoader />
     }
@@ -66,7 +82,7 @@ const SmetaItem: FC = () => {
                 { hdr: "Адрес", field: 'address' },
                 { hdr: "Кол-во", field: 'qty' },
                 { hdr: "Стоимость", field: 'price' },
-                { hdr: "Общая стоимость", field: 'totalCost' },
+                { hdr: "Общая стоимость", field: 'totalPrice' },
                 { hdr: "Источник информации", field: 'infoSrc' }]}
         />
         <SmetaRoadCostItem
@@ -139,6 +155,9 @@ const SmetaItem: FC = () => {
         <div className={'buttons-block'}>
             <Button title={"Сохранить"} onClick={handleupdate} />
             <PDFButton url={`http://188.68.220.210:12345/${smetaItem.id}`} />
+            <div>
+                Итого: {getSumOfAll()}
+            </div>
         </div>
         <BasicModal
             open={respStatus === 'ok' || error !== ""}

@@ -13,7 +13,8 @@ const SmetaTable: FC<{
     addDataToTable: () => void,
     localObj: any,
     removeDataToTable: (id: number) => void,
-    error: boolean, setLocalObj: any,
+    error: boolean,
+    setLocalObj: any,
     setError: any,
     handleChangeCosts: (id: number, keyVal: string, val: string) => void
 }> = (
