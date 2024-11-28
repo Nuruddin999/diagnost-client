@@ -28,7 +28,8 @@ export type SmetaItemType = {
     status: string,
     customer: string,
     patientPhone: string,
-    updatedAt: string
+    updatedAt: string,
+    allTotalSum:string
 }
 
 type SmetaCosts = Array<{ kind: string, supplier: string, phone: string, address: string, qty: string, price: string, totalCost: string }>

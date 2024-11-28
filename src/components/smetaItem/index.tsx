@@ -13,7 +13,6 @@ import { CommonButton as Button } from "../../common/components/button"
 import { RoundLoader } from "../../common/components/roundloader";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import { PDFButton } from "../../common/components/pdf_icon_button";
-import {getAllCostsTotalSum} from "./scripts/scripts";
 
 
 
@@ -40,27 +39,13 @@ const SmetaItem: FC = () => {
         Smetacosts,
         Smetatransportcosts,
         managerName,
-        managerSpeciality
+        managerSpeciality,
+        totalAllSum
     } = smetaItem
 
     const handleupdate = async () => {
         await updateSmetaItem()
     }
-
-
-    const getSumOfAll =()=>{
-        const totalAddCosts =  getAllCostsTotalSum(Smetacosts, "sum")
-        const totalRoadCosts =  getAllCostsTotalSum(Smetaroadcosts, "totalCost")
-        const totalMealCosts = getAllCostsTotalSum(Smetamealcosts, "totalCost")
-        const totalTransportCosts = getAllCostsTotalSum(Smetatransportcosts, "totalCost")
-        const totalAcommodationsCosts = getAllCostsTotalSum(Smetaroaccomodations, "totalCost")
-        const totalSmetaplanCosts = getAllCostsTotalSum(Smetaplans, "totalPrice")
-        return `  ${totalAcommodationsCosts + totalSmetaplanCosts + totalMealCosts + totalTransportCosts + totalRoadCosts + totalAddCosts}  `
-
-
-    }
-
-
 
     if (isLoading) {
         return <RoundLoader />
@@ -156,7 +141,7 @@ const SmetaItem: FC = () => {
             <h2>
                 Итого:
                 <span>
-                    {getSumOfAll() }
+                    {totalAllSum}
                 </span>
                <span>
                    руб.
