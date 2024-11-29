@@ -7,6 +7,7 @@ import TableHeader from "../../common/components/tableheader/tableHeader";
 import "./style.smetalist.scss"
 import {selectApplicationUserRights} from "../../common/selectors/user";
 import {useHistory} from "react-router-dom";
+import PaginationComponent from "../../common/components/pagination";
 
 const Smetalist = (): React.ReactElement => {
     const [smetas, setSmetas] = React.useState<SmetasResponseType>()
@@ -71,6 +72,10 @@ const Smetalist = (): React.ReactElement => {
             setIsLoading(false)
         }
     }
+
+    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
     useEffect(() => {
         if (id !== undefined && id !== '') {
             fetchApp(page, 10)
@@ -96,13 +101,11 @@ const Smetalist = (): React.ReactElement => {
                         <td>{el.status}</td>
                         <td>{el.customer}</td>
                         <td></td>
-
-                        {/*{role !== 'doctor' && <td>{appl.manager}</td>}*/}
-                        {/*<td>{new Date(appl.creationDate).toLocaleString()}</td>*/}
                     </tr>)}
                 </tbody>
             </table>
         </div>
+        {smetas?.count && smetas?.count > 10 && <PaginationComponent count={smetas.count} handleChange={handleChange} />}
     </div>
 }
 

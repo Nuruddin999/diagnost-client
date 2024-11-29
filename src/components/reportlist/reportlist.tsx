@@ -18,6 +18,7 @@ import { useFetchApplications } from "../../common/hooks/useFetchApplications";
 import TableHeader from "../../common/components/tableheader/tableHeader";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import { CommonButton } from "../../common/components/button";
+import PaginationComponent from "../../common/components/pagination";
 
 const ReportList = (): React.ReactElement => {
     const dispatch = useDispatch()
@@ -150,16 +151,10 @@ const ReportList = (): React.ReactElement => {
                         onClick={() => setDeleteModal(false)} />
                 </div>
             </Box>} />
-        {/*</BasicModal>*/}
         {appls.count > 10 && <div className="pagination">
-            <Pagination
-                count={(Math.ceil(appls.count / 10)) + 1}
-                variant="outlined"
-                shape="rounded"
-                onChange={handleChange}
-                size='large'
-                color="primary"
-                boundaryCount={10}
+            <PaginationComponent
+                count={appls.count}
+                handleChange={handleChange}
             />
         </div>}
     </div>
