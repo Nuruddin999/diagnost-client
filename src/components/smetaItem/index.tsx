@@ -141,7 +141,7 @@ const SmetaItem: FC = () => {
             <h2>
                 Итого:
                 <span>
-                    {totalAllSum}
+                    {!Number.isNaN(totalAllSum) ? totalAllSum : '___'}
                 </span>
                <span>
                    руб.
