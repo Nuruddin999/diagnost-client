@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Typography, Pagination, CircularProgress } from "@mui/material";
+import { Typography, CircularProgress } from "@mui/material";
 import React, { useEffect } from "react";
 import './style.reportlist.scss'
 import { useDispatch, useSelector } from "react-redux";
