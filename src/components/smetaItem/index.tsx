@@ -69,6 +69,7 @@ const SmetaItem: FC = () => {
                 {hdr: "Стоимость", field: 'price'},
                 {hdr: "Общая стоимость", field: 'totalPrice'},
                 {hdr: "Источник информации", field: 'infoSrc'}]}
+            calculationFields={['qty', 'price']}
         />
         <SmetaRoadCostItem
             data={Smetaroadcosts}
@@ -82,6 +83,7 @@ const SmetaItem: FC = () => {
                 {hdr: "Стоимость", field: 'cost'},
                 {hdr: "Общая стоимость", field: 'totalCost'},
                 {hdr: "Источник информации", field: 'infoSrc'}]}
+            calculationFields={['cost', 'ticketQty']}
         />
         <div className='entity-table'>
             <SmetaAccomodationItem
@@ -96,6 +98,7 @@ const SmetaItem: FC = () => {
                     {hdr: "Цена 1 дня", field: 'costPerDay'},
                     {hdr: "Общая стоимость", field: 'totalCost'},
                     {hdr: "Источник информации", field: 'infoSrc'}]}
+                calculationFields={['costPerDay', 'inData','outData','peopleQty']}
             />
         </div>
         <div className='entity-table'>
@@ -110,6 +113,7 @@ const SmetaItem: FC = () => {
                     {hdr: "Стоимость 1 дня", field: 'costPerDay'},
                     {hdr: "Общая стоимость", field: 'totalCost'},
                     {hdr: "Источник информации", field: 'infoSrc'}]}
+                calculationFields={['costPerDay', 'daysQty','peopleQty']}
             />
         </div>
         <div className='entity-table'>
@@ -124,6 +128,7 @@ const SmetaItem: FC = () => {
                     {hdr: "Стоимость поездки", field: 'costPerTrip'},
                     {hdr: "Общая стоимость", field: 'totalCost'},
                     {hdr: "Источник информации", field: 'infoSrc'}]}
+                calculationFields={['costPerTrip', 'tripsQty','peopleQty']}
             />
         </div>
         <div className='entity-table'>

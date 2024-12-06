@@ -141,6 +141,9 @@ const SmetaTable: FC<{
                                                     if (error) {
                                                         setError(false)
                                                     }
+                                                    else if (['totalPrice','totalCost'].includes(el.field as any)) {
+                                                        return
+                                                    }
                                                     setLocalObj((state: any) => ({
                                                         ...state,
                                                         [el.field as any]: e.target.value

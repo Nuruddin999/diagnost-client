@@ -3,7 +3,7 @@ import {
     calculateLocalAccommodationCost,
     calculateLocalRoadCost, calculateMealCost, calculateMealLocalCost,
     calculateRoadCost,
-    getAllCostsTotalSum
+    getAllCostsTotalSum, processListData
 } from "../scripts";
 
 const roadCostObj = {
@@ -495,4 +495,17 @@ describe('calculate all costs', () => {
     });
 
 
+});
+
+
+describe('processListData', () => {
+    it('processData works', () => {
+        const result = processListData({id:0,keyVal:'ticketQty',val:'3'},[{...roadCostObj,cost:'2400',ticketQty:2}],calculateRoadCost,['ticketQty','cost']);
+        expect(result).toStrictEqual([{...roadCostObj,cost:'2400',ticketQty:'3', totalCost:'7200'}]);
+    });
+
+    it('processData works with empty' , () => {
+        const result = processListData({id:0,keyVal:'cost',val:''},[{...roadCostObj,cost:'2400',ticketQty:2}],calculateRoadCost,['ticketQty','cost']);
+        expect(result).toBe(false);
+    });
 });

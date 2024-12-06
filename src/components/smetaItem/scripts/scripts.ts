@@ -77,7 +77,12 @@ export const calculateLocalAccommodationCost = ({
                                                     outData,
                                                     peopleQty,
                                                     costPerDay,
-                                                }: { peopleQty: any, costPerDay: string, inData: string, outData: string }): string => {
+                                                }: {
+    peopleQty: any,
+    costPerDay: string,
+    inData: string,
+    outData: string
+}): string => {
     const qty = parseInt(peopleQty)
     const price = parseInt(costPerDay)
     const inDate = new Date(inData)
@@ -124,7 +129,7 @@ export const calculateTransportCost = (dataEl: any, keyVal: string, val: string)
         if (val.trim() === '') {
             dataObj.totalCost = ''
         } else {
-            dataObj.totalCost = calculateThreeFieldsCost(dataObj.tripsQty,dataObj.costPerTrip,dataObj.peopleQty)
+            dataObj.totalCost = calculateThreeFieldsCost(dataObj.tripsQty, dataObj.costPerTrip, dataObj.peopleQty)
         }
     }
     return dataObj
@@ -147,12 +152,31 @@ export const calculateMedCost = (dataEl: any, keyVal: string, val: string) => {
         if (val.trim() === '') {
             dataObj.totalPrice = ''
         } else {
-            dataObj.totalPrice= calculateLocalRoadCost(dataObj.qty,dataObj.price)
+            dataObj.totalPrice = calculateLocalRoadCost(dataObj.qty, dataObj.price)
         }
     }
     return dataObj
 }
 
-export const getAllCostsTotalSum = <T extends Record<string, any>>(data:Array<T>, key:keyof T) => {
-    return  data.reduce((acc, prev) =>  acc + parseInt(prev[key as any]),0)
+export const getAllCostsTotalSum = <T extends Record<string, any>>(data: Array<T>, key: keyof T) => {
+    return data.reduce((acc, prev) => acc + parseInt(prev[key as any]), 0)
+}
+
+export const processListData = (currentChangeObj:{id: number, keyVal: string, val: string},data: any, callback:(dataEl:any,keyVal:string,val:any)=>void,calculationFields:Array<string>) => {
+    let {id,keyVal,val}=currentChangeObj;
+    if (['totalCost','totalPrice'].includes(keyVal)) {
+        return false
+    }
+    if (!val.trim()) {
+        return false
+    }
+    if (calculationFields.includes(keyVal)) {
+        val = parseInt(val).toString()
+    }
+    return data.map((dataEl: any, index: number) => {
+        if (id === index) {
+            return callback(dataEl, keyVal, val)
+        }
+        return dataEl
+    })
 }

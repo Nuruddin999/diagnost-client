@@ -2,14 +2,24 @@ import {FC, useEffect} from "react";
 import {Typography} from "@mui/material";
 import SmetaTable from "../smeta-table";
 import {useSmetaItemTable} from "../../../common/hooks/useSmetaItemTable";
-import {calculateAccommodationCost, calculateLocalAccommodationCost} from "../scripts/scripts";
+import {
+    calculateAccommodationCost,
+    calculateLocalAccommodationCost,
+    processListData
+} from "../scripts/scripts";
 
 
-const SmetaAccomodationItem: FC<{ data: any, handleChangeSmeta: (field: string, payload: any) => void, headers: Array<{ hdr: string, field: string, isDate?: boolean }> }> = ({
-                                                                                                                                                                                  data,
-                                                                                                                                                                                  handleChangeSmeta,
-                                                                                                                                                                                  headers,
-                                                                                                                                                                              }) => {
+const SmetaAccomodationItem: FC<{
+    data: any,
+    handleChangeSmeta: (field: string, payload: any) => void,
+    headers: Array<{ hdr: string, field: string, isDate?: boolean, }>,
+    calculationFields: Array<string>
+}> = ({
+          data,
+          handleChangeSmeta,
+          headers,
+          calculationFields,
+      }) => {
 
     const {
         addDataToTable,
@@ -21,12 +31,10 @@ const SmetaAccomodationItem: FC<{ data: any, handleChangeSmeta: (field: string, 
     } = useSmetaItemTable(headers, handleChangeSmeta, data, "Smetaroaccomodations")
 
     const handleChangeRoadCosts = (id: number, keyVal: string, val: string) => {
-        const newList = data.map((dataEl: any, index: number) => {
-            if (id === index) {
-              return calculateAccommodationCost(dataEl, keyVal, val)
-            }
-            return dataEl
-        })
+        const newList = processListData({id, keyVal, val}, data, calculateAccommodationCost, calculationFields)
+        if (newList === false) {
+            return;
+        }
         handleChangeSmeta('Smetaroaccomodations', newList)
     }
 
