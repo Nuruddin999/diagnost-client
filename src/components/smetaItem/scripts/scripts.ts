@@ -168,7 +168,7 @@ export const processListData = (currentChangeObj:{id: number, keyVal: string, va
         return false
     }
     if (!val.trim()) {
-        return false
+        val='0';
     }
     if (calculationFields.includes(keyVal)) {
         val = parseInt(val).toString()
