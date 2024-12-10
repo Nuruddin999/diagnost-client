@@ -1,6 +1,7 @@
 import React from "react";
 import {Box, Typography} from "@mui/material";
 import {CommonButton} from "../button";
+import "./style.remobody.scss"
 
 type DeleteModalBodyProps = {
     removeAppl: () => void;

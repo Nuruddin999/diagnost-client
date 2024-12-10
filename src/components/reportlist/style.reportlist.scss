@@ -63,25 +63,4 @@
       color: crimson;
     }
   }
-
-  .delete-modal-block {
-    .delete-modal-btns {
-      margin: 8px;
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-
-      .approve-button, .decline-button {
-        background: crimson;
-        color: white;
-        height: 30px;
-        margin: 1em 2em 2em 0;
-        box-shadow: initial;
-      }
-
-      .decline-button {
-        background: #1f75cb;
-      }
-    }
-  }
 }
