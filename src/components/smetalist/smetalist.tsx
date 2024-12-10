@@ -8,6 +8,8 @@ import "./style.smetalist.scss"
 import {selectApplicationUserRights} from "../../common/selectors/user";
 import {useHistory} from "react-router-dom";
 import PaginationComponent from "../../common/components/pagination";
+import {IconButton} from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 const Smetalist = (): React.ReactElement => {
     const [smetas, setSmetas] = React.useState<SmetasResponseType>()
@@ -20,6 +22,7 @@ const Smetalist = (): React.ReactElement => {
     const [patientName, setPatientName] = React.useState('');
     const [diagnosis, setDiagnosis] = React.useState('');
     const [patientPromoter, setPatientPromoter] = React.useState('');
+    const [deleteModalId, setDeleteModal] = React.useState<boolean | number>(false);
     const history = useHistory()
 
     const fetchSmetas = async (page: number, limit: number) => {
@@ -100,12 +103,19 @@ const Smetalist = (): React.ReactElement => {
                         <td>{el.fundRequest}</td>
                         <td>{el.status}</td>
                         <td>{el.customer}</td>
-                        <td></td>
+                        <td>
+                            <td><IconButton className='delete-button' onClick={(e: any) => {
+                                e.stopPropagation()
+                                el.id && setDeleteModal(el.id)
+                            }}>
+                                <DeleteOutlineIcon/>
+                            </IconButton></td>
+                        </td>
                     </tr>)}
                 </tbody>
             </table>
         </div>
-        {smetas?.count && smetas?.count > 10 && <PaginationComponent count={smetas.count} handleChange={handleChange} />}
+        {smetas?.count && smetas?.count > 10 && <PaginationComponent count={smetas.count} handleChange={handleChange}/>}
     </div>
 }
 
