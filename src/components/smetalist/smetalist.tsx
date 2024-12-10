@@ -33,24 +33,30 @@ const Smetalist = (): React.ReactElement => {
     }
 
     const removeSmeta = async (value: number) => {
-        await deleteSmetaItemApi(value.toString())
-        setDeleteModal(false)
+        try {
+            setIsLoading(true)
+            await deleteSmetaItemApi(value.toString())
+            await fetchApp(page, 10)
+            setDeleteModal(false)
+        } finally {
+            setIsLoading(false)
+        }
     };
 
     const tableData = ['№', {
         title: 'ФИО пациента',
         field: patientName,
         onChange: setPatientName
-    }, 'Дата рождения',{
+    }, 'Дата рождения', {
         title: 'Телефон',
         field: patientPromoter,
         onChange: setPatientPromoter
     },
         {
-        title: 'Представитель',
-        field: patientPromoter,
-        onChange: setPatientPromoter
-    }, {
+            title: 'Представитель',
+            field: patientPromoter,
+            onChange: setPatientPromoter
+        }, {
             title: 'Запрос пациента',
             field: patientPromoter,
             onChange: setPatientPromoter
@@ -58,7 +64,7 @@ const Smetalist = (): React.ReactElement => {
             title: 'Запрос фонда',
             field: patientPromoter,
             onChange: setPatientPromoter
-        },{
+        }, {
             title: 'Статус',
             field: patientPromoter,
             onChange: setPatientPromoter
@@ -66,7 +72,7 @@ const Smetalist = (): React.ReactElement => {
             title: 'Заказчик',
             field: patientPromoter,
             onChange: setPatientPromoter
-        },'Удалить']
+        }, 'Удалить']
 
     const goSmetaItem = (id: number | undefined) => {
         history.push(`smeta/${id}`)
@@ -96,11 +102,12 @@ const Smetalist = (): React.ReactElement => {
         <div className="smetas-table">
             <table>
                 <thead>
-                <TableHeader tableData={tableData} role={role} isDeleteRights={rights.processedRights.applications?.delete}/>
+                <TableHeader tableData={tableData} role={role}
+                             isDeleteRights={rights.processedRights.applications?.delete}/>
                 </thead>
                 <tbody>
-                {smetas?.rows.map((el,index) =>
-                    <tr   onClick={() => goSmetaItem(el.id)} key={el.patientName}>
+                {smetas?.rows.map((el, index) =>
+                    <tr onClick={() => goSmetaItem(el.id)} key={el.patientName}>
                         <td>{(page * 10 - 10) + 1 + index}</td>
                         <td>{el.patientName}</td>
                         <td>{new Date(el.patientBirthDate).toLocaleString()}</td>
