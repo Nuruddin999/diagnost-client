@@ -28,3 +28,11 @@ export const updateOneSmetaApi = async (smeta: SmetaUpdate) => {
     }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` }, })
     return response.data
 }
+
+export const deleteSmetaItemApi = async (id: string) => {
+    const response = await diagnostApi.get(`/smetasdel/${id}`,
+        {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('refreshToken')}` },
+        })
+    return response.data
+}

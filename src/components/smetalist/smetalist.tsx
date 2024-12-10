@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
-import {getSmetasApi} from "../../api/smetas";
+import {deleteSmetaItemApi, getSmetasApi} from "../../api/smetas";
 import {SmetasResponseType} from "../../common/types";
 import TableHeader from "../../common/components/tableheader/tableHeader";
 import "./style.smetalist.scss"
@@ -10,6 +10,8 @@ import {useHistory} from "react-router-dom";
 import PaginationComponent from "../../common/components/pagination";
 import {IconButton} from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import BasicModal from "../../common/components/modal/ConsiliumModal";
+import DeleteModalBody from "../../common/components/delete_modal_body/DeleteModalBody";
 
 const Smetalist = (): React.ReactElement => {
     const [smetas, setSmetas] = React.useState<SmetasResponseType>()
@@ -29,6 +31,11 @@ const Smetalist = (): React.ReactElement => {
         const resp = await getSmetasApi(page, 10)
         setSmetas(resp)
     }
+
+    const removeSmeta = async (value: number) => {
+        await deleteSmetaItemApi(value.toString())
+        setDeleteModal(false)
+    };
 
     const tableData = ['№', {
         title: 'ФИО пациента',
@@ -115,6 +122,18 @@ const Smetalist = (): React.ReactElement => {
                 </tbody>
             </table>
         </div>
+        <BasicModal
+            open={(deleteModalId as boolean)}
+            onClose={() => setDeleteModal(false)}
+            className='delete-modal-block'
+            body={
+                <DeleteModalBody
+                    setDeleteModal={() => setDeleteModal(false)}
+                    removeAppl={() => removeSmeta(deleteModalId as number)}
+                    entityTitle={"смету"}
+                />
+            }
+        />
         {smetas?.count && smetas?.count > 10 && <PaginationComponent count={smetas.count} handleChange={handleChange}/>}
     </div>
 }
