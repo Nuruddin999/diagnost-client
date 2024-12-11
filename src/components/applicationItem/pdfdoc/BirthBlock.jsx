@@ -9,6 +9,7 @@ const birthFormattedStyle = {
     marginHorizontal: 'auto',
     flexDirection: 'row',
     fontSize: '10px',
+    fontFamily: 'Times New Roman Bold',
 }
 
 const BirthBlock = ({ patientName, patientBirthDate}) => {
@@ -22,7 +23,7 @@ const BirthBlock = ({ patientName, patientBirthDate}) => {
                   </Text>
               </View>)}
       </View>
-      <View style={birthFormattedStyle}>
+      <View style={{...birthFormattedStyle, fontFamily: 'Times New Roman Reg',}}>
           {['ФИО','Дата рождения'].map(el=>
               <View style={{width: '50%', height: "40px"}} key={el}>
                   <Text>{el}</Text>
