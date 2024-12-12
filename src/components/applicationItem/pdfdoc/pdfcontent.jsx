@@ -20,6 +20,7 @@ const hyphenationCallback = (word) => {
 
 export const BASIC_FONT = "Dejavu Sans Reg"
 export const BASIC_FONT_BOLD = "Dejavu Sans Bold"
+export const BASIC_APPL_FONT_SIZE = "10px"
 
 Font.register({
     family: "Roboto",
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
         margin: '0 auto'
     },
     author: {
-        fontSize: 12,
+        fontSize: BASIC_APPL_FONT_SIZE,
         textAlign: 'center',
         marginBottom: 40,
     },
@@ -114,14 +115,14 @@ const styles = StyleSheet.create({
         marginHorizontal: 100,
     },
     header: {
-        fontSize: 12,
+        fontSize: BASIC_APPL_FONT_SIZE,
         marginBottom: 20,
         textAlign: 'center',
         color: 'grey',
     },
     pageNumber: {
         position: 'absolute',
-        fontSize: 12,
+        fontSize: BASIC_APPL_FONT_SIZE,
         bottom: 30,
         left: 0,
         right: 0,
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     newbirth: {
         fontWeight: 700,
         fontFamily: BASIC_FONT_BOLD,
-        fontSize: '12px'
+        fontSize: BASIC_APPL_FONT_SIZE
     },
     newbirthText: {
         fontFamily: BASIC_FONT,
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
     reasonTitle: {
         fontWeight: 700,
         fontFamily: BASIC_FONT_BOLD,
-        fontSize: '12px',
+        fontSize: BASIC_APPL_FONT_SIZE,
         marginTop: '14px'
     },
     reasonSubTitle: {
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         textAlign: 'justify',
-        fontSize: '12px'
+        fontSize: BASIC_APPL_FONT_SIZE
     },
     complaintTitleAnamnesis: {
         width: '100%',
@@ -200,13 +201,13 @@ const styles = StyleSheet.create({
         width: '750px',
         textAlign: 'justify',
         fontFamily: BASIC_FONT,
-        fontSize: '12px',
+        fontSize: BASIC_APPL_FONT_SIZE,
     },
     probableDiagnosisNum: {
         ...(examineStyle),
         borderRight: 'unset',
         fontFamily: BASIC_FONT_BOLD,
-        fontSize: '12px',
+        fontSize: BASIC_APPL_FONT_SIZE,
         width: '350px',
         textAlign: 'start'
     },
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
         width: '100%',
         borderBottom: '1px solid black',
         fontFamily: BASIC_FONT,
-        fontSize: '12px',
+        fontSize: BASIC_APPL_FONT_SIZE,
         textAlign: 'justify'
     },
     commonSize: {
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     finalDateAndFioText: {
-        fontSize: '12px'
+        fontSize: BASIC_APPL_FONT_SIZE
     },
     exeDateText: {width: '150px', marginHorizontal: '10px', borderBottom: '1px solid black',},
     managerAndSpeciality: {
@@ -446,7 +447,7 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                                 fontFamily: BASIC_FONT_BOLD,
                                 marginTop: 14,
                                 textAlign: 'left',
-                                fontSize: '12px'
+                                fontSize: BASIC_APPL_FONT_SIZE
                             }}> Пояснения:</Text>
                             <View style={{...styles.commentsWrapper, marginTop: 28}}>
                                 <View style={{width: '100%'}}>

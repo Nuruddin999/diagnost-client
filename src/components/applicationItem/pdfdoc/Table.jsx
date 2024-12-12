@@ -2,7 +2,7 @@ import { Text, View } from '@react-pdf/renderer'
 import hyphen from 'hyphen';
 import pattern from 'hyphen/patterns/ru';
 import TableContent from "./TableContent";
-import { BASIC_FONT, BASIC_FONT_BOLD } from './pdfcontent';
+import {BASIC_APPL_FONT_SIZE, BASIC_FONT, BASIC_FONT_BOLD} from './pdfcontent';
 
 const hyphenator = hyphen(pattern);
 
@@ -45,7 +45,7 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
             }}
             wrap={false}>
             <Text
-                style={{ fontFamily: BASIC_FONT_BOLD, fontSize: '12px' }}>
+                style={{ fontFamily: BASIC_FONT_BOLD, fontSize: BASIC_APPL_FONT_SIZE }}>
                 {title}
             </Text>
             <Text
@@ -70,7 +70,7 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
                                     padding: '7px'
                                 }}>
                                 <Text hyphenationCallback={hyphenationCallback}
-                                    style={{ fontFamily: BASIC_FONT_BOLD, fontSize: '12px' }}>
+                                    style={{ fontFamily: BASIC_FONT_BOLD, fontSize:BASIC_APPL_FONT_SIZE }}>
                                     {hdr}
                                 </Text>
                             </View>
@@ -93,7 +93,7 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
                     alignItems: 'center',
                     padding: '5px'
                 }}>
-                    <Text style={{ fontFamily: BASIC_FONT, fontSize: '12px' }}>1</Text>
+                    <Text style={{ fontFamily: BASIC_FONT, fontSize: BASIC_APPL_FONT_SIZE }}>1</Text>
                 </View> : null}
                 {processedDataContent && processedDataContent.length > 0 && contentKeys.length > 0 ? contentKeys.map((val) => {
                     const isNotForHideFileds = !hiddenFields.includes(val)
@@ -124,7 +124,7 @@ const TablePdf = ({ headers, dataContent, contentKeys, title, subTitle, status, 
                             alignItems: 'center',
                             padding: '5px'
                         }}>
-                            <Text style={{ fontFamily: BASIC_FONT, fontSize: '12px' }}>{index + 1}</Text>
+                            <Text style={{ fontFamily: BASIC_FONT, fontSize: BASIC_APPL_FONT_SIZE }}>{index + 1}</Text>
                         </View>
                         {contentKeys.length > 0 ? contentKeys.map((val) => {
                             const isNotForHideFileds = !hiddenFields.includes(val)

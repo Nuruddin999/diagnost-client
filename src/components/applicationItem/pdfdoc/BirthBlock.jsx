@@ -1,18 +1,20 @@
 
 import { Text, View } from '@react-pdf/renderer'
-import { BASIC_FONT } from './pdfcontent'
+import {BASIC_APPL_FONT_SIZE} from "./pdfcontent";
 
 
-const birthFormattedStyle = {
-    width: '80%',
-    borderBottom: "1px solid black",
-    marginHorizontal: 'auto',
-    flexDirection: 'row',
-    fontSize: '10px',
-    fontFamily: 'Times New Roman Bold',
-}
+
+
 
 const BirthBlock = ({ patientName, patientBirthDate}) => {
+    const birthFormattedStyle = {
+        width: '80%',
+        borderBottom: "1px solid black",
+        marginHorizontal: 'auto',
+        flexDirection: 'row',
+        fontSize: BASIC_APPL_FONT_SIZE,
+        fontFamily: "Dejavu Sans Bold",
+    }
 
   return <View>
       <View style={birthFormattedStyle}>
@@ -23,7 +25,7 @@ const BirthBlock = ({ patientName, patientBirthDate}) => {
                   </Text>
               </View>)}
       </View>
-      <View style={{...birthFormattedStyle, fontFamily: 'Times New Roman Reg',}}>
+      <View style={{...birthFormattedStyle, fontFamily: 'Times New Roman Reg', border:"unset"}}>
           {['ФИО','Дата рождения'].map(el=>
               <View style={{width: '50%', height: "40px"}} key={el}>
                   <Text>{el}</Text>
