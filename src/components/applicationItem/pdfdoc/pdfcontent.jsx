@@ -330,7 +330,7 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                         <Image src={hopedoc} style={styles.hdrimg}/>
                         <View style={{fontSize: BASIC_APPL_FONT_SIZE, fontFamily: BASIC_FONT}}>
                             <Text>г Махачкала, ул. Батырая 11 </Text>
-                            <Text>9 этаж, помещение №905</Text>
+                            <Text>9 этаж, помещение № 905</Text>
                             <Text>Тел. +7(8722)98-96-97, +7(964)006-70-07</Text>
                             <Text>vrachi_nadejdi@mail.ru</Text>
                         </View>
