@@ -153,7 +153,7 @@ export const Registration = ({notHaveSuperUser}: { notHaveSuperUser?: boolean })
                         >
                             <MenuItem value={'admin'}>Администратор</MenuItem>
                             <MenuItem value={'doctor'}>Врач</MenuItem>
-                            <MenuItem value={'сoordinator'}>Координатор</MenuItem>
+                            <MenuItem value={'coordinator'}>Координатор</MenuItem>
                         </Select>}
                         <Typography align='left'>Фото для подписи</Typography>
                         <FileUpload files={files} setFiles={setFiles}/>
