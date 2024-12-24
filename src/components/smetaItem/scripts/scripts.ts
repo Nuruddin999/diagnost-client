@@ -52,11 +52,21 @@ export const calculateAccommodationCost = (dataEl: any, keyVal: string, val: str
     if (['inData', 'outData'].includes(keyVal)) {
         const inDate = new Date(keyVal === 'inData' ? val : dataObj.inData)
         const outDate = new Date(keyVal === 'outData' ? val : dataObj.outData)
+        const inYaerLength = new Date(inDate).getFullYear().toString().length
+        const outYaer = new Date(outDate).getFullYear().toString().length
+
         if (val.toString().trim() === '') {
             dataObj.totalCost = ''
-        } else if (inDate.toString() === 'Invalid Date' || outDate.toString() === 'Invalid Date') {
+        }
+
+        else if(inYaerLength < 4 || outYaer < 4) {
             dataObj.totalCost = ''
-        } else {
+        }
+
+        else if (inDate.toString() === 'Invalid Date' || outDate.toString() === 'Invalid Date') {
+            dataObj.totalCost = ''
+        }
+        else {
             const qty = parseInt(dataObj.peopleQty)
             const price = parseInt(dataObj.costPerDay)
             const isValidNumbers = !Number.isNaN(qty) && !Number.isNaN(price)
@@ -164,13 +174,14 @@ export const getAllCostsTotalSum = <T extends Record<string, any>>(data: Array<T
 
 export const processListData = (currentChangeObj:{id: number, keyVal: string, val: string},data: any, callback:(dataEl:any,keyVal:string,val:any)=>void,calculationFields:Array<string>) => {
     let {id,keyVal,val}=currentChangeObj;
+    const isNotDates = keyVal !== 'inData' && keyVal !== 'outData';
     if (['totalCost','totalPrice'].includes(keyVal)) {
         return false
     }
-    if (!val.trim()) {
-        val='0';
+    if (!val || !val.toString().trim()) {
+        val= isNotDates ? '0' : '';
     }
-    if (calculationFields.includes(keyVal)) {
+    if (calculationFields.includes(keyVal) && isNotDates )  {
         val = parseInt(val).toString()
     }
     return data.map((dataEl: any, index: number) => {

@@ -59,7 +59,7 @@ const SmetaTable: FC<{
                         </thead>
                         <tbody>
                             {data.length > 0 && data.map((el: any, index: number) => (<tr>
-                                {headers.map(hdrEl => <td>
+                                {headers.map(hdrEl => <td key={hdrEl.hdr}>
                                     {!hdrEl.isDate ? <TextField size={'small'}
                                         value={el[hdrEl.field]}
                                         onChange={(e) => {
@@ -105,7 +105,7 @@ const SmetaTable: FC<{
                             </tr>))}
                             <tr>
                                 {headers.map(el => {
-                                    return el.isDate ? <td>
+                                    return el.isDate ? <td key={el.field}>
                                         <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
                                             <div>
                                                 <DatePicker
@@ -133,7 +133,7 @@ const SmetaTable: FC<{
                                                 />
                                             </div>
                                         </LocalizationProvider></td>
-                                        : <td>
+                                        : <td key={el.field}>
                                             <TextField size={'small'}
                                                 required
                                                 value={localObj[el.field as any] || ''}
