@@ -13,7 +13,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import DeleteModalBody from "../../common/components/delete_modal_body/DeleteModalBody";
 
-const Smetalist = (): React.ReactElement => {
+const Smetalist = ({isOnCheck}: { isOnCheck?: boolean }): React.ReactElement => {
     const [smetas, setSmetas] = React.useState<SmetasResponseType>()
     const [isLoading, setIsLoading] = React.useState<any>([])
     const [error, setErrorMessage] = useState('')
@@ -27,8 +27,8 @@ const Smetalist = (): React.ReactElement => {
     const [deleteModalId, setDeleteModal] = React.useState<boolean | number>(false);
     const history = useHistory()
 
-    const fetchSmetas = async (page: number, limit: number) => {
-        const resp = await getSmetasApi(page, 10)
+    const fetchSmetas = async (page: number) => {
+        const resp = await getSmetasApi(page, 10, isOnCheck)
         setSmetas(resp)
     }
 
@@ -36,7 +36,7 @@ const Smetalist = (): React.ReactElement => {
         try {
             setIsLoading(true)
             await deleteSmetaItemApi(value.toString())
-            await fetchApp(page, 10)
+            await fetchApp(page)
             setDeleteModal(false)
         } finally {
             setIsLoading(false)
@@ -78,10 +78,10 @@ const Smetalist = (): React.ReactElement => {
         history.push(`smeta/${id}`)
     }
 
-    const fetchApp = async (page: number, limit: number) => {
+    const fetchApp = async (page: number) => {
         setIsLoading(true)
         try {
-            await fetchSmetas(page, limit)
+            await fetchSmetas(page)
         } catch (e) {
             setErrorMessage(e?.message)
         } finally {
@@ -94,9 +94,9 @@ const Smetalist = (): React.ReactElement => {
     };
     useEffect(() => {
         if (id !== undefined && id !== '') {
-            fetchApp(page, 10)
+            fetchApp(page)
         }
-    }, [page, id])
+    }, [page, id, isOnCheck])
 
     return <div className='smetas-container'>
         <div className="smetas-table">

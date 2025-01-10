@@ -7,9 +7,10 @@ type ButtonProps = {
   title?: string,
   disabled?:boolean
     color?:'primary' | 'error' | 'secondary',
+    className?:string,
 }
-export const CommonButton = ({ title = '', onClick, disabled,color }: ButtonProps): React.ReactElement => {
-  return    <button className={classNames('add-button',color ?? 'primary')} onClick={onClick} disabled={disabled} color={color}>
+export const CommonButton = ({ title = '', onClick, disabled,color,className }: ButtonProps): React.ReactElement => {
+  return    <button className={classNames('add-button',color ?? 'primary', className)} onClick={onClick} disabled={disabled} color={color}>
 {title}
 </button>
 }

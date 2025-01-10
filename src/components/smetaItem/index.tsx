@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import { useManageSmetaItem } from "../../common/hooks/useManageSmetaItem";
+import React, {FC, useState} from "react";
+import {useManageSmetaItem} from "../../common/hooks/useManageSmetaItem";
 import './style.smetaitem.scss'
-import { Box, Typography } from "@mui/material";
+import {Box,Typography} from "@mui/material";
 import PatientDoctor from "./patient_doctor";
 import SmetaRoadCostItem from "./smeta_road_cost_item";
 import SmetaAccomodationItem from "./smeta_accomodation_table"
@@ -9,10 +9,10 @@ import SmetaMealCostItem from "./smeta_meals_cost";
 import SmetaTransportCostItem from "./smeta_transport_costs";
 import SmetaMedCostItem from "./smeta_med_cost";
 import SmetaAdditionalCosts from "./smeta_additional_costs";
-import { CommonButton as Button } from "../../common/components/button"
-import { RoundLoader } from "../../common/components/roundloader";
+import {CommonButton as Button} from "../../common/components/button"
+import {RoundLoader} from "../../common/components/roundloader";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
-import { PDFButton } from "../../common/components/pdf_icon_button";
+import {PDFButton} from "../../common/components/pdf_icon_button";
 
 
 
@@ -25,7 +25,8 @@ const SmetaItem: FC = () => {
         respStatus,
         setRespStatus,
         error,
-        setErrorMessage
+        setErrorMessage,
+        moveToDirector
     } = useManageSmetaItem()
     const {
         diagnosis,
@@ -43,12 +44,20 @@ const SmetaItem: FC = () => {
         totalAllSum
     } = smetaItem
 
+    const [openCheckConfirmModal, setOpenCheckConfirmModal] = useState(false)
+
     const handleupdate = async () => {
         await updateSmetaItem()
     }
 
+    const makeReadyForCheck =async ()=>{
+        await moveToDirector()
+        setOpenCheckConfirmModal(false)
+    }
+
+
     if (isLoading) {
-        return <RoundLoader />
+        return <RoundLoader/>
     }
     return <div className={'smeta-item'}>
         <Typography variant={'h4'}>
@@ -98,7 +107,7 @@ const SmetaItem: FC = () => {
                     {hdr: "Цена 1 дня", field: 'costPerDay'},
                     {hdr: "Общая стоимость", field: 'totalCost'},
                     {hdr: "Источник информации", field: 'infoSrc'}]}
-                calculationFields={['costPerDay', 'inData','outData','peopleQty']}
+                calculationFields={['costPerDay', 'inData', 'outData', 'peopleQty']}
             />
         </div>
         <div className='entity-table'>
@@ -113,7 +122,7 @@ const SmetaItem: FC = () => {
                     {hdr: "Стоимость 1 дня", field: 'costPerDay'},
                     {hdr: "Общая стоимость", field: 'totalCost'},
                     {hdr: "Источник информации", field: 'infoSrc'}]}
-                calculationFields={['costPerDay', 'daysQty','peopleQty']}
+                calculationFields={['costPerDay', 'daysQty', 'peopleQty']}
             />
         </div>
         <div className='entity-table'>
@@ -128,7 +137,7 @@ const SmetaItem: FC = () => {
                     {hdr: "Стоимость поездки", field: 'costPerTrip'},
                     {hdr: "Общая стоимость", field: 'totalCost'},
                     {hdr: "Источник информации", field: 'infoSrc'}]}
-                calculationFields={['costPerTrip', 'tripsQty','peopleQty']}
+                calculationFields={['costPerTrip', 'tripsQty', 'peopleQty']}
             />
         </div>
         <div className='entity-table'>
@@ -148,13 +157,16 @@ const SmetaItem: FC = () => {
                 <span>
                     {!Number.isNaN(parseInt(totalAllSum)) ? totalAllSum : '   '}
                 </span>
-               <span>
+                <span>
                    руб.
                </span>
             </h2>
         </div>
         <div className={'buttons-block'}>
             <Button title={"Сохранить"} onClick={handleupdate}/>
+            <Button title={"На проверку"} color={"secondary"} onClick={() => {
+                setOpenCheckConfirmModal(true)
+            }}/>
             <PDFButton url={`http://188.68.220.210:12345/${smetaItem.id}`}/>
         </div>
         <BasicModal
@@ -169,6 +181,21 @@ const SmetaItem: FC = () => {
                     {error !== "" && error}
                     {respStatus === 'ok' && 'Сохранено'}
                 </Typography>
+            </Box>}
+        />
+        <BasicModal
+            open={openCheckConfirmModal}
+            onClose={() => {
+                setOpenCheckConfirmModal(false);
+            }}
+            body={<Box>
+                <Typography variant={"h4"}>
+                    Отправить смету на проверку директору ?
+                </Typography>
+                <Box display={"flex"} alignItems={"center"} justifyContent={"center"} gap={10} mt={2}>
+                    <Button title={"Да"} onClick={() => makeReadyForCheck()} />
+                    <Button title={"Нет"} onClick={() => setOpenCheckConfirmModal(false)}  color={"error"}/>
+                </Box>
             </Box>}
         />
     </div>
