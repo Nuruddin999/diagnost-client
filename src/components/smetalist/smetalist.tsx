@@ -13,7 +13,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import DeleteModalBody from "../../common/components/delete_modal_body/DeleteModalBody";
 
-const Smetalist = ({isOnCheck}: { isOnCheck?: boolean }): React.ReactElement => {
+const Smetalist = ({status}: { status: string }): React.ReactElement => {
     const [smetas, setSmetas] = React.useState<SmetasResponseType>()
     const [isLoading, setIsLoading] = React.useState<any>([])
     const [error, setErrorMessage] = useState('')
@@ -28,7 +28,7 @@ const Smetalist = ({isOnCheck}: { isOnCheck?: boolean }): React.ReactElement => 
     const history = useHistory()
 
     const fetchSmetas = async (page: number) => {
-        const resp = await getSmetasApi(page, 10, isOnCheck)
+        const resp = await getSmetasApi(page, 10, status)
         setSmetas(resp)
     }
 
@@ -96,7 +96,7 @@ const Smetalist = ({isOnCheck}: { isOnCheck?: boolean }): React.ReactElement => 
         if (id !== undefined && id !== '') {
             fetchApp(page)
         }
-    }, [page, id, isOnCheck])
+    }, [page, id, status])
 
     return <div className='smetas-container'>
         <div className="smetas-table">

@@ -12,6 +12,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import GradingIcon from '@mui/icons-material/Grading';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ApplicationItem from "../applicationItem";
 import {Registration} from "../../common/components/registration/registration";
 import UsersList from "../userslist/userslist";
@@ -122,6 +123,21 @@ const Dashboard = (): React.ReactElement => {
                             </ListItemText>
                         </Link>
                     </div>}
+                    {isAdmin && <div className='list-item'>
+                        <Link to='/main/smetas'>
+                            <ListItemIcon>
+                                <CheckCircleOutlineIcon/>
+                            </ListItemIcon>
+                        </Link>
+                        <Link to='/main/smetasonrealization'>
+                            <ListItemText>
+                                Сметы на
+                            </ListItemText>
+                            <ListItemText>
+                                реализации
+                            </ListItemText>
+                        </Link>
+                    </div>}
                 </div>
                 <div className="main-content">
                     <Switch>
@@ -153,7 +169,7 @@ const Dashboard = (): React.ReactElement => {
                             <UserItem isProfile/>
                         </Route>
                         <Route path='/main/smetas'>
-                            {rights.processedRights.smetas?.read ? <Smetalist isOnCheck={false}/> :
+                            {rights.processedRights.smetas?.read ? <Smetalist status={'rework'}/> :
                                 <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
                                 </div>}
                         </Route>
@@ -163,7 +179,12 @@ const Dashboard = (): React.ReactElement => {
                                 </div>}
                         </Route>
                         <Route path='/main/smetasoncheck'>
-                            {isAdmin ?  <Smetalist isOnCheck={isAdmin}/>   :
+                            {isAdmin ?  <Smetalist status={'oncheck'}/>   :
+                                <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
+                                </div>}
+                        </Route>
+                        <Route path='/main/smetasonrealization'>
+                            {isAdmin ?  <Smetalist status={'realization'}/>   :
                                 <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
                                 </div>}
                         </Route>

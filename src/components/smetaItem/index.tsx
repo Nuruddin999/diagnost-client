@@ -1,7 +1,8 @@
 import React, {FC, useState} from "react";
+import {useHistory} from "react-router-dom";
 import {useManageSmetaItem} from "../../common/hooks/useManageSmetaItem";
 import './style.smetaitem.scss'
-import {Box,Typography} from "@mui/material";
+import {Box, TextField, Typography} from "@mui/material";
 import PatientDoctor from "./patient_doctor";
 import SmetaRoadCostItem from "./smeta_road_cost_item";
 import SmetaAccomodationItem from "./smeta_accomodation_table"
@@ -13,7 +14,8 @@ import {CommonButton as Button} from "../../common/components/button"
 import {RoundLoader} from "../../common/components/roundloader";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import {PDFButton} from "../../common/components/pdf_icon_button";
-
+import {FileUpload} from "../../common/components/fileupload/fileUpload";
+import {FileThumbnail} from "../../common/components/file_thumbnail/file_thumbnail";
 
 
 const SmetaItem: FC = () => {
@@ -26,7 +28,8 @@ const SmetaItem: FC = () => {
         setRespStatus,
         error,
         setErrorMessage,
-        moveToDirector
+        updateSmetaStatus,
+        handleUploadComment
     } = useManageSmetaItem()
     const {
         diagnosis,
@@ -39,20 +42,53 @@ const SmetaItem: FC = () => {
         Smetaplans,
         Smetacosts,
         Smetatransportcosts,
+        ReworkComments,
         managerName,
         managerSpeciality,
-        totalAllSum
+        totalAllSum,
+        status
     } = smetaItem
 
     const [openCheckConfirmModal, setOpenCheckConfirmModal] = useState(false)
+    const [openOnRealizationModal, setOpenOnRealizationModal] = useState(false)
+    const [openOnReworkModal, setOpenOnReworkModal] = useState(false)
+    const [reworkComment, setReworkComment] = useState('')
+    const [files, setFiles] = useState<Array<File>>([])
+    const [currentWathFile, setCurrentWatchFile] = useState<number>(-1)
+    const history = useHistory();
+
 
     const handleupdate = async () => {
         await updateSmetaItem()
     }
 
-    const makeReadyForCheck =async ()=>{
-        await moveToDirector()
-        setOpenCheckConfirmModal(false)
+    const makeReadyForCheck = async (status: string, callback: (isFalse: boolean) => void) => {
+        await updateSmetaStatus(status)
+        callback(false)
+    }
+
+    const handleModalClose = () => {
+        if (openOnRealizationModal) {
+            setOpenOnRealizationModal(false);
+        } else if (openCheckConfirmModal) {
+            setOpenCheckConfirmModal(false);
+        }
+    };
+
+    const handleConfirm = () => {
+        if (openOnRealizationModal) {
+            makeReadyForCheck('realization', setOpenOnRealizationModal);
+            history.push('/main/smetasonrealization')
+        } else if (openCheckConfirmModal) {
+            makeReadyForCheck('oncheck', setOpenCheckConfirmModal);
+            history.push('/main/smetas')
+        }
+    };
+
+    const handleUpload = async () => {
+        await handleUploadComment(reworkComment, files)
+        setOpenOnReworkModal(false)
+        history.push('/main/smetasoncheck')
     }
 
 
@@ -162,11 +198,73 @@ const SmetaItem: FC = () => {
                </span>
             </h2>
         </div>
+        {ReworkComments.length > 0 && <div>
+            <Typography align='left' variant='h5'>На доработке</Typography>
+            {ReworkComments.map((comment: any, i: number) => {
+                return <div key={i}>
+                    <Typography variant={"h4"} align={"left"}>
+                        Комментарий
+                    </Typography>
+                    <p className={"rework-comment"}>{comment.comment}</p>
+                    <div>
+                        <Typography variant={"h5"} align={"left"}>
+                            Файлы
+                        </Typography>
+                        <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={2}>
+                            {comment.ReworkCommentFiles.length > 0 && comment.ReworkCommentFiles.map((file: any, i: number) => {
+                                const isOnlyImg = file?.type?.split("/")[0] === 'image'
+                                const isCurrentWatch = currentWathFile === i && isOnlyImg
+                                return <Box
+                                    {...(isCurrentWatch ? {
+                                        position:"fixed",
+                                        top:"0px",
+                                        left:"0px",
+                                        width:"100%",
+                                        height:"100%",
+                                        overflow:"scroll",
+                                        zIndex:3700
+                                    }:{})}
+                                            key={file.id}
+                                onClick={()=> {
+                                    if (isOnlyImg) {
+                                        setCurrentWatchFile(isCurrentWatch ? -1 : i)
+                                    }
+                                }}
+                                    sx={{cursor: "pointer", border:"0.5px solid #f0f0f0", borderRadius:"4px"}}  height={isCurrentWatch? "auto" :451}
+                                >
+                                    <FileThumbnail
+                                        type={file.type}
+                                        url={'http://localhost:5001/file/' + file.url}
+                                        imgWidth={isCurrentWatch ? "auto":800}
+                                        imgHeight={isCurrentWatch? "auto" :451}
+                                        videoHeight={451}
+                                        videoWidth={800}
+                                        pdfWidth={800}
+                                        pdfHeight={451}
+                                        mswordWidth={800}
+                                        mswordHeight={451}
+                                    />
+                                </Box>
+                            })}
+
+                        </Box>
+                    </div>
+                </div>
+            })}
+        </div>}
         <div className={'buttons-block'}>
             <Button title={"Сохранить"} onClick={handleupdate}/>
-            <Button title={"На проверку"} color={"secondary"} onClick={() => {
+            {status !== 'oncheck' && <Button title={"На проверку"} color={"secondary"} onClick={() => {
                 setOpenCheckConfirmModal(true)
-            }}/>
+            }}/>}
+            {status === 'oncheck' && <Button title={"На доработку"} color={"warning"} onClick={() => {
+                setOpenOnReworkModal(true)
+            }}/>}
+
+            {status === 'oncheck' && <Button title={"На реализацию"} color={"success"} onClick={() => {
+                setOpenOnRealizationModal(true)
+            }}/>}
+
             <PDFButton url={`http://188.68.220.210:12345/${smetaItem.id}`}/>
         </div>
         <BasicModal
@@ -184,17 +282,40 @@ const SmetaItem: FC = () => {
             </Box>}
         />
         <BasicModal
-            open={openCheckConfirmModal}
-            onClose={() => {
-                setOpenCheckConfirmModal(false);
-            }}
+            open={openCheckConfirmModal || openOnRealizationModal}
+            onClose={handleModalClose}
             body={<Box>
                 <Typography variant={"h4"}>
-                    Отправить смету на проверку директору ?
+                    {`Отправить смету на ${openCheckConfirmModal ? 'проверку директору' : 'реализацию'} ?`}
                 </Typography>
                 <Box display={"flex"} alignItems={"center"} justifyContent={"center"} gap={10} mt={2}>
-                    <Button title={"Да"} onClick={() => makeReadyForCheck()} />
-                    <Button title={"Нет"} onClick={() => setOpenCheckConfirmModal(false)}  color={"error"}/>
+                    <Button title={"Да"} onClick={handleConfirm}/>
+                    <Button title={"Нет"} onClick={handleModalClose} color={"error"}/>
+                </Box>
+            </Box>}
+        />
+        <BasicModal
+            open={openOnReworkModal}
+            onClose={() => setOpenOnReworkModal(false)}
+            bodyStyle={{width: '60%'}}
+            body={<Box>
+                <Typography variant={"h4"}>
+                    {`Комментарий`}
+                </Typography>
+                <TextField
+                    multiline
+                    maxRows={30}
+                    value={reworkComment}
+                    fullWidth={true}
+                    onChange={(e) => setReworkComment(e.target.value)}
+                />
+                <Typography variant={"h6"} align={"left"}>
+                    {`Файлы`}
+                </Typography>
+                <FileUpload files={files} setFiles={setFiles} isThumbnails/>
+                <Box display={"flex"} alignItems={"center"} justifyContent={"center"} gap={10} mt={2}>
+                    <Button title={"Отправить"} onClick={handleUpload}/>
+                    <Button title={"Отмена"} onClick={() => setOpenOnReworkModal(false)} color={"error"}/>
                 </Box>
             </Box>}
         />

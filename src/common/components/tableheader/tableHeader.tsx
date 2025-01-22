@@ -21,7 +21,9 @@ const TableHeader = ({tableData, role, isDeleteRights,isManagerChange}: { tableD
         {tableData.map((el: any) => {
                 if (isObject(el) && (el as any).title === 'Ответственный') {
                     if (role === 'doctor') {
-                        return null
+                        return <th>
+
+                        </th>
                     }
                 }
                 if (el !== 'Удалить' || isDeleteRights) {
@@ -45,7 +47,9 @@ const TableHeader = ({tableData, role, isDeleteRights,isManagerChange}: { tableD
                         </div>
                     </th>
                 }
-                return null
+                   return <th>
+
+            </th>
             }
         )}
         {isManagerChange && <th>

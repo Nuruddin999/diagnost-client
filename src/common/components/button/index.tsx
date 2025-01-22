@@ -6,7 +6,7 @@ type ButtonProps = {
   onClick: () => void,
   title?: string,
   disabled?:boolean
-    color?:'primary' | 'error' | 'secondary',
+    color?:'primary' | 'error' | 'secondary' | 'warning' | 'success',
     className?:string,
 }
 export const CommonButton = ({ title = '', onClick, disabled,color,className }: ButtonProps): React.ReactElement => {

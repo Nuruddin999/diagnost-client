@@ -5,14 +5,14 @@ import {SmetasResponseType, SmetaUpdate} from "../common/types";
  * Получаем список заключений.
  * @param {number} page Страница.
  * @param {number} limit Сколько показывать.
- * @param {boolean} isOnCheck Есть ли режим выдачи смет отправленных на проверку.
+ * @param {string} status Есть ли режим выдачи смет отправленных на проверку.
  * @returns
  */
 export const getSmetasApi = async (page: number,
-                                   limit: number, isOnCheck?: boolean): Promise<SmetasResponseType> => {
+                                   limit: number, status?: string): Promise<SmetasResponseType> => {
     const response = await diagnostApi.get('/smetas', {
         headers: {'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`},
-        params: {page, limit, isOnCheck}
+        params: {page, limit, status}
     })
     return response.data
 }
@@ -46,5 +46,36 @@ export const deleteSmetaItemApi = async (id: string) => {
         {
             headers: {'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`},
         })
+    return response.data
+}
+
+export const uploadReworkCommentFilesApi = async (reworkCommentId: string, file: File) => {
+    let formData = new FormData();
+    formData.append('file', file)
+    formData.append('reworkCommentId', reworkCommentId)
+
+    const response = await diagnostApi.post('/uploadrwf', formData, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`,
+            "Content-Type": "multipart/form-data",
+        }
+    })
+
+    return response.data
+}
+
+export const uploadMultipleFilesApi = async (reworkCommentId: string, files: Array<File>) => {
+    const resp = []
+    for (const file of files) {
+        const response = await uploadReworkCommentFilesApi(reworkCommentId, file)
+        resp.push(response)
+    }
+    return resp
+}
+
+export const addSmetaReworkCommentApi = async (smetaId: string, comment: string) => {
+    const response = await diagnostApi.post('/smetas-mkrwc', {
+        comment, smetaId
+    }, {headers: {'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`},})
     return response.data
 }

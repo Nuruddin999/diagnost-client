@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {getListItemById} from "../api/api";
 import {useParams} from "react-router-dom";
-import {updateOneSmetaApi, updateSmetaStatusApi} from "../../api/smetas";
+import {
+    addSmetaReworkCommentApi,
+    updateOneSmetaApi,
+    updateSmetaStatusApi,
+    uploadMultipleFilesApi
+} from "../../api/smetas";
 import {getAllCostsTotalSum} from "../../components/smetaItem/scripts/scripts";
 
 export const useManageSmetaItem = () => {
@@ -12,7 +17,7 @@ export const useManageSmetaItem = () => {
         Smetamealcosts: [],
         Smetatransportcosts: [],
         Smetaroaccomodations: [],
-        Smetaplans: []
+        Smetaplans: [],
     })
     const [isLoading, setIsLoading] = React.useState<any>([])
     const [respStatus, setRespStatus] = React.useState<any>([])
@@ -46,9 +51,32 @@ export const useManageSmetaItem = () => {
         await updateWrapper(() => updateOneSmetaApi(smetaItem))
     }
 
-    const moveToDirector = async ()=>{
-        await updateWrapper(() => updateSmetaStatusApi(id, 'oncheck'))
+    const updateSmetaStatus = async (status: string) => {
+        await updateWrapper(() => updateSmetaStatusApi(id, status))
     }
+
+    const handleUploadFiles = async (id: string, files: Array<File>) => {
+        if (files.length > 0) {
+            await uploadMultipleFilesApi(id, files)
+        }
+    }
+
+    const handleUploadComment = async (reworkComment: string, files: Array<File>) => {
+        if (reworkComment.trim()) {
+            try {
+                setIsLoading(true)
+                const result = await addSmetaReworkCommentApi(smetaItem.id, reworkComment)
+                await handleUploadFiles(result.added, files)
+                await updateSmetaStatusApi(id, 'rework')
+            } catch (e) {
+
+            } finally {
+                setIsLoading(false)
+            }
+
+        }
+    }
+
 
     const updateWrapper = async (callback: any) => {
         try {
@@ -89,7 +117,8 @@ export const useManageSmetaItem = () => {
         respStatus,
         setRespStatus,
         setErrorMessage,
-        moveToDirector
+        updateSmetaStatus,
+        handleUploadComment
     }
 
 }

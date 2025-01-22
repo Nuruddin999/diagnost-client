@@ -82,6 +82,7 @@ export const Registration = ({notHaveSuperUser}: { notHaveSuperUser?: boolean })
             setTimeout(() => dispatch(setAddUserStatus('')), 2000)
         }
     }, [addUserStatus])
+
     return <div className={'registration-main'}>
         <div className={'auth-wrapper'}>
             {

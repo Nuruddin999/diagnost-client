@@ -15,7 +15,7 @@ const style = {
     p: 4,
 };
 
-export default function BasicModal({open,onClose,body, className}:{open:boolean, onClose:()=>void,body:ReactElement, className?:string}) {
+export default function BasicModal({open,onClose,body, className, bodyStyle}:{open:boolean, onClose:()=>void,body:ReactElement, className?:string, bodyStyle?:Record<string, string>}) {
 
 
     return (
@@ -27,7 +27,7 @@ export default function BasicModal({open,onClose,body, className}:{open:boolean,
                 className={className}
                 disablePortal
             >
-                <Box sx={style}>
+                <Box sx={{...style, ...bodyStyle}}>
                 {body}
                 </Box>
             </Modal>
