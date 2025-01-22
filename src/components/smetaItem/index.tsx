@@ -215,12 +215,15 @@ const SmetaItem: FC = () => {
                                 const isOnlyImg = file?.type?.split("/")[0] === 'image'
                                 const isCurrentWatch = currentWathFile === i && isOnlyImg
                                 return <Box
+                                    display="flex"
+                                    justifyContent="center"
+                                    alignItems={"center"}
+                                    width={isCurrentWatch ? "100%": 800}
+                                    height={isCurrentWatch ? "100%" : 451}
                                     {...(isCurrentWatch ? {
                                         position:"fixed",
                                         top:"0px",
                                         left:"0px",
-                                        width:"100%",
-                                        height:"100%",
                                         overflow:"scroll",
                                         zIndex:3700
                                     }:{})}
@@ -230,13 +233,14 @@ const SmetaItem: FC = () => {
                                         setCurrentWatchFile(isCurrentWatch ? -1 : i)
                                     }
                                 }}
-                                    sx={{cursor: "pointer", border:"0.5px solid #f0f0f0", borderRadius:"4px"}}  height={isCurrentWatch? "auto" :451}
+                                    sx={{cursor: "pointer", border:"0.5px solid #f0f0f0", borderRadius:"4px", background:isCurrentWatch ? "black":"initial"}}
+
                                 >
                                     <FileThumbnail
                                         type={file.type}
                                         url={'http://188.68.220.210/api/file/' + file.url}
-                                        imgWidth={isCurrentWatch ? "auto":800}
-                                        imgHeight={isCurrentWatch? "auto" :451}
+                                        imgWidth={"auto"}
+                                        imgHeight={isCurrentWatch ? "auto" :"100%"}
                                         videoHeight={451}
                                         videoWidth={800}
                                         pdfWidth={800}
