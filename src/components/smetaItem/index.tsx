@@ -234,7 +234,7 @@ const SmetaItem: FC = () => {
                                 >
                                     <FileThumbnail
                                         type={file.type}
-                                        url={'http://localhost:5001/file/' + file.url}
+                                        url={'http://188.68.220.210/api/file/' + file.url}
                                         imgWidth={isCurrentWatch ? "auto":800}
                                         imgHeight={isCurrentWatch? "auto" :451}
                                         videoHeight={451}
