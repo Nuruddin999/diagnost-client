@@ -198,14 +198,16 @@ const SmetaItem: FC = () => {
                </span>
             </h2>
         </div>
+        {smetaItem.status === 'rework' && <div className={"status-title"}>На доработке</div>}
         {ReworkComments.length > 0 && <div>
-            <Typography align='left' variant='h5'>На доработке</Typography>
-            {ReworkComments.map((comment: any, i: number) => {
+        {ReworkComments.map((comment: any, i: number) => {
                 return <div key={i}>
-                    <Typography variant={"h4"} align={"left"}>
+                    <Box width={"50%"}>
+                    <Typography variant={"h6"} sx={{backgroundColor:'#1f75cb', color:"white", padding:"8px", paddingLeft:"8px", borderTopLeftRadius:"8px",borderTopRightRadius:"8px"}} key={i}>
                         Комментарий
                     </Typography>
                     <p className={"rework-comment"}>{comment.comment}</p>
+                    </Box>
                     <div>
                         <Typography variant={"h5"} align={"left"}>
                             Файлы

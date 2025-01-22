@@ -26,9 +26,27 @@
     }
 
   }
-
+  .status-title {
+    background-color: orange;
+    color: white;
+    text-align: center;
+    font-size: 25px;
+    padding: 10px;
+    width: 180px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+  }
   .rework-comment {
     text-align: left;
+    font-size: 20px;
+    max-height: 400px;
+    overflow-y: scroll;
+    border: 1px solid black;
+    border-top: none;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding: 4px;
+    margin-top: 0;
   }
 
   .buttons-block {

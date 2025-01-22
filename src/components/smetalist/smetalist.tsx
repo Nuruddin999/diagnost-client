@@ -12,6 +12,7 @@ import {IconButton} from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import DeleteModalBody from "../../common/components/delete_modal_body/DeleteModalBody";
+import {SMETA_STATUS} from "../../common/constants";
 
 const Smetalist = ({status}: { status: string }): React.ReactElement => {
     const [smetas, setSmetas] = React.useState<SmetasResponseType>()
@@ -115,7 +116,7 @@ const Smetalist = ({status}: { status: string }): React.ReactElement => {
                         <td>{el.patientPromoter}</td>
                         <td>{el.patientRequest}</td>
                         <td>{el.fundRequest}</td>
-                        <td>{el.status}</td>
+                        <td>{SMETA_STATUS[el.status as keyof typeof SMETA_STATUS]}</td>
                         <td>{el.customer}</td>
                         <td>
                             <td><IconButton className='delete-button' onClick={(e: any) => {
