@@ -1,3 +1,5 @@
+import {formatPhone} from "../../../common/utils";
+
 const calculateQtyByCost = ({
                                 val,
                                 currentKeyVal
@@ -156,7 +158,7 @@ export const calculateTransportLocalCost = ({
 export const calculateMedCost = (dataEl: any, keyVal: string, val: string) => {
     const dataObj = {
         ...dataEl,
-        [keyVal]: val
+        [keyVal]: keyVal === 'phone' ?  formatPhone(val) : val
     }
     if (['price', 'qty'].includes(keyVal)) {
         if (val.trim() === '') {

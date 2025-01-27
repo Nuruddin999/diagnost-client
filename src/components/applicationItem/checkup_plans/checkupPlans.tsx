@@ -11,6 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { selectApplicationUserRights } from "../../../common/selectors/user";
 import { changeDeleteOptionAction } from "../../../actions/application";
 import { CheckupPlanDetailType } from "../../../common/types";
+import {formatPhone, handleKeyDown} from "../../../common/utils";
 
 
 const CheckupPlanForm = (): React.ReactElement => {
@@ -55,9 +56,10 @@ const CheckupPlanForm = (): React.ReactElement => {
 
     const handleCheckupDetails = (e: any, checkupPlanDetail: CheckupPlanDetailType, field: string) => {
         const { price, phone, target, place, address, kind, supplier, medicine, qty } = checkupPlanDetail.checkupPlan
+        const currentValue = field === 'phone' ? formatPhone(e.target.value) : e.target.value
         applications?.update && dispatch(changeCheckupPlan({
             index: checkupPlanDetail.index,
-            checkupPlan: { supplier, kind, place, target, price, phone, address, medicine, qty, [field]: e.target.value, },
+            checkupPlan: { supplier, kind, place, target, price, phone, address, medicine, qty, [field]: currentValue, },
             isTotalPriceEdit: field === 'totalPrice'
         }))
     }
@@ -128,6 +130,14 @@ const CheckupPlanForm = (): React.ReactElement => {
                                 multiline
                                 maxRows={15}
                                 onChange={(e) => handleCheckupDetails(e, { index, checkupPlan }, el)}
+                                onKeyDown={(e)=>{
+                                    if ((e.key === 'Backspace' || e.key === 'Delete') && el === 'phone') {
+                                        const formattedPhone = handleKeyDown(checkupPlan[el as keyof typeof checkupPlan])
+                                        handleCheckupDetails({target:{
+                                            value:formattedPhone
+                                            }}, { index, checkupPlan }, el)
+                                    }
+                                }}
                             />
                         </td>)}
                     <td><TextField
@@ -219,7 +229,13 @@ const CheckupPlanForm = (): React.ReactElement => {
                             if (error) {
                                 setError('')
                             }
-                            setPlacePhone(e.target.value)
+                            setPlacePhone(formatPhone(e.target.value))
+                        }}
+                        onKeyDown={(e)=>{
+                            if (e.key === 'Backspace' || e.key === 'Delete') {
+                                const formattedPhone = handleKeyDown(placePhone)
+                                setPlacePhone(formattedPhone)
+                            }
                         }}
                     />
                     <TextField

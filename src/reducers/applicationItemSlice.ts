@@ -2,6 +2,7 @@ import {consiliumDoctor} from '../sagas/application';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {applicationItemResponse} from '../sagas/application';
 import {CheckupPlanDetailType, CheckupPlanItem} from "../common/types";
+import {formatPhone} from "../common/utils";
 
 
 export type applicationInitialState = {
@@ -88,7 +89,7 @@ export const applicationItemSlice = createSlice({
             state.diagnostic = action.payload.Diagnostics
             state.mostProblDiagnosis = action.payload.mostProblDiagnosis
             state.secondaryDiagnosis = action.payload.secondaryDiagnosis
-            state.checkupPlans = action.payload.CheckupPlans
+            state.checkupPlans = action.payload.CheckupPlans.map(el=>({...el, phone:formatPhone(el.phone || '')}))
             state.anamnesis = action.payload.anamnesis
             state.complaint = action.payload.complaint
             state.patientName = action.payload.patientName

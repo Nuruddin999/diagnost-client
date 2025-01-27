@@ -8,6 +8,7 @@ import {
     uploadMultipleFilesApi
 } from "../../api/smetas";
 import {getAllCostsTotalSum} from "../../components/smetaItem/scripts/scripts";
+import {formatPhone} from "../utils";
 
 export const useManageSmetaItem = () => {
     const {id} = useParams<{ id: string }>()
@@ -39,7 +40,8 @@ export const useManageSmetaItem = () => {
         try {
             setIsLoading(true)
             const response = await getListItemById(id, 'smetas')
-            setSmetaItem(response)
+            const formattedSmetaPlans = response.Smetaplans.map((el:any)=>({...el, phone:formatPhone(el.phone || '')}))
+            setSmetaItem({...response, Smetaplans: formattedSmetaPlans })
         } catch (e) {
             setErrorMessage(e?.message)
         } finally {
