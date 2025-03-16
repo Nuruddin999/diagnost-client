@@ -11,8 +11,10 @@ export const selectsUserItemRights = createSelector(selectUserItem, user => {
             processedRights[0] = item
         } else if (item.entity === 'users') {
             processedRights[1] = item
-        } else {
+        } else if (item.entity === 'smetas') {
             processedRights[2] = item
+        } else {
+            processedRights[3] = item
         }
     })
     return processedRights
