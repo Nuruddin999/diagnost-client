@@ -28,7 +28,7 @@ const Comments = (): React.ReactElement => {
           size='small'
           multiline
           value={commentEl.comment}
-          onChange={(e) => processedRights.applications?.update &&  dispatch(changeComment({ index, comment: e.target.value }))}
+          onChange={(e) => processedRights.applications?.update &&  dispatch(changeComment({ title:commentEl.title!, comment: e.target.value }))}
           margin='normal'
         />
       </div>)}
