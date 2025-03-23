@@ -19,6 +19,7 @@ import { RoundLoader } from "../../common/components/roundloader";
 import { makeSmetaReadyForCoordApi } from "../../api/smetas";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import { PDFButton } from "../../common/components/pdf_icon_button";
+import { initComments } from "../../common/constants";
 
 const ApplicationItem = (): React.ReactElement => {
     const { id } = useParams<{ id: string }>()
@@ -52,22 +53,7 @@ const ApplicationItem = (): React.ReactElement => {
                 updatedAt: '',
                 createdAt: '',
                 ConsiliumDoctors: [],
-                Comments: [{
-                    title: 'Куда обратился пациент и с какой помощью',
-                    comment: ''
-                }, {
-                    title: 'Что было им предоставлено, или наоборот, ничего не было предоставлено, только жалоюы и просьбы',
-                    comment: ''
-                }, {
-                    title: 'Какая работа была проделана',
-                    comment: ''
-                }, {
-                    title: 'Почему быоо рекомендовано то, или иное, на основании чего',
-                    comment: ''
-                }, {
-                    title: 'Заключение: "По результатам проделанной работы считаю просьбу подопечного (ой) обоснованной (или нет) и возможной для одобрения (или нет)"',
-                    comment: ''
-                }],
+                Comments: initComments,
                 Diagnostics: [],
                 CheckupPlans: []
             }))

@@ -1,7 +1,8 @@
-import {applicationItemResponse, consiliumDoctor} from '../sagas/application';
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {CheckupPlanDetailType, CheckupPlanItem} from "../common/types";
-import {formatPhone} from "../common/utils";
+import { applicationItemResponse, consiliumDoctor } from '../sagas/application';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { CheckupPlanDetailType, CheckupPlanItem } from "../common/types";
+import { formatPhone } from "../common/utils";
+import { initComments } from '../common/constants';
 
 
 export type applicationInitialState = {
@@ -58,42 +59,7 @@ export const initialState: applicationInitialState = {
     mostProblDiagnosis: '',
     secondaryDiagnosis: '',
     checkupPlans: [],
-    comments: [
-        {
-            title: 'Подопечный (ая) обратился в',
-            comment: ''
-        },
-        {
-            title: 'с просьбой помочь ему (ей) в',
-            comment: ''
-        },
-        {
-            title: 'Подопечным были предоставлены личные документы',
-            comment: ''
-        },
-        {
-            title: 'медицинские документы',
-            comment: ''
-        },
-        {
-            title: 'Мы связались с подопечным. После получения документов и ознакомления с ними, мы',
-            comment: ''
-        }, {
-            title: 'Дополнительно у подопечного мы запросили:',
-            comment: ''
-        }, {
-            title: 'Дополнительно подопечного мы направили:',
-            comment: ''
-        }, {
-            title: 'Дополнительно мы запросили информацию у:',
-            comment: ''
-        }, {
-            title: 'Проблемы при обработке заявки:',
-            comment: ''
-        }, {
-            title: 'Завершаем обработку заявки:',
-            comment: ''
-        }],
+    comments: initComments,
     status: 'no'
 };
 
@@ -108,7 +74,7 @@ export const applicationItemSlice = createSlice({
             state.diagnostic = action.payload.Diagnostics
             state.mostProblDiagnosis = action.payload.mostProblDiagnosis
             state.secondaryDiagnosis = action.payload.secondaryDiagnosis
-            state.checkupPlans = action.payload.CheckupPlans.map(el => ({...el, phone: formatPhone(el.phone || '')}))
+            state.checkupPlans = action.payload.CheckupPlans.map(el => ({ ...el, phone: formatPhone(el.phone || '') }))
             state.anamnesis = action.payload.anamnesis
             state.complaint = action.payload.complaint
             state.patientName = action.payload.patientName
@@ -139,10 +105,10 @@ export const applicationItemSlice = createSlice({
             state.consiliumDoctors = state.consiliumDoctors.filter((doctor, index) => index !== action.payload)
         },
         saveDiagnostic: (state, action: PayloadAction<string>) => {
-            state.diagnostic = [...state.diagnostic, {diagnosis: action.payload}]
+            state.diagnostic = [...state.diagnostic, { diagnosis: action.payload }]
         },
         changeDiagnostic: (state, action: PayloadAction<{ index: number, diagnosis: string }>) => {
-            state.diagnostic = state.diagnostic.map((diagnostEl, diagnosIndex) => diagnosIndex === action.payload.index ? {diagnosis: action.payload.diagnosis} : diagnostEl)
+            state.diagnostic = state.diagnostic.map((diagnostEl, diagnosIndex) => diagnosIndex === action.payload.index ? { diagnosis: action.payload.diagnosis } : diagnostEl)
         },
         deleteDiagnostic: (state, action: PayloadAction<number>) => {
             state.diagnostic = state.diagnostic.filter((doctor, index) => index !== action.payload)
@@ -154,11 +120,11 @@ export const applicationItemSlice = createSlice({
             state.secondaryDiagnosis = action.payload
         },
         saveCheckupPlan: (state, action: PayloadAction<CheckupPlanItem>) => {
-            state.checkupPlans = [...state.checkupPlans, {...action.payload}]
+            state.checkupPlans = [...state.checkupPlans, { ...action.payload }]
         },
         changeCheckupPlan: (state, action: PayloadAction<CheckupPlanDetailType>) => {
             let totalCalc: string | undefined;
-            const {qty, price, totalPrice} = action.payload.checkupPlan
+            const { qty, price, totalPrice } = action.payload.checkupPlan
             if (!action.payload.isTotalPriceEdit) {
                 const isValidData = qty && price && parseInt(qty) && parseInt(price)
                 totalCalc = isValidData ? (parseInt(qty as string) * parseInt(price as string)).toString() : ''
@@ -174,7 +140,7 @@ export const applicationItemSlice = createSlice({
             state.checkupPlans = state.checkupPlans.filter((checkupPlan, index) => index !== action.payload)
         },
         saveComment: (state, action: PayloadAction<string>) => {
-            state.comments = [...state.comments, {comment: action.payload}]
+            state.comments = [...state.comments, { comment: action.payload }]
         },
         changeComment: (state, action: PayloadAction<{ title: string, comment: string }>) => {
             state.comments = state.comments.map((commentEl) => commentEl.title === action.payload.title ? {
