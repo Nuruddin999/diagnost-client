@@ -377,7 +377,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                     </View> : null}
                     {diagnostic.length > 0 ? <View style={{ marginTop: 14, ...styles.commonSize }}>
                         <Table
-                            title='С целью проведения консультации по следующим вопросам:  '
+                            title='С целью проведения консультации по следующим вопросам:'
                             subTitle='(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)'
                             headers={['№', 'Диагноз']}
                             dataContent={diagnostic}
