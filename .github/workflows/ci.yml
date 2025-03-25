@@ -23,10 +23,4 @@ jobs:
     - run: yarn install --frozen-lockfile
     - run: npx browserslist@latest --update-db
     - run: echo "CI=false" >> $GITHUB_ENV
-    - run: yarn build 
-    - run: |
-         git config --global user.name "GitHub Actions"
-         git config --global user.email "actions@github.com"
-         git add build
-         git commit -m "Add build folder"
-         git push --force origin ${GITHUB_REF#refs/heads/}
+    - run: yarn build
