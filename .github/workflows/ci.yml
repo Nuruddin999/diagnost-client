@@ -22,4 +22,5 @@ jobs:
         cache: 'npm'
     - run: yarn install --frozen-lockfile
     - run: npx browserslist@latest --update-db
+    - run: echo "CI=false" >> $GITHUB_ENV
     - run: yarn build 
