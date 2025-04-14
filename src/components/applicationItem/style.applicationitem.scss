@@ -3,7 +3,8 @@
   overflow: auto;
   margin: 45px auto 0;
 
-  .save-button, .forCoordinate-button {
+  .save-button,
+  .forCoordinate-button {
     background: #1f75cb;
     color: white;
     height: 30px;
@@ -58,6 +59,15 @@
 .comments-section-wrapper {
   display: flex;
   align-items: center;
+}
+
+.comments-where-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.comments-docs-wrapper {
+  margin-top: 16px;
 }
 
 .add-in-table-svg {
