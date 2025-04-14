@@ -1,4 +1,4 @@
-import { Document, Font, Image, Page, PDFViewer, StyleSheet, Text, View } from '@react-pdf/renderer'
+import {Document, Font, Image, Page, PDFViewer, StyleSheet, Text, View} from '@react-pdf/renderer'
 import './style.pdfdoc.scss'
 import hopedoc from '../../../hopedoc.png'
 import sell from '../../../sign.jpeg'
@@ -9,9 +9,9 @@ import DejavuSansReg from '../../../DejaVuSans.ttf'
 import Table from './Table'
 import hyphen from 'hyphen';
 import pattern from 'hyphen/patterns/ru';
-import { declination } from '../../../helpers'
+import {declination} from '../../../helpers'
 import BirthBlock from "./BirthBlock";
-import { unset } from 'lodash'
+import {unset} from 'lodash'
 
 
 const hyphenator = hyphen(pattern);
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     finalDateAndFioText: {
         fontSize: BASIC_APPL_FONT_SIZE
     },
-    exeDateText: { width: '150px', marginHorizontal: '10px', borderBottom: '1px solid black', },
+    exeDateText: {width: '150px', marginHorizontal: '10px', borderBottom: '1px solid black',},
     managerAndSpeciality: {
         display: 'flex',
         flexDirection: 'row',
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
 });
 
 
-function MyDocContent({ applItem, isDeletedPlace, status }) {
+function MyDocContent({applItem, isDeletedPlace, status}) {
     const {
         mostProblDiagnosis,
         secondaryDiagnosis,
@@ -327,9 +327,9 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
         <PDFViewer>
             <Document>
                 <Page style={styles.title}>
-                    <View style={{ ...styles.commonSize, ...styles.hdr, marginBottom: 15 }} fixed>
-                        <Image src={hopedoc} style={styles.hdrimg} />
-                        <View style={{ fontSize: BASIC_APPL_FONT_SIZE, fontFamily: BASIC_FONT }}>
+                    <View style={{...styles.commonSize, ...styles.hdr, marginBottom: 15}} fixed>
+                        <Image src={hopedoc} style={styles.hdrimg}/>
+                        <View style={{fontSize: BASIC_APPL_FONT_SIZE, fontFamily: BASIC_FONT}}>
                             <Text>г Махачкала, ул. Батырая 11 </Text>
                             <Text>9 этаж, помещение № 905</Text>
                             <Text>Тел. +7(8722)98-96-97, +7(964)006-70-07</Text>
@@ -339,7 +339,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                     <Text style={styles.recomenTitle}>
                         РЕКОМЕНДАЦИИ ВРАЧА
                     </Text>
-                    <Text style={{ ...styles.commonSize, ...styles.subtitle }}>
+                    <Text style={{...styles.commonSize, ...styles.subtitle}}>
                         (ВНИМАНИЕ! ДОКУМЕНТ ИСКЛЮЧИТЕЛЬНО ДЛЯ ВНУТРЕННЕГО ПОЛЬЗОВАНИЯ ОРГАНИЗАЦИИ)
                     </Text>
                     <BirthBlock
@@ -347,7 +347,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                         patientBirthDate={patientBirthDataFormatted}
                     />
                     {patientPromoter ?
-                        <View style={{ ...styles.commonSize, marginTop: '8px' }}>
+                        <View style={{...styles.commonSize, marginTop: '8px'}}>
                             <Text style={styles.complaintTitle} wrap={false}><Text
                                 style={styles.complaintTitleFirstWord}>Представитель: </Text>{patientPromoter}
                             </Text>
@@ -356,17 +356,17 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                     <Text style={styles.reasonTitle}>На основании: </Text>
                     <Text style={styles.reasonSubTitle}> (указать основания: жалобы, симптомы, синдромы, подозрения
                         врача и пр.): </Text>
-                    <View style={{ ...styles.commonSize, ...styles.anamnesisSection }}>
+                    <View style={{...styles.commonSize, ...styles.anamnesisSection}}>
                         {complaint ? <Text style={styles.complaintTitle} wrap={false}><Text
                             style={styles.complaintTitleFirstWord}>Жалоб: </Text>{complaint}</Text> : null}
-                        {anamnesis ? <Text style={{ ...styles.complaintTitle, marginTop: '10px' }} wrap={false}><Text
+                        {anamnesis ? <Text style={{...styles.complaintTitle, marginTop: '10px'}} wrap={false}><Text
                             style={styles.complaintTitleFirstWord}>Анамнеза: </Text>{anamnesis}
                         </Text> : null}
-                        {diagnosticData ? <Text style={{ ...styles.complaintTitle, marginTop: '10px' }} wrap={false}><Text
+                        {diagnosticData ? <Text style={{...styles.complaintTitle, marginTop: '10px'}} wrap={false}><Text
                             style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}
                         </Text> : null}
                     </View>
-                    {consiliumDoctors.length > 0 ? <View style={{ ...styles.commonSize, marginTop: 10 }}>
+                    {consiliumDoctors.length > 0 ? <View style={{...styles.commonSize, marginTop: 10}}>
                         <Table
                             title='Проведен дистанционный врачебный консилиум в составе:'
                             subTitle='(указать ФИО и специальности врачей, которые участвовали в формировании заключения):'
@@ -375,7 +375,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                             contentKeys={['name', 'speciality']}
                         />
                     </View> : null}
-                    {diagnostic.length > 0 ? <View style={{ marginTop: 14, ...styles.commonSize }}>
+                    {diagnostic.length > 0 ? <View style={{marginTop: 14, ...styles.commonSize}}>
                         <Table
                             title='С целью проведения консультации по следующим вопросам:'
                             subTitle='(указать заболевания, факты и симптомы клинической картины, которых частично или полностью соответствуют заболеванию)'
@@ -384,7 +384,7 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                             contentKeys={['diagnosis']}
                         />
                     </View> : null}
-                    <View style={{ marginTop: 44, ...styles.commonSize }}>
+                    <View style={{marginTop: 44, ...styles.commonSize}}>
                         <View style={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -392,19 +392,19 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                             borderBottom: '1px solid black',
                             width: '100%'
                         }} wrap={false}>
-                            <View style={{ flexBasis: '450px', padding: '5px' }}>
-                                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }}
-                                    hyphenationCallback={hyphenationCallback}>
+                            <View style={{flexBasis: '450px', padding: '5px'}}>
+                                <Text style={{...styles.probableDiagnosisNum, width: '100%', padding: '0px'}}
+                                      hyphenationCallback={hyphenationCallback}>
                                     Выявлен наиболее вероятный
                                 </Text>
-                                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }}
-                                    hyphenationCallback={hyphenationCallback}>
+                                <Text style={{...styles.probableDiagnosisNum, width: '100%', padding: '0px'}}
+                                      hyphenationCallback={hyphenationCallback}>
                                     основной диагноз:
                                 </Text>
                             </View>
                             <View style={styles.probDiagValue}>
-                                <Text style={{ ...styles.probableDiagnosisText, padding: 5 }}
-                                    hyphenationCallback={hyphenationCallback}>
+                                <Text style={{...styles.probableDiagnosisText, padding: 5}}
+                                      hyphenationCallback={hyphenationCallback}>
                                     {mostProblDiagnosis}
                                 </Text>
                             </View>
@@ -416,25 +416,25 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                             borderTop: '1px solid black',
                             width: '100%'
                         }} wrap={false}>
-                            <View style={{ flexBasis: '450px', padding: '5px' }}>
-                                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }}
-                                    hyphenationCallback={hyphenationCallback}>
+                            <View style={{flexBasis: '450px', padding: '5px'}}>
+                                <Text style={{...styles.probableDiagnosisNum, width: '100%', padding: '0px'}}
+                                      hyphenationCallback={hyphenationCallback}>
                                     Выявлены сопутствующие
                                 </Text>
-                                <Text style={{ ...styles.probableDiagnosisNum, width: '100%', padding: '0px' }}
-                                    hyphenationCallback={hyphenationCallback}>
+                                <Text style={{...styles.probableDiagnosisNum, width: '100%', padding: '0px'}}
+                                      hyphenationCallback={hyphenationCallback}>
                                     диагнозы:
                                 </Text>
                             </View>
                             <View style={styles.probDiagValue}>
-                                <Text style={{ ...styles.probableDiagnosisText, padding: 5, flexWrap: 'wrap' }}
-                                    hyphenationCallback={hyphenationCallback}>
+                                <Text style={{...styles.probableDiagnosisText, padding: 5, flexWrap: 'wrap'}}
+                                      hyphenationCallback={hyphenationCallback}>
                                     {secondaryDiagnosis}
                                 </Text>
                             </View>
                         </View>
                     </View>
-                    <View style={{ marginTop: 44, ...styles.commonSize }}>
+                    <View style={{marginTop: 44, ...styles.commonSize}}>
                         {checkupPlans.length > 0 && <Table
                             headers={['№', 'Вид обследования', 'Поставщик', 'Адрес', 'Телефон', 'Медикаменты', 'Кол-во', 'Цена', 'Общая стоимость', 'Цель проведения']}
                             dataContent={checkupPlans}
@@ -443,73 +443,74 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                             isDeletedPlace={isDeletedPlace}
                             status={status}
                         />}
-                        {comments ? <View wrap={false}>
+                        {comments && comments[1].comment.trim() ? <View wrap={false}>
                             <Text style={{
                                 fontFamily: BASIC_FONT_BOLD,
                                 marginTop: 14,
                                 textAlign: 'left',
                                 fontSize: BASIC_APPL_FONT_SIZE
                             }}> Пояснения:</Text>
-                            <View style={{ ...styles.commentsWrapper, marginTop: 28 }}>
-                                <View style={{ width: '100%' }}>
-                                    <Text style={{ ...styles.commentsSecText }}
-                                        hyphenationCallback={hyphenationCallback}>{1} {comments[0].title} {comments[0].comment} {comments[1].title} {comments[1].comment}</Text>
+                            <View style={{...styles.commentsWrapper, marginTop: 28}}>
+                                <View style={{width: '100%'}}>
+                                    <Text style={{...styles.commentsSecText}}
+                                          hyphenationCallback={hyphenationCallback}>{1} {comments[0].title} {comments[0].comment} {comments[1].title} {comments[1].comment}</Text>
                                 </View>
                             </View>
                         </View> : null}
                         {/** разделил блоки комментариев, чтоб первый комментарий не оставался на заполненном листе и переносился на новый, сейчас это отменено, //todo написать один компонент без разделения  */}
-                        {comments ?
-                            <View style={{ ...styles.commentsWrapper, marginTop: 28 }}>
-                                <View style={{ width: '100%' }}>
-                                    <Text style={{ ...styles.commentsSecText, borderBottom: unset }}
-                                        hyphenationCallback={hyphenationCallback}>2 {comments[2].title} {comments[2].comment}</Text>
-                                    <Text style={{ ...styles.commentsSecText, borderBottom: unset }}
-                                        hyphenationCallback={hyphenationCallback}>{comments[3].title} {comments[3].comment}</Text>
+                        {comments && comments[2].comment.trim() ?
+                            <View style={{...styles.commentsWrapper, marginTop: 28}}>
+                                <View style={{width: '100%'}}>
+                                    <Text style={{...styles.commentsSecText, borderBottom: unset}}
+                                          hyphenationCallback={hyphenationCallback}>2 {comments[2].title} {comments[2].comment}</Text>
                                 </View>
                             </View> : null}
-                        {comments ?
-                            <View style={{ ...styles.commentsWrapper, marginTop: 28 }}>
-                                <View style={{ width: '100%' }}>
-                                    <Text style={{ ...styles.commentsSecText }}
-                                        hyphenationCallback={hyphenationCallback}>3 {comments[4].title}</Text>
+                        {comments && comments[3].comment.trim() ?
+                             <Text style={{...styles.commentsSecText, borderBottom: unset}}
+                                         hyphenationCallback={hyphenationCallback}>{comments[3].title}: {comments[3].comment}</Text> : null}
+                        {comments && comments[4].comment.trim() ?
+                            <View style={{...styles.commentsWrapper, marginTop: 28}}>
+                                <View style={{width: '100%'}}>
+                                    <Text style={{...styles.commentsSecText}}
+                                          hyphenationCallback={hyphenationCallback}>3 {comments[4].title}</Text>
                                 </View>
                             </View> : null}
-                        {comments ?
-                            <Text style={{ ...styles.commentsSecText, borderBottom: unset }}
-                                hyphenationCallback={hyphenationCallback}>{comments[4].comment}</Text>
+                        {comments && comments[4].comment.trim()?
+                            <Text style={{...styles.commentsSecText, borderBottom: unset}}
+                                  hyphenationCallback={hyphenationCallback}>{comments[4].comment}</Text>
                             : null}
-                        {comments ? comments.map((comment, index) => index > 4 && index < 10 ?
+                        {comments ? comments.map((comment, index) => index > 4 && index < 10 && comment.comment.trim() ?
                             <View wrap={false}>
-                                <View style={{ ...styles.commentsWrapper, marginTop: 18 }}>
-                                    <View style={{ width: '100%' }}>
-                                        <Text style={{ ...styles.commentsSecText, borderBottom: unset }}
-                                            hyphenationCallback={hyphenationCallback}>{comment.title}</Text>
+                                <View style={{...styles.commentsWrapper, marginTop: 18}}>
+                                    <View style={{width: '100%'}}>
+                                        <Text style={{...styles.commentsSecText, borderBottom: unset}}
+                                              hyphenationCallback={hyphenationCallback}>{comment.title}</Text>
                                     </View>
                                 </View>
-                                <View style={{ ...styles.commentsWrapper, marginTop: 8 }}>
-                                    <View style={{ width: '100%' }}>
-                                        <Text style={{ ...styles.commentsSecText, borderBottom: unset }}
-                                            hyphenationCallback={hyphenationCallback}>{comment.comment}</Text>
+                                <View style={{...styles.commentsWrapper, marginTop: 8}}>
+                                    <View style={{width: '100%'}}>
+                                        <Text style={{...styles.commentsSecText, borderBottom: unset}}
+                                              hyphenationCallback={hyphenationCallback}>{comment.comment}</Text>
                                     </View>
                                 </View>
                             </View> : null) : null}
-                        <View style={{ ...styles.commentsWrapper, marginTop: 18 }}>
-                            <View style={{ width: '100%' }}>
-                                <Text style={{ ...styles.commentsSecText, borderBottom: unset }}>
+                        {comments && comments[5].comment.trim() ? <View style={{...styles.commentsWrapper, marginTop: 18}}>
+                            <View style={{width: '100%'}}>
+                                <Text style={{...styles.commentsSecText, borderBottom: unset}}>
                                     4 Решение принято на основании вышеизложенных фактов
                                 </Text>
                             </View>
-                        </View>
-                        {comments ? <View style={{ ...styles.commentsWrapper, marginTop: 18 }}>
-                            <View style={{ width: '100%' }}>
-                                <Text style={{ ...styles.commentsSecText, borderBottom: unset }}>
+                        </View>:null}
+                        {comments && comments[11].comment.trim() ? <View style={{...styles.commentsWrapper, marginTop: 18}}>
+                            <View style={{width: '100%'}}>
+                                <Text style={{...styles.commentsSecText, borderBottom: unset}}>
                                     5 {comments[11].title} {comments[11].comment}
                                 </Text>
                             </View>
                         </View> : null}
                     </View>
-                    <View style={{ ...styles.commonSize, position: 'relative' }} wrap={false}>
-                        <Image src={sell} style={{ width: '150px', alignSelf: 'center', marginLeft: '20px' }} />
+                    <View style={{...styles.commonSize, position: 'relative'}} wrap={false}>
+                        <Image src={sell} style={{width: '150px', alignSelf: 'center', marginLeft: '20px'}}/>
                         {execDate && manager ?
                             <View style={{
                                 ...styles.commonSize,
@@ -522,11 +523,11 @@ function MyDocContent({ applItem, isDeletedPlace, status }) {
                                 <View
                                     style={styles.exeDateText}><Text>{new Date(execDate).toLocaleString().substring(0, 10)}</Text>
                                 </View>
-                                {managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg} /> : null}
+                                {managerSignUrlPath ? <Image src={managerSignUrlPath} style={styles.hdrimg}/> : null}
                                 <View style={styles.managerAndSpeciality}>
                                     {managerSpeciality ?
                                         <Text>{isContainsDoctorWord ? managerSpeciality : `Врач-${managerSpeciality.toLowerCase()}`} /</Text> : null}
-                                    <Text style={{ paddingLeft: '10px' }}>{managerFio}</Text>
+                                    <Text style={{paddingLeft: '10px'}}>{managerFio}</Text>
                                 </View>
                             </View> : null}
                     </View>
