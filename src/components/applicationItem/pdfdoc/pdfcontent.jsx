@@ -494,13 +494,13 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                                     </View>
                                 </View>
                             </View> : null) : null}
-                        {comments && comments[5].comment.trim() ? <View style={{...styles.commentsWrapper, marginTop: 18}}>
+                        <View style={{...styles.commentsWrapper, marginTop: 18}}>
                             <View style={{width: '100%'}}>
                                 <Text style={{...styles.commentsSecText, borderBottom: unset}}>
                                     4 Решение принято на основании вышеизложенных фактов
                                 </Text>
                             </View>
-                        </View>:null}
+                        </View>
                         {comments && comments[11].comment.trim() ? <View style={{...styles.commentsWrapper, marginTop: 18}}>
                             <View style={{width: '100%'}}>
                                 <Text style={{...styles.commentsSecText, borderBottom: unset}}>

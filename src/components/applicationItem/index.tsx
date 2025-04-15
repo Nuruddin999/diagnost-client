@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateApplication } from "../../actions/application";
 import ConsiliumDoctorsForm from "./consilium_doctors/consiliumDoctors";
-import { Button, Typography, IconButton, Box } from "@mui/material";
+import { Button, Typography, Box } from "@mui/material";
 import { RootState } from "../../app/store";
 import './style.applicationitem.scss'
 import DiagnosticForm from "./diagnostic/consiliumDoctors";
