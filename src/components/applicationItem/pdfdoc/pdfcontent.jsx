@@ -323,6 +323,13 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
     // TODO может есть какой-то проще метод, типа равно врач ignore case
     const isContainsDoctorWord = (managerSpeciality.replace(/\s/g, "").substring(0, 4) === 'Врач') || (managerSpeciality.replace(/\s/g, "").substring(0, 4) === 'врач')
     const patientBirthDataFormatted = `${date > 9 ? date : '0' + date}.${month > 9 ? month : '0' + month}.${yearsOld} г.р. (${age > 0 ? age + ' ' + ageWithEnding : ageInMonth + 'мес'})`
+    const isCommentsEmpty = comments.reduce((prev,curr)=>{
+        if (curr.comment.trim()) {
+            prev.push(curr)
+        }
+        return prev
+    },[]).length === 0
+    console.log('isCommentsEmpty', isCommentsEmpty)
     return (
         <PDFViewer>
             <Document>
@@ -494,13 +501,13 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                                     </View>
                                 </View>
                             </View> : null) : null}
-                        <View style={{...styles.commentsWrapper, marginTop: 18}}>
+                        {comments && comments[11].comment.trim() ?  <View style={{...styles.commentsWrapper, marginTop: 18}}>
                             <View style={{width: '100%'}}>
                                 <Text style={{...styles.commentsSecText, borderBottom: unset}}>
                                     4 Решение принято на основании вышеизложенных фактов
                                 </Text>
                             </View>
-                        </View>
+                        </View>: null}
                         {comments && comments[11].comment.trim() ? <View style={{...styles.commentsWrapper, marginTop: 18}}>
                             <View style={{width: '100%'}}>
                                 <Text style={{...styles.commentsSecText, borderBottom: unset}}>
