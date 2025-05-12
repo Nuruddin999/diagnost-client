@@ -16,6 +16,8 @@ import BasicModal from "../../common/components/modal/ConsiliumModal";
 import {PDFButton} from "../../common/components/pdf_icon_button";
 import {FileUpload} from "../../common/components/fileupload/fileUpload";
 import {FileThumbnail} from "../../common/components/file_thumbnail/file_thumbnail";
+import {useSelector} from "react-redux";
+import {RootState} from "../../app/store";
 
 
 const SmetaItem: FC = () => {
@@ -31,6 +33,7 @@ const SmetaItem: FC = () => {
         updateSmetaStatus,
         handleUploadComment
     } = useManageSmetaItem()
+    const {id, role, name, speciality: userSpeciality} = useSelector((state: RootState) => state.user.user)
     const {
         diagnosis,
         patientBirthDate,
@@ -258,6 +261,9 @@ const SmetaItem: FC = () => {
                 </div>
             })}
         </div>}
+        <Typography variant={'h4'}>
+            {name}
+        </Typography>
         <div className={'buttons-block'}>
             <Button title={"Сохранить"} onClick={handleupdate}/>
             {status !== 'oncheck' && <Button title={"На проверку"} color={"secondary"} onClick={() => {
