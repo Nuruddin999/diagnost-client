@@ -26,7 +26,7 @@ import SmetaItem from "../smetaItem";
 
 const Dashboard = (): React.ReactElement => {
     const {user, hasSuperUser} = useSelector((state: RootState) => state.user)
-    const {name} = user
+    const {name, id} = user
     const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
     const isAdmin = user.role === 'admin' || user.role === 'superadmin'
     const isCircular = useSelector((state: RootState) => state.ui.isCircular)
@@ -36,6 +36,24 @@ const Dashboard = (): React.ReactElement => {
     useEffect(() => {
         dispatch(checkUser())
     }, [])
+
+    useEffect(() => {
+        let socket: WebSocket;
+        if (name) {
+            socket = new WebSocket('ws://188.68.220.210:5000');
+
+            socket.onopen = () => {
+                socket.send(JSON.stringify({type: 'online', id}));
+            };
+
+        }
+
+        return () => {
+            if (socket) {
+                socket.close();
+            }
+        };
+    }, [name]);
     return !hasSuperUser ? <Registration notHaveSuperUser/> : <div className="dashboard">
 
         {name === '' ? <RoundLoader/> : <div className="dashboard" data-testid='dashboard'>
@@ -179,12 +197,12 @@ const Dashboard = (): React.ReactElement => {
                                 </div>}
                         </Route>
                         <Route path='/main/smetasoncheck'>
-                            {isAdmin ?  <Smetalist status={'oncheck'}/>   :
+                            {isAdmin ? <Smetalist status={'oncheck'}/> :
                                 <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
                                 </div>}
                         </Route>
                         <Route path='/main/smetasonrealization'>
-                            {isAdmin ?  <Smetalist status={'realization'}/>   :
+                            {isAdmin ? <Smetalist status={'realization'}/> :
                                 <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
                                 </div>}
                         </Route>

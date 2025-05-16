@@ -261,9 +261,6 @@ const SmetaItem: FC = () => {
                 </div>
             })}
         </div>}
-        <Typography variant={'h4'}>
-            {name}
-        </Typography>
         <div className={'buttons-block'}>
             <Button title={"Сохранить"} onClick={handleupdate}/>
             {status !== 'oncheck' && <Button title={"На проверку"} color={"secondary"} onClick={() => {
@@ -277,7 +274,7 @@ const SmetaItem: FC = () => {
                 setOpenOnRealizationModal(true)
             }}/>}
 
-            <PDFButton url={`http://188.68.220.210:12345/${smetaItem.id}`}/>
+            <PDFButton url={`http://localhost:9000/${smetaItem.id}-${id}`}/>
         </div>
         <BasicModal
             open={respStatus === 'ok' || error !== ""}
