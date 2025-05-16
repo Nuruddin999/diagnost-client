@@ -39,7 +39,7 @@ const Dashboard = (): React.ReactElement => {
 
     useEffect(() => {
         let socket: WebSocket;
-        if (name && name !== 'empty') {
+        if (id.trim() && id !== '0') {
             socket = new WebSocket('ws://188.68.220.210:5000');
 
             socket.onopen = () => {
@@ -53,7 +53,7 @@ const Dashboard = (): React.ReactElement => {
                 socket.close();
             }
         };
-    }, [name]);
+    }, [id]);
     return !hasSuperUser ? <Registration notHaveSuperUser/> : <div className="dashboard">
 
         {name === '' ? <RoundLoader/> : <div className="dashboard" data-testid='dashboard'>
