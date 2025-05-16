@@ -39,7 +39,7 @@ const Dashboard = (): React.ReactElement => {
 
     useEffect(() => {
         let socket: WebSocket;
-        if (name) {
+        if (name && name !== 'empty') {
             socket = new WebSocket('ws://188.68.220.210:5000');
 
             socket.onopen = () => {

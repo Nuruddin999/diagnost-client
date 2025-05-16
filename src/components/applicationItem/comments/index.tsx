@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Checkbox, TextField, Typography } from "@mui/material";
 import { RootState } from "../../../app/store";
@@ -15,7 +15,6 @@ import Box from "@mui/material/Box";
  */
 const Comments = (): React.ReactElement => {
     const comments = useSelector((state: RootState) => state.applicationItem.comments)
-    console.log('comments', comments)
     const { processedRights } = useSelector((state: RootState) => selectApplicationUserRights(state))
     const dispatch = useDispatch()
 
