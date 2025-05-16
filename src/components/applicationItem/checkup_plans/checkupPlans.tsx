@@ -94,7 +94,7 @@ const CheckupPlanForm = (): React.ReactElement => {
                     </span>
                 </th>
                 {!checkUpPlaceIsDeleted && <Fragment>
-                    {['Поставщик', 'Адрес', 'Телефон', 'Медикаменты', 'Кол-во', 'Цена', 'Общая стоимость'].map(el => <th>
+                    {['Поставщик', 'Адрес', 'Телефон',  'Кол-во', 'Цена', 'Общая стоимость'].map(el => <th>
                         <span>
                             {el}
                         </span>
@@ -236,20 +236,6 @@ const CheckupPlanForm = (): React.ReactElement => {
                                 const formattedPhone = handleKeyDown(placePhone)
                                 setPlacePhone(formattedPhone)
                             }
-                        }}
-                    />
-                    <TextField
-                        value={placeMedicine}
-                        variant='outlined'
-                        size='small'
-                        error={Boolean(error)}
-                        fullWidth
-                        placeholder='Медикаменты'
-                        onChange={(e) => {
-                            if (error) {
-                                setError('')
-                            }
-                            setPlaceMedicine(e.target.value)
                         }}
                     />
                     <TextField

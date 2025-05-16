@@ -443,9 +443,9 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                     </View>
                     <View style={{marginTop: 44, ...styles.commonSize}}>
                         {checkupPlans.length > 0 && <Table
-                            headers={['№', 'Вид обследования', 'Поставщик', 'Адрес', 'Телефон', 'Медикаменты', 'Кол-во', 'Цена', 'Общая стоимость', 'Цель проведения']}
+                            headers={['№', 'Вид обследования', 'Поставщик', 'Адрес', 'Телефон', 'Кол-во', 'Цена', 'Общая стоимость', 'Цель проведения']}
                             dataContent={checkupPlans}
-                            contentKeys={['kind', 'supplier', 'address', 'phone', 'medicine', 'qty', 'price', 'totalPrice', 'target']}
+                            contentKeys={['kind', 'supplier', 'address', 'phone', 'qty', 'price', 'totalPrice', 'target']}
                             title='На основании проведенного консилиума рекомендован план лечения (ПЛ):'
                             isDeletedPlace={isDeletedPlace}
                             status={status}
