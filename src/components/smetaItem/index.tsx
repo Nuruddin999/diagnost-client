@@ -274,7 +274,7 @@ const SmetaItem: FC = () => {
                 setOpenOnRealizationModal(true)
             }}/>}
 
-            <PDFButton url={`http://localhost:9000/${smetaItem.id}-${id}`}/>
+            <PDFButton url={`http://188.68.220.210:12345/${smetaItem.id}-${id}`}/>
         </div>
         <BasicModal
             open={respStatus === 'ok' || error !== ""}
