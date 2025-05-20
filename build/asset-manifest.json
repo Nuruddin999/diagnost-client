@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.ed8eb9fb.css",
+    "main.css": "/static/css/main.b59adb69.css",
     "main.js": "/static/js/main.ae1ee599.js",
     "static/media/TimesNewRomanPS-BoldMT.ttf": "/static/media/TimesNewRomanPS-BoldMT.cc3d758274d0cf379bdf.ttf",
     "static/media/TimesNewRomanPSMT.ttf": "/static/media/TimesNewRomanPSMT.ea822ef9b261e9594b74.ttf",
@@ -9,11 +9,11 @@
     "static/media/sign.jpeg": "/static/media/sign.477c0706778f2416e255.jpeg",
     "static/media/hopedoc.png": "/static/media/hopedoc.ae22fcb5ef0372095b0a.png",
     "index.html": "/index.html",
-    "main.ed8eb9fb.css.map": "/static/css/main.ed8eb9fb.css.map",
+    "main.b59adb69.css.map": "/static/css/main.b59adb69.css.map",
     "main.ae1ee599.js.map": "/static/js/main.ae1ee599.js.map"
   },
   "entrypoints": [
-    "static/css/main.ed8eb9fb.css",
+    "static/css/main.b59adb69.css",
     "static/js/main.ae1ee599.js"
   ]
 }
