@@ -17,7 +17,7 @@ export const getSmetasApi = async (page: number,
                                    patientPromoter?: string,
                                    customer?: string
 ): Promise<SmetasResponseType> => {
-    const response = await diagnostApi.get('/smetas', {
+    const response = await diagnostApi.get('/smts', {
         headers: {'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`},
         params: {page, limit, status, patientName, patientRequest, patientPromoter, customer, fundRequest},
     })

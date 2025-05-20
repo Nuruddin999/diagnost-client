@@ -23,7 +23,10 @@ const Smetalist = ({status}: { status: string }): React.ReactElement => {
     const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
 
     const [patientName, setPatientName] = React.useState('');
-    const [diagnosis, setDiagnosis] = React.useState('');
+    const [patientPhone, setPatientPhone] = React.useState('');
+    const [patientRequest, setPatientRequest] = React.useState('');
+    const [fundRequest, setFundRequest] = React.useState('');
+    const [customer, setCustomer] = React.useState('');
     const [patientPromoter, setPatientPromoter] = React.useState('');
     const [deleteModalId, setDeleteModal] = React.useState<boolean | number>(false);
     const history = useHistory()
@@ -54,8 +57,8 @@ const Smetalist = ({status}: { status: string }): React.ReactElement => {
         onChange: setPatientName
     }, 'Дата рождения', {
         title: 'Телефон',
-        field: patientPromoter,
-        onChange: setPatientPromoter
+        field: patientPhone,
+        onChange: setPatientPhone
     },
         {
             title: 'Представитель',
@@ -63,20 +66,20 @@ const Smetalist = ({status}: { status: string }): React.ReactElement => {
             onChange: setPatientPromoter
         }, {
             title: 'Запрос пациента',
-            field: patientPromoter,
-            onChange: setPatientPromoter
+            field: patientRequest,
+            onChange: setPatientRequest
         }, {
             title: 'Запрос фонда',
-            field: patientPromoter,
-            onChange: setPatientPromoter
+            field: fundRequest,
+            onChange: setFundRequest
         }, {
             title: 'Статус',
-            field: patientPromoter,
-            onChange: setPatientPromoter
+            field: status,
+            onChange: ()=>{}
         }, {
             title: 'Заказчик',
-            field: patientPromoter,
-            onChange: setPatientPromoter
+            field: customer,
+            onChange: setCustomer
         }, 'Удалить']
 
     const goSmetaItem = (id: number | undefined) => {
@@ -103,15 +106,15 @@ const Smetalist = ({status}: { status: string }): React.ReactElement => {
     };
     useEffect(() => {
         if (id !== undefined && id !== '') {
-            fetchApp(page)
+            fetchApp(page, patientName, fundRequest, patientRequest, patientPromoter, customer);
         }
     }, [page, id, status])
 
     useEffect(() => {
         if (id !== undefined && id !== '') {
-            fetchApp(page, patientName)
+            fetchApp(page, patientName, fundRequest, patientRequest, patientPromoter, customer);
         }
-    }, [patientName, patientPromoter])
+    }, [patientName, fundRequest, patientRequest, patientPromoter, customer])
 
     return <div className='smetas-container'>
         <div className="smetas-table">
