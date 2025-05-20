@@ -9,10 +9,17 @@ import {SmetasResponseType, SmetaUpdate} from "../common/types";
  * @returns
  */
 export const getSmetasApi = async (page: number,
-                                   limit: number, status?: string): Promise<SmetasResponseType> => {
+                                   limit: number,
+                                   status?: string,
+                                   patientName?: string,
+                                   fundRequest?: string,
+                                   patientRequest?: string,
+                                   patientPromoter?: string,
+                                   customer?: string
+): Promise<SmetasResponseType> => {
     const response = await diagnostApi.get('/smetas', {
         headers: {'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`},
-        params: {page, limit, status}
+        params: {page, limit, status, patientName, patientRequest, patientPromoter, customer, fundRequest},
     })
     return response.data
 }

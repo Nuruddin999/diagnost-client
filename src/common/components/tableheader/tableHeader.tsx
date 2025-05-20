@@ -17,6 +17,7 @@ const TableHeader = ({tableData, role, isDeleteRights,isManagerChange}: { tableD
     const debouncedChangeHandler = useCallback(
         debounce(changeHandler, 300)
         , []);
+
     return <tr className={'table-header'}>
         {tableData.map((el: any) => {
                 if (isObject(el) && (el as any).title === 'Ответственный') {

@@ -28,8 +28,12 @@ const Smetalist = ({status}: { status: string }): React.ReactElement => {
     const [deleteModalId, setDeleteModal] = React.useState<boolean | number>(false);
     const history = useHistory()
 
-    const fetchSmetas = async (page: number) => {
-        const resp = await getSmetasApi(page, 10, status)
+    const fetchSmetas = async (page: number, patientName?: string,
+                               fundRequest?: string,
+                               patientRequest?: string,
+                               patientPromoter?: string,
+                               customer?: string) => {
+        const resp = await getSmetasApi(page, 10, status, patientName, fundRequest, patientRequest, patientPromoter, customer);
         setSmetas(resp)
     }
 
@@ -79,10 +83,14 @@ const Smetalist = ({status}: { status: string }): React.ReactElement => {
         history.push(`smeta/${id}`)
     }
 
-    const fetchApp = async (page: number) => {
+    const fetchApp = async (page: number, patientName?: string,
+                            fundRequest?: string,
+                            patientRequest?: string,
+                            patientPromoter?: string,
+                            customer?: string) => {
         setIsLoading(true)
         try {
-            await fetchSmetas(page)
+            await fetchSmetas(page, patientName, fundRequest, patientRequest, patientPromoter, customer);
         } catch (e) {
             setErrorMessage(e?.message)
         } finally {
@@ -99,12 +107,21 @@ const Smetalist = ({status}: { status: string }): React.ReactElement => {
         }
     }, [page, id, status])
 
+    useEffect(() => {
+        if (id !== undefined && id !== '') {
+            fetchApp(page, patientName)
+        }
+    }, [patientName, patientPromoter])
+
     return <div className='smetas-container'>
         <div className="smetas-table">
             <table>
                 <thead>
-                <TableHeader tableData={tableData} role={role}
-                             isDeleteRights={rights.processedRights.applications?.delete}/>
+                <TableHeader
+                    tableData={tableData}
+                    role={role}
+                    isDeleteRights={rights.processedRights.applications?.delete}
+                />
                 </thead>
                 <tbody>
                 {smetas?.rows.map((el, index) =>

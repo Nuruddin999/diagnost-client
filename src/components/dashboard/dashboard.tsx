@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
-import {Link, Redirect, Route, Switch,} from "react-router-dom";
+import {Link, Redirect, Route, Switch, useHistory, useLocation,} from "react-router-dom";
 import ReportList from "../reportlist/reportlist";
-import {Backdrop, CircularProgress, IconButton, ListItemIcon, ListItemText, Typography} from "@mui/material";
+import {Backdrop, Button, CircularProgress, IconButton, ListItemIcon, ListItemText, Typography} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import './style.dash.scss'
 import {useDispatch, useSelector} from "react-redux";
@@ -22,6 +22,8 @@ import {RoundLoader} from "../../common/components/roundloader";
 import Specialities from "../specialities/Specialities";
 import Smetalist from "../smetalist/smetalist";
 import SmetaItem from "../smetaItem";
+import HopedocLogo from "../../hopedoc.png"
+import BasicModal from "../../common/components/modal/ConsiliumModal";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -30,9 +32,11 @@ const Dashboard = (): React.ReactElement => {
     const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
     const isAdmin = user.role === 'admin' || user.role === 'superadmin'
     const isCircular = useSelector((state: RootState) => state.ui.isCircular)
+    const [isWarning, setIsWarning] = React.useState('');
     const dispatch = useDispatch()
     const logOut = () => dispatch(logOutUser())
-
+    const location = useLocation()
+    const history = useHistory()
     useEffect(() => {
         dispatch(checkUser())
     }, [])
@@ -54,6 +58,20 @@ const Dashboard = (): React.ReactElement => {
             }
         };
     }, [id]);
+
+    const goToTab = (e: any, url: string) => {
+        const pattern = /^\/main\/application\/\d+$/
+        const smetaPattern = /^\/main\/smeta\/\d+$/
+        e.preventDefault()
+        if (pattern.test(location.pathname) || smetaPattern.test(location.pathname) ) {
+            setIsWarning(url);
+        } else {
+            history.push(url);
+        }
+    }
+
+    console.log('war', isWarning)
+
     return !hasSuperUser ? <Registration notHaveSuperUser/> : <div className="dashboard">
 
         {name === '' ? <RoundLoader/> : <div className="dashboard" data-testid='dashboard'>
@@ -65,6 +83,7 @@ const Dashboard = (): React.ReactElement => {
                 <CircularProgress color="inherit"/>
             </Backdrop>
             <div className="dasheader">
+                <img src={HopedocLogo} height={40} alt="Hopedoc"/>
                 <div className='user-block'>
                     <Link to='/main/aboutme'>
                         <Typography variant="body1">
@@ -79,60 +98,60 @@ const Dashboard = (): React.ReactElement => {
             <div className="main-wrapper">
                 <div className="sidebar">
                     {rights.isApplicationOneRight && <div className='list-item'>
-                        <Link to='/main/table'>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/table')}>
                             <ListItemIcon>
                                 <SummarizeIcon/>
                             </ListItemIcon>
                         </Link>
-                        <Link to='/main/table'>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/table')}>
                             <ListItemText>
                                 Заключения
                             </ListItemText>
                         </Link>
                     </div>}
                     {rights.isUsersOneRight && <div className='list-item'>
-                        <Link to='/main/users'>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/users')}>
                             <ListItemIcon>
                                 <PeopleAltIcon/>
                             </ListItemIcon>
                         </Link>
-                        <Link to='/main/users'>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/users')}>
                             <ListItemText>
                                 Пользователи
                             </ListItemText>
                         </Link>
                     </div>}
                     <div className='list-item'>
-                        <Link to='/main/speciality'>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/speciality')}>
                             <ListItemIcon>
                                 <BusinessCenterIcon/>
                             </ListItemIcon>
                         </Link>
-                        <Link to='/main/speciality'>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/speciality')}>
                             <ListItemText>
                                 Специальности
                             </ListItemText>
                         </Link>
                     </div>
                     {rights.processedRights.smetas?.read && <div className='list-item'>
-                        <Link to='/main/smetas'>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/smetas')}>
                             <ListItemIcon>
                                 <CalculateIcon/>
                             </ListItemIcon>
                         </Link>
-                        <Link to='/main/smetas'>
+                        <Link to=''  onClick={(e) => goToTab(e, '/main/smetas')}>
                             <ListItemText>
                                 Сметы
                             </ListItemText>
                         </Link>
                     </div>}
                     {isAdmin && <div className='list-item'>
-                        <Link to='/main/smetas'>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/smetasoncheck')}>
                             <ListItemIcon>
                                 <GradingIcon/>
                             </ListItemIcon>
                         </Link>
-                        <Link to='/main/smetasoncheck'>
+                        <Link to=''  onClick={(e) => goToTab(e, '/main/smetasoncheck')}>
                             <ListItemText>
                                 Сметы на
                             </ListItemText>
@@ -142,12 +161,12 @@ const Dashboard = (): React.ReactElement => {
                         </Link>
                     </div>}
                     {isAdmin && <div className='list-item'>
-                        <Link to='/main/smetas'>
+                        <Link to=''  onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
                             <ListItemIcon>
                                 <CheckCircleOutlineIcon/>
                             </ListItemIcon>
                         </Link>
-                        <Link to='/main/smetasonrealization'>
+                        <Link to=''  onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
                             <ListItemText>
                                 Сметы на
                             </ListItemText>
@@ -210,6 +229,18 @@ const Dashboard = (): React.ReactElement => {
                 </div>
             </div>
             {name === 'empty' && <Redirect to='/auth'/>}
+            <BasicModal
+                open={isWarning.length>0}
+                onClose={() => setIsWarning('')}
+                body={<div>
+                    <Typography color={'primary'}>Вы уверены, что хотите закрыть заключение/смету ?</Typography>
+                    <p>Если вы изменяли данные в заключении/смете и не нажали кнопку Сохранить - изменения не сохранятся</p>
+                    <Button onClick={()=> {
+                        history.push(isWarning)
+                        setIsWarning('')
+                    }}>Да, уверен</Button>
+                    <Button color={'error'} onClick={()=>setIsWarning('')}>Нет</Button>
+                </div>}/>
         </div>}
     </div>
 }
