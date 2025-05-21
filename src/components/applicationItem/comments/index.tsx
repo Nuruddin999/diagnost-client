@@ -2,10 +2,11 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Checkbox, TextField, Typography } from "@mui/material";
 import { RootState } from "../../../app/store";
-import './style.comments.scss'
 import { changeComment } from "../../../reducers/applicationItemSlice";
 import { selectApplicationUserRights } from "../../../common/selectors/user";
 import Box from "@mui/material/Box";
+import PatternImg from "../../../pattern.png"
+import './style.comments.scss'
 
 
 
@@ -100,7 +101,7 @@ const Comments = (): React.ReactElement => {
                 </Box>
             </div>
             <div className='comments-docs-wrapper'>
-                {comments.map((comment, index) => index > 4 && index < 10 ? (
+                {comments.map((comment, index) => index > 4 && index < 9 ? (
                     <Box key={comment.title}>
                         <Box flex={1}>
                             <Typography
@@ -125,13 +126,34 @@ const Comments = (): React.ReactElement => {
                         </Box>
                     </Box>) : null)}
             </div>
-            <Box display={'flex'} alignItems={'center'}>
+            <Box display={'flex'} alignItems={'center'} marginTop={2}>
                 <Typography sx={{ width: "40px" }}>4
                 </Typography>
-                <Typography sx={{ fontSize: '20px' }}>Решение принято на основании вышеизложенных фактов
+                <Typography>Решение принято на основании:
                 </Typography>
             </Box>
-            <Box display={'flex'} alignItems={'center'}>
+            <Typography align={'left'}>фото-образец:</Typography>
+            <Box sx={{ width:"719px", border:"1px solid black"}}>
+                <img src={PatternImg} width={719} height={248} alt={'Образец заявки'}/>
+            </Box>
+            <Box flex={1}>
+                <TextField
+                    fullWidth
+                    className="text"
+                    size='small'
+                    multiline
+                    maxRows={10}
+                    value={comments[9].comment}
+                    onChange={(e) => processedRights.applications?.update && dispatch(changeComment({
+                        title: comments[9].title!,
+                        comment: e.target.value
+                    }))}
+                    margin='normal'
+                    variant={'standard'}
+                    sx={{ minHeight: '30px', maxHeight: '300px', margin: 0 }}
+                />
+            </Box>
+            <Box display={'flex'} alignItems={'center'} marginTop={2}>
                 <Typography sx={{ width: "40px" }}>5
                 </Typography>
                 <Typography>Заключение: просьбу подопечного считаем
