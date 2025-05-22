@@ -486,7 +486,7 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                             <Text style={{...styles.commentsSecText, borderBottom: unset}}
                                   hyphenationCallback={hyphenationCallback}>{comments[4].comment}</Text>
                             : null}
-                        {comments ? comments.map((comment, index) => index > 4 && index < 10 && comment.comment.trim() ?
+                        {comments ? comments.map((comment, index) => index > 4 && index < 9 && comment.comment.trim() ?
                             <View wrap={false}>
                                 <View style={{...styles.commentsWrapper, marginTop: 18}}>
                                     <View style={{width: '100%'}}>
@@ -501,17 +501,21 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                                     </View>
                                 </View>
                             </View> : null) : null}
-                        {comments && comments[11].comment.trim() ?  <View style={{...styles.commentsWrapper, marginTop: 18}}>
+                        {comments && comments[9].comment.trim() ?  <View style={{width:'100%', marginTop: 18}}>
                             <View style={{width: '100%'}}>
                                 <Text style={{...styles.commentsSecText, borderBottom: unset}}>
-                                    4 Решение принято на основании вышеизложенных фактов
+                                    4 Решение принято на основании:
                                 </Text>
+                            </View>
+                            <View style={{width: '100%'}}>
+                                <Text style={{...styles.commentsSecText, borderBottom: unset}}
+                                      hyphenationCallback={hyphenationCallback}>{comments[9].comment}</Text>
                             </View>
                         </View>: null}
                         {comments && comments[11].comment.trim() ? <View style={{...styles.commentsWrapper, marginTop: 18}}>
                             <View style={{width: '100%'}}>
                                 <Text style={{...styles.commentsSecText, borderBottom: unset}}>
-                                    5 {comments[11].title} {comments[11].comment}
+                                    5 {comments[11].title} {comments[11].comment} и {comments[12].comment}
                                 </Text>
                             </View>
                         </View> : null}
