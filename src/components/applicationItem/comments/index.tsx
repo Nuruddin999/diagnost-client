@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Checkbox, TextField, Typography } from "@mui/material";
+import {MenuItem, Select, TextField, Typography} from "@mui/material";
 import { RootState } from "../../../app/store";
 import { changeComment } from "../../../reducers/applicationItemSlice";
 import { selectApplicationUserRights } from "../../../common/selectors/user";
@@ -158,14 +158,33 @@ const Comments = (): React.ReactElement => {
                 </Typography>
                 <Typography>Заключение: просьбу подопечного считаем
                 </Typography>
+                <Select
+                    variant={'standard'}
+                    value={comments[11].comment}
+                    onChange={(e) => processedRights.applications?.update && dispatch(changeComment({
+                        title: comments[11].title!,
+                        comment: e.target.value
+                    }))}
+                    sx={{marginLeft:"8px"}}
+                >
+                    <MenuItem value={'обоснованной'}>обоснованной</MenuItem>
+                    <MenuItem value={'необоснованной'}>необоснованной</MenuItem>
+                    <MenuItem value={'частично обоснованной'}>частично обоснованной</MenuItem>
+                </Select>
+                <Typography marginX={2}>и
+                </Typography>
+                <Select
+                    variant={'standard'}
+                    value={comments[12].comment}
+                    onChange={(e) => processedRights.applications?.update && dispatch(changeComment({
+                        title: comments[12].title!,
+                        comment: e.target.value
+                    }))}
+                >
+                    <MenuItem value={'возможной'}>возможной</MenuItem>
+                    <MenuItem value={'невозможной'}>невозможной</MenuItem>
+                </Select>
             </Box>
-            {['обоснованной', 'необоснованной', 'частично обоснованной', 'возможной', 'невозможной'].map((item, index) => <Box display={'flex'} alignItems={'center'} key={item}>
-                <Checkbox onChange={() => processedRights.applications?.update && dispatch(changeComment({
-                    title: comments[11].title!,
-                    comment: item
-                }))} checked={item === comments[11].comment} />
-                <Typography>{item}</Typography>
-            </Box>)}
         </div>
     </>
 }

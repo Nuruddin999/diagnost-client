@@ -45,4 +45,7 @@ export const initComments = [
     }, {
         title: 'Заключение: просьбу подопечного считаем',
         comment: ''
+    }, {
+        title: 'и',
+        comment: ''
     }]
