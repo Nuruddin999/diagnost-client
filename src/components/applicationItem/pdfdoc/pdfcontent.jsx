@@ -515,7 +515,7 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                         {comments && comments[11].comment.trim() ? <View style={{...styles.commentsWrapper, marginTop: 18}}>
                             <View style={{width: '100%'}}>
                                 <Text style={{...styles.commentsSecText, borderBottom: unset}}>
-                                    5 {comments[11].title} {comments[11].comment} и {comments[12].comment}
+                                    5 {comments[11].title} {comments[11].comment} {comments[12].comment.trim() ? `и ${comments[12].comment}`: ''}
                                 </Text>
                             </View>
                         </View> : null}
