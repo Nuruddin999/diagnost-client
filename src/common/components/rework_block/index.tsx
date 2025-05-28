@@ -7,10 +7,10 @@ const ReworkBlock: FC<{reworkComments:ReworkCommentType}> = ({reworkComments}) =
     return <Box>
         <Typography align={'left'} variant={'h6'} borderBottom={1} marginTop={2}>Доработки</Typography>
         {reworkComments.map((commentItem, index) => (
-            <Box sx={{backgroundColor: '#eaeaea', padding: '16px', marginTop: '8px', borderRadius: '8px'}}>
+            <Box sx={{backgroundColor: '#eaeaea', padding: '16px', marginTop: '8px', borderRadius: '8px', overflowY:'scroll'}}>
                 <Box textAlign={'left'}>
                     <Typography marginBottom={1}>{new Date(commentItem.createdAt).toLocaleString()}</Typography>
-                    <Typography sx={{background: 'white', padding: '8px', borderRadius: '8px'}} component={'span'}>
+                    <Typography sx={{background: 'white', padding: '8px', borderRadius: '8px', maxHeight:'300px',overflowY:'scroll'}} component={'div'}>
                         {commentItem.comment}
                     </Typography>
                     {commentItem.ReworkCommentFiles && commentItem.ReworkCommentFiles?.length > 0 &&
