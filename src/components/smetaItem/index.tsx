@@ -15,9 +15,19 @@ import {RoundLoader} from "../../common/components/roundloader";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import {PDFButton} from "../../common/components/pdf_icon_button";
 import {FileUpload} from "../../common/components/fileupload/fileUpload";
-import {FileThumbnail} from "../../common/components/file_thumbnail/file_thumbnail";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
+import ReworkBlock from "../../common/components/rework_block";
+
+
+const smetaStatusColor = {
+    'rework': {color:'#f1a217', name:'Доработка'},
+    'null': {color:'#1f75cb', name:'Рассмотрение'},
+    'realization':  {color:'green', name:'Реализация'},
+    oncheck:  {color:'#704cb6', name:'Проверка'},
+
+
+}
 
 
 const SmetaItem: FC = () => {
@@ -49,7 +59,8 @@ const SmetaItem: FC = () => {
         managerName,
         managerSpeciality,
         totalAllSum,
-        status
+        status,
+        applId
     } = smetaItem
 
     const [openCheckConfirmModal, setOpenCheckConfirmModal] = useState(false)
@@ -89,7 +100,7 @@ const SmetaItem: FC = () => {
     };
 
     const handleUpload = async () => {
-        await handleUploadComment(reworkComment, files)
+        await handleUploadComment(reworkComment, files, (!status || status === 'rework') ? applId : undefined)
         setOpenOnReworkModal(false)
         history.push('/main/smetasoncheck')
     }
@@ -201,72 +212,20 @@ const SmetaItem: FC = () => {
                </span>
             </h2>
         </div>
-        {smetaItem.status === 'rework' && <div className={"status-title"}>На доработке</div>}
-        {ReworkComments.length > 0 && <div>
-        {ReworkComments.map((comment: any, i: number) => {
-                return <div key={i}>
-                    <Box width={"50%"}>
-                    <Typography variant={"h6"} sx={{backgroundColor:'#1f75cb', color:"white", padding:"8px", paddingLeft:"8px", borderTopLeftRadius:"8px",borderTopRightRadius:"8px"}} key={i}>
-                        Комментарий
-                    </Typography>
-                    <p className={"rework-comment"}>{comment.comment}</p>
-                    </Box>
-                    <div>
-                        <Typography variant={"h5"} align={"left"}>
-                            Файлы
-                        </Typography>
-                        <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={2}>
-                            {comment.ReworkCommentFiles.length > 0 && comment.ReworkCommentFiles.map((file: any, i: number) => {
-                                const isOnlyImg = file?.type?.split("/")[0] === 'image'
-                                const isCurrentWatch = currentWathFile === i && isOnlyImg
-                                return <Box
-                                    display="flex"
-                                    justifyContent="center"
-                                    alignItems={"center"}
-                                    width={isCurrentWatch ? "100%": 800}
-                                    height={isCurrentWatch ? "100%" : 451}
-                                    {...(isCurrentWatch ? {
-                                        position:"fixed",
-                                        top:"0px",
-                                        left:"0px",
-                                        overflow:"scroll",
-                                        zIndex:3700
-                                    }:{})}
-                                            key={file.id}
-                                onClick={()=> {
-                                    if (isOnlyImg) {
-                                        setCurrentWatchFile(isCurrentWatch ? -1 : i)
-                                    }
-                                }}
-                                    sx={{cursor: "pointer", border:"0.5px solid #f0f0f0", borderRadius:"4px", background:isCurrentWatch ? "black":"initial"}}
-
-                                >
-                                    <FileThumbnail
-                                        type={file.type}
-                                        url={'http://188.68.220.210/api/file/' + file.url}
-                                        imgWidth={"auto"}
-                                        imgHeight={isCurrentWatch ? "auto" :"100%"}
-                                        videoHeight={451}
-                                        videoWidth={800}
-                                        pdfWidth={800}
-                                        pdfHeight={451}
-                                        mswordWidth={800}
-                                        mswordHeight={451}
-                                    />
-                                </Box>
-                            })}
-
-                        </Box>
-                    </div>
-                </div>
-            })}
-        </div>}
+            <Box sx={{textAlign: 'left'}}>
+                <Typography sx={{background: smetaStatusColor[String(status) as keyof typeof smetaStatusColor].color,color:'white', padding: '8px', borderRadius: '8px'}}
+                            component={'span'}>
+                    {smetaStatusColor[String(status) as keyof typeof smetaStatusColor].name}
+                </Typography>
+            </Box>
+        {ReworkComments.length > 0 && <ReworkBlock reworkComments={ReworkComments}/>}
         <div className={'buttons-block'}>
             <Button title={"Сохранить"} onClick={handleupdate}/>
-            {status !== 'oncheck' && <Button title={"На проверку"} color={"secondary"} onClick={() => {
-                setOpenCheckConfirmModal(true)
-            }}/>}
-            {status === 'oncheck' && <Button title={"На доработку"} color={"warning"} onClick={() => {
+            {status !== 'realization' && status !== 'oncheck' &&
+                <Button title={"На проверку"} color={"secondary"} onClick={() => {
+                    setOpenCheckConfirmModal(true)
+                }}/>}
+            {status !== 'realization' && <Button title={"На доработку"} color={"warning"} onClick={() => {
                 setOpenOnReworkModal(true)
             }}/>}
 

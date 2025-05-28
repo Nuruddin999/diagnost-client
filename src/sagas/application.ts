@@ -59,6 +59,11 @@ type applicationItemFields = {
         title?: string,
         comment: string,
     }>,
+    ReworkComments: Array<{
+        files?: Array<{ type: string, url: string }>,
+        comment: string,
+        createdAt:string,
+    }>,
 }
 export type applicationItemResponse = applicationAddResponse & applicationItemFields;
 

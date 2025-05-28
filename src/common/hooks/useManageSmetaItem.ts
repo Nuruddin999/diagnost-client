@@ -63,18 +63,19 @@ export const useManageSmetaItem = () => {
         }
     }
 
-    const handleUploadComment = async (reworkComment: string, files: Array<File>) => {
+    const handleUploadComment = async (reworkComment: string, files: Array<File>, keyType?:string) => {
         if (reworkComment.trim()) {
             try {
-                setIsLoading(true)
-                const result = await addSmetaReworkCommentApi(smetaItem.id, reworkComment)
+               setIsLoading(true)
+                const result = await addSmetaReworkCommentApi(smetaItem.id, reworkComment, keyType)
                 await handleUploadFiles(result.added, files)
                 await updateSmetaStatusApi(id, 'rework')
             } catch (e) {
 
             } finally {
-                setIsLoading(false)
+               // setIsLoading(false)
             }
+
 
         }
     }

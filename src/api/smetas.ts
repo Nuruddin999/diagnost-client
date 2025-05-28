@@ -80,9 +80,9 @@ export const uploadMultipleFilesApi = async (reworkCommentId: string, files: Arr
     return resp
 }
 
-export const addSmetaReworkCommentApi = async (smetaId: string, comment: string) => {
+export const addSmetaReworkCommentApi = async (smetaId: string, comment: string, keyType?:string) => {
     const response = await diagnostApi.post('/smetas-mkrwc', {
-        comment, smetaId
+        comment, smetaId, applId:keyType
     }, {headers: {'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`},})
     return response.data
 }

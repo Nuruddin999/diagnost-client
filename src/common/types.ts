@@ -59,3 +59,9 @@ export type SmetaUpdate = Omit<SmetaItemType, "createdAt" | "updatedAt"> & Smeta
 export type SmetasResponseType = {
     count: number, rows: Array<SmetaItemType>
 }
+
+export type ReworkCommentType =  Array<{
+    ReworkCommentFiles?: Array<{ type: string, url: string }>,
+    comment: string,
+    createdAt:string,
+}>
