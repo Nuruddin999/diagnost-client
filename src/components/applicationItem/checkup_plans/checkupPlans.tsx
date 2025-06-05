@@ -119,7 +119,7 @@ const CheckupPlanForm = (): React.ReactElement => {
 
                     /></td>
                     {!checkUpPlaceIsDeleted && ["supplier", "address",
-                        "phone", "medicine", "qty",
+                        "phone",  "qty",
 
                         "price", "totalPrice"].map(el => <td>
                             <TextField
