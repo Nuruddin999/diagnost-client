@@ -364,12 +364,12 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
                     <Text style={styles.reasonSubTitle}> (указать основания: жалобы, симптомы, синдромы, подозрения
                         врача и пр.): </Text>
                     <View style={{...styles.commonSize, ...styles.anamnesisSection}}>
-                        {complaint ? <Text style={styles.complaintTitle} wrap={false}><Text
+                        {complaint ? <Text style={styles.complaintTitle} wrap><Text
                             style={styles.complaintTitleFirstWord}>Жалоб: </Text>{complaint}</Text> : null}
-                        {anamnesis ? <Text style={{...styles.complaintTitle, marginTop: '10px'}} wrap={false}><Text
+                        {anamnesis ? <Text style={{...styles.complaintTitle, marginTop: '10px'}} wrap><Text
                             style={styles.complaintTitleFirstWord}>Анамнеза: </Text>{anamnesis}
                         </Text> : null}
-                        {diagnosticData ? <Text style={{...styles.complaintTitle, marginTop: '10px'}} wrap={false}><Text
+                        {diagnosticData ? <Text style={{...styles.complaintTitle, marginTop: '10px'}} wrap><Text
                             style={styles.complaintTitleFirstWord}>Данных обследования: </Text>{diagnosticData}
                         </Text> : null}
                     </View>
