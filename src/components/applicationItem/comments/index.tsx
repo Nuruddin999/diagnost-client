@@ -181,8 +181,8 @@ const Comments = (): React.ReactElement => {
                         comment: e.target.value
                     }))}
                 >
-                    <MenuItem value={'возможной'}>возможной</MenuItem>
-                    <MenuItem value={'невозможной'}>невозможной</MenuItem>
+                    <MenuItem value={'возможной для одобрения'}>возможной для одобрения</MenuItem>
+                    <MenuItem value={'невозможной для одобрения'}>невозможной для одобрения</MenuItem>
                 </Select>
             </Box>
         </div>
