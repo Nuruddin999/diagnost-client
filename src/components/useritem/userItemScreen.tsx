@@ -80,9 +80,6 @@ const UserItemScreen = ({isProfile, id, onClose}: userItem): React.ReactElement 
 
     return userItemStatus === 'pending' ? <div className="user-item-loader"><CircularProgress/></div> :
         <div className="user-item-wrapper">
-            <div className='close-ic' onClick={() => onClose('')}>
-                <CloseIcon/>
-            </div>
             {userItemStatus === 'ok' ? <div className="user-item">
                 <div className='user-info-block'>
                     <div className="user-info">
