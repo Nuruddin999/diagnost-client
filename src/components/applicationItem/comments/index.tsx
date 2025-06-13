@@ -17,7 +17,9 @@ import './style.comments.scss'
 const Comments = (): React.ReactElement => {
     const comments = useSelector((state: RootState) => state.applicationItem.comments)
     const { processedRights } = useSelector((state: RootState) => selectApplicationUserRights(state))
+
     const dispatch = useDispatch()
+
 
     return <>
         <h4>Пояснения:</h4>
