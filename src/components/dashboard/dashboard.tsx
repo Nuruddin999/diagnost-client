@@ -24,6 +24,8 @@ import Smetalist from "../smetalist/smetalist";
 import SmetaItem from "../smetaItem";
 import HopedocLogo from "../../hopedoc.png"
 import BasicModal from "../../common/components/modal/ConsiliumModal";
+import {saveEndTime, saveStartTime} from "../../api/user";
+import UserItemScreen from "../useritem/userItemScreen";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -33,17 +35,45 @@ const Dashboard = (): React.ReactElement => {
     const isAdmin = user.role === 'admin' || user.role === 'superadmin'
     const isCircular = useSelector((state: RootState) => state.ui.isCircular)
     const [isWarning, setIsWarning] = React.useState('');
+    const [sessionId, setSessionId] = React.useState('');
+    const visibilityRef= React.useRef<string | null>(null);
     const dispatch = useDispatch()
-    const logOut = () => dispatch(logOutUser())
+
+    const logOut = async () => {
+        await saveEndTime(sessionId);
+        dispatch(logOutUser())
+    }
+
     const location = useLocation()
     const history = useHistory()
+
     useEffect(() => {
         dispatch(checkUser())
     }, [])
 
+    const handleStartTime = async () => {
+        const result = await saveStartTime()
+        setSessionId(result.id)
+    }
+
+    const handlePageHide = () => {
+
+        if  (!visibilityRef.current)  {
+            visibilityRef.current = document.visibilityState
+            return
+        }
+        if (document.visibilityState === 'hidden' && sessionId.toString().trim()) {
+            const data = JSON.stringify({sessionId});
+            const blob = new Blob([data], {type: 'application/json;charset=UTF-8'});
+            navigator.sendBeacon(`${process.env.REACT_APP_BASIC_URL}/suet`, blob);
+        }
+    };
+
     useEffect(() => {
         let socket: WebSocket;
         if (id.trim() && id !== '0' && id !== 'undefined') {
+
+            handleStartTime()
             socket = new WebSocket('ws://188.68.220.210:5000');
 
             socket.onopen = () => {
@@ -52,6 +82,7 @@ const Dashboard = (): React.ReactElement => {
 
         }
 
+
         return () => {
             if (socket) {
                 socket.close();
@@ -59,18 +90,31 @@ const Dashboard = (): React.ReactElement => {
         };
     }, [id]);
 
+
+    useEffect(() => {
+        if (sessionId) {
+            window.addEventListener('visibilitychange', handlePageHide);
+            window.addEventListener('beforeunload', handlePageHide);
+        }
+
+
+        return () => {
+            window.removeEventListener('visibilitychange', handlePageHide);
+            window.removeEventListener('beforeunload', handlePageHide);
+        };
+    }, [sessionId]);
+
     const goToTab = (e: any, url: string) => {
         const pattern = /^\/main\/application\/\d+$/
         const smetaPattern = /^\/main\/smeta\/\d+$/
         e.preventDefault()
-        if (pattern.test(location.pathname) || smetaPattern.test(location.pathname) ) {
+        if (pattern.test(location.pathname) || smetaPattern.test(location.pathname)) {
             setIsWarning(url);
         } else {
             history.push(url);
         }
     }
 
-    console.log('war', isWarning)
 
     return !hasSuperUser ? <Registration notHaveSuperUser/> : <div className="dashboard">
 
@@ -139,7 +183,7 @@ const Dashboard = (): React.ReactElement => {
                                 <CalculateIcon/>
                             </ListItemIcon>
                         </Link>
-                        <Link to=''  onClick={(e) => goToTab(e, '/main/smetas')}>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/smetas')}>
                             <ListItemText>
                                 Сметы
                             </ListItemText>
@@ -151,7 +195,7 @@ const Dashboard = (): React.ReactElement => {
                                 <GradingIcon/>
                             </ListItemIcon>
                         </Link>
-                        <Link to=''  onClick={(e) => goToTab(e, '/main/smetasoncheck')}>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/smetasoncheck')}>
                             <ListItemText>
                                 Сметы на
                             </ListItemText>
@@ -161,12 +205,12 @@ const Dashboard = (): React.ReactElement => {
                         </Link>
                     </div>}
                     {isAdmin && <div className='list-item'>
-                        <Link to=''  onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
                             <ListItemIcon>
                                 <CheckCircleOutlineIcon/>
                             </ListItemIcon>
                         </Link>
-                        <Link to=''  onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
                             <ListItemText>
                                 Сметы на
                             </ListItemText>
@@ -187,7 +231,7 @@ const Dashboard = (): React.ReactElement => {
                                 </div>}
                         </Route>
                         <Route path='/main/user/:id'>
-                            {rights.processedRights.users?.read ? <UserItem/> :
+                            {rights.processedRights.users?.read ? <UserItemScreen   onClose={()=>{}}/> :
                                 <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
                         </Route>
                         <Route path='/main/newuser'>
@@ -203,7 +247,7 @@ const Dashboard = (): React.ReactElement => {
                                 <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
                         </Route>
                         <Route path='/main/aboutme'>
-                            <UserItem isProfile/>
+                            <UserItemScreen   onClose={()=>{}} isProfile />
                         </Route>
                         <Route path='/main/smetas'>
                             {rights.processedRights.smetas?.read ? <Smetalist status={'rework'}/> :
@@ -230,16 +274,17 @@ const Dashboard = (): React.ReactElement => {
             </div>
             {name === 'empty' && <Redirect to='/auth'/>}
             <BasicModal
-                open={isWarning.length>0}
+                open={isWarning.length > 0}
                 onClose={() => setIsWarning('')}
                 body={<div>
                     <Typography color={'primary'}>Вы уверены, что хотите закрыть заключение/смету ?</Typography>
-                    <p>Если вы изменяли данные в заключении/смете и не нажали кнопку Сохранить - изменения не сохранятся</p>
-                    <Button onClick={()=> {
+                    <p>Если вы изменяли данные в заключении/смете и не нажали кнопку Сохранить - изменения не
+                        сохранятся</p>
+                    <Button onClick={() => {
                         history.push(isWarning)
                         setIsWarning('')
                     }}>Да, уверен</Button>
-                    <Button color={'error'} onClick={()=>setIsWarning('')}>Нет</Button>
+                    <Button color={'error'} onClick={() => setIsWarning('')}>Нет</Button>
                 </div>}/>
         </div>}
     </div>

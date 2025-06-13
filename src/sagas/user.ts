@@ -18,9 +18,10 @@ type loginUserResponse = {
     speciality: string,
     role: string,
     rights: Array<Right>,
+    UserSessions:Array<any>,
     urlSignPath?: string,
     signFileName?: string,
-    isDeletedPlace: boolean
+    isDeletedPlace: boolean,
   }
 }
 type allUsersResponse = {
@@ -103,7 +104,7 @@ export function* checkUserAuth() {
     else {
       yield put(changeReqStatus('Неизвестаня ошибка'))
     }
-    yield put(saveUser({ id: '0', name: 'empty', role: '', phone: '', email: '', speciality: '', rights: [], isLoading: false, reqStatus: 'ok', isDeletedPlace: false }))
+    yield put(saveUser({ id: '0', name: 'empty', role: '', phone: '', email: '', speciality: '', rights: [], UserSessions:[],isLoading: false, reqStatus: 'ok', isDeletedPlace: false }))
   }
 }
 
@@ -114,7 +115,7 @@ export function* logoutUser() {
     if (response) {
       localStorage.removeItem('dtokenn')
       localStorage.removeItem('refreshToken')
-      yield put(saveUser({ id: '', email: '', role: '', name: 'empty', isLoading: false, reqStatus: 'no', rights: initialRights, phone: '', speciality: '', isDeletedPlace: false }))
+      yield put(saveUser({ id: '', email: '', role: '', name: 'empty', isLoading: false, reqStatus: 'no', rights: initialRights, UserSessions:[], phone: '', speciality: '', isDeletedPlace: false }))
       yield put(changeLoadStatus(false))
     }
   } catch (e: any) {

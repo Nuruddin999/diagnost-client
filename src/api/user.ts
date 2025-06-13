@@ -93,3 +93,23 @@ export const getFilesList = async (id:string) => {
 }
 
 
+export const saveStartTime = async () => {
+    const response = await diagnostApi.get(`/sust`,  {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`,
+        },
+    })
+    return response.data
+}
+
+
+export const saveEndTime = async (sessionId:number | string) => {
+    const response = await diagnostApi.post(`/suet`, {sessionId} ,{
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`,
+        },
+    })
+    return response.data
+}
+
+

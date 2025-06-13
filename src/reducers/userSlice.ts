@@ -19,7 +19,8 @@ export interface User {
   isDeletedPlace?: boolean,
   urlSignPath?: string,
   signFileName?: string,
-  rights?: Array<Right>
+  rights?: Array<Right>,
+    UserSessions: Array<any>
 }
 interface UserState {
   user: User,
@@ -39,6 +40,7 @@ const initialState: UserState = {
     email: '',
     speciality: '',
     rights: [],
+      UserSessions:[],
     isDeletedPlace: false
   },
   useritem: {
@@ -50,6 +52,7 @@ const initialState: UserState = {
     speciality: '',
     urlSignPath:'',
     rights: initialRights,
+      UserSessions:[],
     isDeletedPlace: false
   },
   users: [],
@@ -65,9 +68,9 @@ export const userSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    saveUser: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string, urlSignPath?: string, signFileName?: string, }>) => {
-      const { name, phone, role, email, speciality, id, isDeletedPlace, rights, signFileName, urlSignPath } = action.payload
-      state.user = { id: String(id), phone, role, name, speciality, email, isDeletedPlace, signFileName, urlSignPath }
+    saveUser: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string, urlSignPath?: string, signFileName?: string,UserSessions:Array<any> }>) => {
+      const { name, phone, role, email, speciality, id, isDeletedPlace, rights, signFileName, urlSignPath, UserSessions } = action.payload
+      state.user = { id: String(id), phone, role, name, speciality, email, isDeletedPlace, signFileName, urlSignPath, UserSessions }
       state.user.rights = [...rights]
       state.isLoading = action.payload.isLoading
       state.reqStatus = action.payload.reqStatus
@@ -85,9 +88,9 @@ export const userSlice = createSlice({
       state.users = action.payload.users
       state.count = action.payload.count
     },
-    saveUserItem: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string, urlSignPath?: string, signFileName?: string }>) => {
-      const { name, phone, role, email, speciality, id, isDeletedPlace, rights, signFileName, urlSignPath} = action.payload
-      state.useritem = { id, phone, role, name, speciality, email, rights, isDeletedPlace, signFileName, urlSignPath }
+    saveUserItem: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string, urlSignPath?: string, signFileName?: string, UserSessions:Array<any> }>) => {
+      const { name, phone, role, email, speciality, id, isDeletedPlace, rights, signFileName, urlSignPath, UserSessions} = action.payload
+      state.useritem = { id, phone, role, name, speciality, email, rights, isDeletedPlace, signFileName, urlSignPath, UserSessions }
       state.isLoading = action.payload.isLoading
       state.reqStatus = action.payload.reqStatus
     },

@@ -10,14 +10,13 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import {openModal} from "../../reducers/ui";
 import isObject from "lodash/isObject";
 import {debounce, isEmpty} from "lodash";
-import classNames from "classnames";
 import {selectApplicationUserRights} from "../../common/selectors/user";
 import {useUsers} from "../../common/hooks/useUsers";
-import UserItemScreen from "../useritem/userItemScreen";
 import {CommonButton} from "../../common/components/button";
 import BlockIcon from '@mui/icons-material/Block';
 import {updateManagerAction} from "../../actions/application";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
+import {useHistory} from "react-router-dom";
 
 const UsersList = ({isChangeManager = false, applIdForChangeManager}: {
     isChangeManager?: boolean,
@@ -36,6 +35,7 @@ const UsersList = ({isChangeManager = false, applIdForChangeManager}: {
     const [email, setUserEmail] = React.useState('');
     const [currentUserId, setCurrentUserId] = React.useState('');
     const [deleteWarn, setDelWarn] = React.useState('');
+    const history = useHistory()
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };
@@ -70,6 +70,10 @@ const UsersList = ({isChangeManager = false, applIdForChangeManager}: {
 
     const changeApplicationManager = (applId: number, userId: string) => {
         dispatch(updateManagerAction(applId.toString(), userId))
+    }
+
+    const goToApplItem = (id: string | undefined) => {
+        history.push(`user/${id}`)
     }
 
     useUsers(page, email, name, speciality, phone)
@@ -108,8 +112,11 @@ const UsersList = ({isChangeManager = false, applIdForChangeManager}: {
                         </thead>
                         <tbody>
                         {status === 'ok' && !isEmpty(users.filter(el => el.id !== '1')) && users.filter(el => el.id !== '1').map((userItem, index) => user.id !== String(userItem.id) &&
-                            <tr key={userItem.name}
-                                onClick={() => isManagerChangeModalOpened ? changeApplicationManager(isManagerChangeModalOpened, userItem.id) : setCurrentUserId(userItem.id)}>
+                            <tr key={userItem.name}   onClick={() => {
+                                if (userItem.id) {
+                                    goToApplItem(userItem.id);
+                                }
+                            }}>
                                 <td>{index + 1}</td>
                                 <td>{userItem.name}</td>
                                 <td>{roles[userItem.role as keyof typeof roles]}</td>
@@ -120,7 +127,6 @@ const UsersList = ({isChangeManager = false, applIdForChangeManager}: {
                                     <td><IconButton disabled={!applUserRights?.delete} className='delete-button'
                                                     onClick={(e: any) => {
                                                         e.stopPropagation()
-                                                        // userItem.id && deleteAppl(userItem.id)
                                                         userItem.id && setDelWarn(userItem.id)
                                                     }}>
                                         <DeleteOutlineIcon/>
@@ -145,9 +151,6 @@ const UsersList = ({isChangeManager = false, applIdForChangeManager}: {
                 </div>
             </div>
         </div>
-        <div
-            className={classNames('user-item-block', currentUserId ? 'user-item-block-open' : 'user-item-block-closed')}>
-            <UserItemScreen id={currentUserId} onClose={setCurrentUserId}/></div>
         <BasicModal
             open={Boolean(deleteWarn)}
             onClose={() => setDelWarn('')}
