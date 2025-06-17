@@ -22,11 +22,14 @@ import {selectApplicationUserRights, selectsUserItemRights} from "../../common/s
 import {FileUpload} from "../../common/components/fileupload/fileUpload";
 import {isEmpty} from "lodash";
 import {setError, setFileUploadStatus} from "../../reducers/ui";
-import CloseIcon from '@mui/icons-material/Close';
 import {CommonButton} from "../../common/components/button";
 import Specialities from "../../common/components/specialities/specialities";
 import {useParams} from "react-router-dom";
 import {formatDuration} from "../../common/utils";
+import Box from "@mui/material/Box";
+import {DatePicker, LocalizationProvider} from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import ruLocale from "date-fns/locale/ru";
 
 type userItem = {
     isProfile?: boolean,
@@ -53,6 +56,11 @@ const UserItemScreen = ({isProfile, id, onClose}: userItem): React.ReactElement 
     const applUserRights = useSelector((state: RootState) => selectApplicationUserRights(state))
     const {users} = applUserRights.processedRights
     const [files, setFiles] = useState<Array<File>>([])
+    const [searchPeriod, setSearchPeriod] = useState<{ from: string, to: string }>({
+        from: '',
+        to: ''
+    })
+    const [dateError, setDateError] = useState<string | null>(null)
     const dispatch = useDispatch()
     const handleChange = (entity: string, field: string, value: any) => {
         dispatch(updateRightsAction(entity, field, value, idUrl))
@@ -61,6 +69,19 @@ const UserItemScreen = ({isProfile, id, onClose}: userItem): React.ReactElement 
         dispatch(userSignFileUpdate(idUrl, files))
     }
 
+    const handlePeriodsFilter = () => {
+
+        if (dateError || !searchPeriod.from || searchPeriod.to) {
+            return
+        }
+
+        console.log('continue')
+        const fromYear = searchPeriod.from.toString().split("-")[2];
+        const fromMonth = searchPeriod.from.toString().split("-")[1];
+        const fromDay = searchPeriod.from.toString().split("-")[0];
+
+    }
+    console.log('searcg', searchPeriod.from);
     useEffect(() => {
         if (idUrl) {
             dispatch(getListItemAction(idUrl, 'users', saveUserItem))
@@ -169,6 +190,39 @@ const UserItemScreen = ({isProfile, id, onClose}: userItem): React.ReactElement 
                     <CommonButton title='Сохранить'
                                   onClick={() => dispatch(updatePrimaryData(email, speciality, phone, name))}/>
                 </div>
+                <Typography align={'left'} m={2}>Фильтр по периодам посещения</Typography>
+                <Box marginY={2} display='flex' alignItems='center' gap={4}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
+                        <div>
+                            <DatePicker
+                                mask='__.__.____'
+                                value={searchPeriod.from}
+                                toolbarPlaceholder='01.01.2025'
+                                label='Период начала'
+                                onChange={(newValue: any) => setSearchPeriod(state => ({...state, from: newValue}))}
+                                onError={(newError) => setDateError(newError)}
+                                renderInput={(params: any) => <TextField {...params} size='small'/>}
+                                inputFormat="dd-MM-yyyy"
+                            />
+                        </div>
+                    </LocalizationProvider>
+                    <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
+                        <div>
+                            <DatePicker
+                                mask='__.__.____'
+                                value={searchPeriod.to}
+                                toolbarPlaceholder='01.01.2025'
+                                label='Период конца'
+                                onChange={(newValue: any) => setSearchPeriod(state => ({...state, to: newValue}))}
+                                onError={(newError) => setDateError(newError)}
+                                renderInput={(params: any) => <TextField {...params} size='small'/>}
+                                inputFormat="dd-MM-yyyy"
+                            />
+                        </div>
+                    </LocalizationProvider>
+                    <Button onClick={handlePeriodsFilter}>Применить</Button>
+                    <Button>Сбросить</Button>
+                </Box>
                 {UserSessions.length > 0 && <div>
                 </div>}
                 <Table>
@@ -190,7 +244,7 @@ const UserItemScreen = ({isProfile, id, onClose}: userItem): React.ReactElement 
                             const date = new Date(session.connectedAt).toLocaleDateString();
                             const time = new Date(session.connectedAt).toLocaleTimeString();
                             const connnectedAt = `${date} ${time}`;
-                            const dateOut =session.disconnectedAt ?   new Date(session.disconnectedAt).toLocaleDateString() : 0;
+                            const dateOut = session.disconnectedAt ? new Date(session.disconnectedAt).toLocaleDateString() : 0;
                             const timeOut = session.disconnectedAt ? new Date(session.disconnectedAt).toLocaleTimeString() : '';
                             const disconnnectedAt = `${dateOut} ${timeOut}`;
                             return <TableRow>
@@ -201,7 +255,7 @@ const UserItemScreen = ({isProfile, id, onClose}: userItem): React.ReactElement 
                                     {disconnnectedAt}
                                 </TableCell>
                                 <TableCell>
-                                    {formatDuration(session.connectedAt,session.disconnectedAt)}
+                                    {formatDuration(session.connectedAt, session.disconnectedAt)}
                                 </TableCell>
                             </TableRow>
                         })}

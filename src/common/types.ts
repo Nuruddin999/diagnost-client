@@ -65,3 +65,7 @@ export type ReworkCommentType =  Array<{
     comment: string,
     createdAt:string,
 }>
+
+export type UsersRecapType = {
+    name: string, speciality: string, applications: number
+}

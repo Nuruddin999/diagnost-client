@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {Fragment, useEffect} from "react";
 import {Link, Redirect, Route, Switch, useHistory, useLocation,} from "react-router-dom";
 import ReportList from "../reportlist/reportlist";
 import {Backdrop, Button, CircularProgress, IconButton, ListItemIcon, ListItemText, Typography} from "@mui/material";
@@ -16,7 +16,6 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ApplicationItem from "../applicationItem";
 import {Registration} from "../../common/components/registration/registration";
 import UsersList from "../userslist/userslist";
-import UserItem from "../useritem";
 import {selectApplicationUserRights} from "../../common/selectors/user";
 import {RoundLoader} from "../../common/components/roundloader";
 import Specialities from "../specialities/Specialities";
@@ -26,6 +25,8 @@ import HopedocLogo from "../../hopedoc.png"
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import {saveEndTime, saveStartTime} from "../../api/user";
 import UserItemScreen from "../useritem/userItemScreen";
+import {Analytics} from "@mui/icons-material";
+import UsersRecap from "../analytics";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -36,7 +37,7 @@ const Dashboard = (): React.ReactElement => {
     const isCircular = useSelector((state: RootState) => state.ui.isCircular)
     const [isWarning, setIsWarning] = React.useState('');
     const [sessionId, setSessionId] = React.useState('');
-    const visibilityRef= React.useRef<string | null>(null);
+    const visibilityRef = React.useRef<string | null>(null);
     const dispatch = useDispatch()
 
     const logOut = async () => {
@@ -58,7 +59,7 @@ const Dashboard = (): React.ReactElement => {
 
     const handlePageHide = () => {
 
-        if  (!visibilityRef.current)  {
+        if (!visibilityRef.current) {
             visibilityRef.current = document.visibilityState
             return
         }
@@ -204,21 +205,37 @@ const Dashboard = (): React.ReactElement => {
                             </ListItemText>
                         </Link>
                     </div>}
-                    {isAdmin && <div className='list-item'>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
-                            <ListItemIcon>
-                                <CheckCircleOutlineIcon/>
-                            </ListItemIcon>
-                        </Link>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
-                            <ListItemText>
-                                Сметы на
-                            </ListItemText>
-                            <ListItemText>
-                                реализации
-                            </ListItemText>
-                        </Link>
-                    </div>}
+                    {isAdmin &&
+                        <Fragment>
+                            <div className='list-item'>
+                                <Link to='' onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
+                                    <ListItemIcon>
+                                        <CheckCircleOutlineIcon/>
+                                    </ListItemIcon>
+                                </Link>
+                                <Link to='' onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
+                                    <ListItemText>
+                                        Сметы на
+                                    </ListItemText>
+                                    <ListItemText>
+                                        реализации
+                                    </ListItemText>
+                                </Link>
+                            </div>
+                            <div className='list-item'>
+                                <Link to='' onClick={(e) => goToTab(e, '/main/analytics')}>
+                                    <ListItemIcon>
+                                        <Analytics/>
+                                    </ListItemIcon>
+                                </Link>
+                                <Link to='' onClick={(e) => goToTab(e, '/main/analytics')}>
+                                    <ListItemText>
+                                       Аналитика
+                                    </ListItemText>
+                                </Link>
+                            </div>
+                        </Fragment>}
+
                 </div>
                 <div className="main-content">
                     <Switch>
@@ -231,7 +248,8 @@ const Dashboard = (): React.ReactElement => {
                                 </div>}
                         </Route>
                         <Route path='/main/user/:id'>
-                            {rights.processedRights.users?.read ? <UserItemScreen   onClose={()=>{}}/> :
+                            {rights.processedRights.users?.read ? <UserItemScreen onClose={() => {
+                                }}/> :
                                 <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
                         </Route>
                         <Route path='/main/newuser'>
@@ -247,7 +265,8 @@ const Dashboard = (): React.ReactElement => {
                                 <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
                         </Route>
                         <Route path='/main/aboutme'>
-                            <UserItemScreen   onClose={()=>{}} isProfile />
+                            <UserItemScreen onClose={() => {
+                            }} isProfile/>
                         </Route>
                         <Route path='/main/smetas'>
                             {rights.processedRights.smetas?.read ? <Smetalist status={'rework'}/> :
@@ -266,6 +285,11 @@ const Dashboard = (): React.ReactElement => {
                         </Route>
                         <Route path='/main/smetasonrealization'>
                             {isAdmin ? <Smetalist status={'realization'}/> :
+                                <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
+                                </div>}
+                        </Route>
+                        <Route path='/main/analytics'>
+                            {isAdmin ? <UsersRecap /> :
                                 <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
                                 </div>}
                         </Route>
