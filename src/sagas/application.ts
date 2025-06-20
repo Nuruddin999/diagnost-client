@@ -139,26 +139,3 @@ export function* changeDeleteOptionInPlan(body: { type: 'application/changedelop
         }
     }
 }
-
-
-/**
- * Изменение ответственного.
- * @param {Object} changeManager .
- */
-export function* changeManagerSaga(changeManager: { type: 'application/updatemanager', payload: { applId: number | string, userId: string } }) {
-
-    try {
-        yield put(setCircular(true))
-        const {applId, userId} = changeManager.payload
-        const {id, role} = yield select((state: RootState) => state.user.user)
-        const response: {} = yield call(changeManagerApi, applId.toString(), userId)
-        if (response) {
-            yield put(getApplication(1, 10, '', '', '', '', '', role === 'doctor' ? id : 'all'))
-            yield put(setCircular(false))
-            yield put(openManagerChangeModal(undefined))
-        }
-
-    } catch (e: any) {
-        setCircular(false)
-    }
-}

@@ -9,7 +9,6 @@ import {
     fetchOneApplication,
     updateOneApplication,
     changeDeleteOptionInPlan,
-    changeManagerSaga
 } from './application';
 import { checkUserAuth, loginUser, logoutUser, registerUser, changeIsDeletedPlace, fetchUser, removeUser, updateUserRights, updateUserSignFile, updateUserPrimary } from './user';
 import {addSpeciality, fetchSpeciality, removeSpeciality} from "./speciality";
@@ -25,7 +24,6 @@ export default function* runSagas(){
         takeLatest(TYPES.userUpdateRights, updateUserRights),
         takeLatest(TYPES.userUpdatePrimary, updateUserPrimary),
         takeLatest(TYPES.userUpdateSignFile, updateUserSignFile),
-        takeLatest(Types.updateManager, changeManagerSaga),
         takeLatest(Types.applicationGetOne, fetchOneApplication),
         takeLatest(CommonTypes.getListItem, fetchListItem),
         takeLatest(Types.applicationUpdate, updateOneApplication),

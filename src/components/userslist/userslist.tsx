@@ -18,9 +18,10 @@ import {updateManagerAction} from "../../actions/application";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import {useHistory} from "react-router-dom";
 
-const UsersList = ({isChangeManager = false, applIdForChangeManager}: {
+const UsersList = ({updateManager}: {
     isChangeManager?: boolean,
-    applIdForChangeManager?: number
+    applIdForChangeManager?: number,
+    updateManager?: (userId: string) => void;
 }): React.ReactElement => {
     const dispatch = useDispatch()
     const {users, user} = useSelector((state: RootState) => state.user)
@@ -76,6 +77,16 @@ const UsersList = ({isChangeManager = false, applIdForChangeManager}: {
         history.push(`user/${id}`)
     }
 
+
+    const handleManagerClick = (id: string) => {
+        if (isManagerChangeModalOpened && updateManager) {
+            updateManager(id)
+        }
+        else {
+            goToApplItem(id)
+        }
+    }
+
     useUsers(page, email, name, speciality, phone)
 
 
@@ -114,7 +125,7 @@ const UsersList = ({isChangeManager = false, applIdForChangeManager}: {
                         {status === 'ok' && !isEmpty(users.filter(el => el.id !== '1')) && users.filter(el => el.id !== '1').map((userItem, index) => user.id !== String(userItem.id) &&
                             <tr key={userItem.name}   onClick={() => {
                                 if (userItem.id) {
-                                    goToApplItem(userItem.id);
+                                   handleManagerClick(userItem.id)
                                 }
                             }}>
                                 <td>{index + 1}</td>

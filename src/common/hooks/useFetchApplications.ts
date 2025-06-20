@@ -1,7 +1,7 @@
 import { useSelector} from "react-redux";
 import React, {useState} from "react";
 import {RootState} from "../../app/store";
-import {deleteOneApplicationApi, getApplicationApi} from "../../api/application";
+import {changeManagerApi, deleteOneApplicationApi, getApplicationApi} from "../../api/application";
 
 export const useFetchApplications = () => {
     const [appls, setAppls] = React.useState<any>([])
@@ -38,8 +38,28 @@ export const useFetchApplications = () => {
 
     };
 
+    const updateApplicationManager=async (applId:string,userId:string)=>{
+        setIsLoading(true)
+        try {
+            await changeManagerApi(applId, userId)
+            await fetchApplications(1, 10, '','', '', '','')
+        } catch (e) {
+            setErrorMessage(e?.message)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
     return {
-        appls, isLoading, error, fetchApp, id, role, deleteAppl
+        appls,
+        isLoading,
+        error,
+        fetchApp,
+        id,
+        role,
+        deleteAppl,
+        setAppls,
+        updateApplicationManager,
     }
 
 }

@@ -27,7 +27,7 @@ const ReportList = (): React.ReactElement => {
         isModalOpened, status, errorMessage,
         isManagerChangeModalOpened
     } = useSelector((state: RootState) => state.ui)
-    const {appls, isLoading, fetchApp, error, id, role, deleteAppl} = useFetchApplications()
+    const {appls, isLoading, fetchApp, error, id, role, deleteAppl, updateApplicationManager} = useFetchApplications()
     const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
     const [page, setPage] = React.useState(1);
     const [patientName, setPatientName] = React.useState('');
@@ -86,7 +86,7 @@ const ReportList = (): React.ReactElement => {
     }
     return <div className='add-appl-container'>
         {isModalOpened && <AddModal fetchApp={fetchApp}/>}
-        {isManagerChangeModalOpened && <ManagerChangeModal appls={appls.rows}/>}
+        {isManagerChangeModalOpened && <ManagerChangeModal isLoading={isLoading} updateManager={updateApplicationManager} appls={appls.rows}/>}
         <div className='add-button-wrapper'>
             {isManagerChangeModalOpened === undefined && rights.processedRights.applications?.create &&
                 <CommonButton

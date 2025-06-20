@@ -1,21 +1,32 @@
 import React from "react";
 import './style.managerchange.scss'
 import UsersList from "../userslist/userslist";
-import {IconButton, Typography} from "@mui/material";
+import {CircularProgress, IconButton, Typography} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import {openManagerChangeModal} from "../../reducers/ui";
-const ManagerChangeModal =({appls}: { appls:Array<any> }): React.ReactElement=>{
 
-    const {isManagerChangeModalOpened}=useSelector((state:RootState)=>state.ui)
-    const appl=appls.find(el=>el.id===isManagerChangeModalOpened)
+const ManagerChangeModal = ({appls, updateManager, isLoading}: {
+    appls: Array<any>,
+    updateManager: (applId: string, userId: string) => Promise<void>,
+    isLoading: boolean
+}): React.ReactElement => {
+
+    const {isManagerChangeModalOpened, isCircular} = useSelector((state: RootState) => state.ui)
+    const appl = appls.find(el => el.id === isManagerChangeModalOpened)
     const dispatch = useDispatch()
+
+    const handleUpdateManager = async (userId: string) => {
+        await updateManager(appl.id.toString(), userId)
+        dispatch(openManagerChangeModal(undefined))
+    }
+
 
     return <div className='managerchange'>
         <div className='managerchange__mainwrapper'>
             <div className='closeblock'>
-               <IconButton> <CloseIcon onClick={()=>dispatch(openManagerChangeModal(undefined))}/></IconButton>
+                <IconButton> <CloseIcon onClick={() => dispatch(openManagerChangeModal(undefined))}/></IconButton>
             </div>
             <div className="appl-table">
                 <table>
@@ -31,7 +42,8 @@ const ManagerChangeModal =({appls}: { appls:Array<any> }): React.ReactElement=>{
                 </table>
             </div>
             <Typography variant={'h5'}>Выберите ответственного и нажимите на него</Typography>
-<UsersList />
+            {isLoading ? <CircularProgress/> : <UsersList updateManager={handleUpdateManager}/>}
+
         </div>
     </div>
 }
