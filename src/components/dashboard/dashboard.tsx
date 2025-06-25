@@ -27,6 +27,7 @@ import {saveEndTime, saveStartTime} from "../../api/user";
 import UserItemScreen from "../useritem/userItemScreen";
 import {Analytics} from "@mui/icons-material";
 import UsersRecap from "../analytics";
+import AnalyticsItem from "../analyticsItem";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -64,7 +65,8 @@ const Dashboard = (): React.ReactElement => {
             return
         }
         if (document.visibilityState === 'hidden' && sessionId.toString().trim()) {
-            const data = JSON.stringify({sessionId});
+            const token = localStorage.getItem('refreshToken') // или откуда ты его берешь
+            const data = JSON.stringify({sessionId, token:`Bearer ${token}`});
             const blob = new Blob([data], {type: 'application/json;charset=UTF-8'});
             navigator.sendBeacon(`${process.env.REACT_APP_BASIC_URL}/suet`, blob);
         }
@@ -290,6 +292,11 @@ const Dashboard = (): React.ReactElement => {
                         </Route>
                         <Route path='/main/analytics'>
                             {isAdmin ? <UsersRecap /> :
+                                <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
+                                </div>}
+                        </Route>
+                        <Route path='/main/analytics-item/:id'>
+                            {isAdmin ? <AnalyticsItem /> :
                                 <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
                                 </div>}
                         </Route>

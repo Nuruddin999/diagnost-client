@@ -20,6 +20,22 @@ export const formatPhone = (phone: string) => {
 }
 
 
+export const makeDuration=(ms:number)=>{
+    const sec = Math.floor(ms / 1000);
+    const days = Math.floor(sec / (3600 * 24));
+    const hours = Math.floor((sec % (3600 * 24)) / 3600);
+    const minutes = Math.floor((sec % 3600) / 60);
+    const seconds = sec % 60;
+
+    const parts = [];
+    if (days) parts.push(`${days} дн.`);
+    if (hours) parts.push(`${hours} ч.`);
+    if (minutes) parts.push(`${minutes} мин.`);
+    if (seconds || parts.length === 0) parts.push(`${seconds} сек.`);
+
+    return parts.join(' ');
+}
+
 export function formatDuration(startDate:string, endDate:string) {
 
     if (!startDate || !endDate) {
@@ -34,19 +50,8 @@ export function formatDuration(startDate:string, endDate:string) {
 
     if (ms <= 0) return '0 сек.';
 
-    const sec = Math.floor(ms / 1000);
-    const days = Math.floor(sec / (3600 * 24));
-    const hours = Math.floor((sec % (3600 * 24)) / 3600);
-    const minutes = Math.floor((sec % 3600) / 60);
-    const seconds = sec % 60;
+    return makeDuration(ms)
 
-    const parts = [];
-    if (days) parts.push(`${days} дн.`);
-    if (hours) parts.push(`${hours} ч.`);
-    if (minutes) parts.push(`${minutes} мин.`);
-    if (seconds || parts.length === 0) parts.push(`${seconds} сек.`);
-
-    return parts.join(' ');
 }
 
 

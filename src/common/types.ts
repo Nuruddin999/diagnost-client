@@ -29,10 +29,18 @@ export type SmetaItemType = {
     customer: string,
     patientPhone: string,
     updatedAt: string,
-    allTotalSum:string
+    allTotalSum: string
 }
 
-type SmetaCosts = Array<{ kind: string, supplier: string, phone: string, address: string, qty: string, price: string, totalCost: string }>
+type SmetaCosts = Array<{
+    kind: string,
+    supplier: string,
+    phone: string,
+    address: string,
+    qty: string,
+    price: string,
+    totalCost: string
+}>
 
 type SmetaRoadCostItem = {
     vehicle: string,
@@ -60,12 +68,28 @@ export type SmetasResponseType = {
     count: number, rows: Array<SmetaItemType>
 }
 
-export type ReworkCommentType =  Array<{
+export type ReworkCommentType = Array<{
     ReworkCommentFiles?: Array<{ type: string, url: string }>,
     comment: string,
-    createdAt:string,
+    createdAt: string,
 }>
 
 export type UsersRecapType = {
-    name: string, speciality: string, applications: number
+    id: number, name: string, speciality: string, applications: number
+}
+
+export type UserItemRecapType = {
+    count: number,
+    period:Array<Date>,
+    user: {
+        name: string,
+        speciality: string,
+        applications: Array<{
+            name: string,
+            birth: string,
+            createdAt: Date,
+            passToCoordinatorTime: Date | null,
+            duration:number,
+        }>
+    }
 }
