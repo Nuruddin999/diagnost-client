@@ -27,9 +27,15 @@ const AnalyticsItem: FC = () => {
     }, []);
 
 
-    return <Box marginTop={10}>
-        <Typography variant={'h5'} fontWeight={'bold'}>Заключения общий отчет</Typography>
-        <Card variant={'outlined'} sx={{width: '800px', margin: "16px auto 0"}}>
+    return  <Box sx={{
+        marginTop: '40px',
+        width: '100%',
+        height: '100%',
+        backgroundColor: "rgba(211, 211, 211, 0.6)",
+        overflow: 'hidden'
+    }}>
+        <Typography variant={'h6'} fontWeight={'bold'} color={"primary"} sx={{opacity:'1', marginTop:"8px"}}>Заключения общий отчет</Typography>
+        <Card sx={{width: '800px', margin: "8px auto 0", borderRadius: "16px"}}>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -57,12 +63,13 @@ const AnalyticsItem: FC = () => {
                 </TableBody>
             </Table>
         </Card>
-        <Typography variant={'h5'} fontWeight={'bold'}>Заключения - отчет детальный</Typography>
-        <Card variant={'outlined'} sx={{width: '800px', margin: "16px auto 0"}}>
+            <Typography variant={'h6'} fontWeight={'bold'} color={"primary"} marginTop={2} sx={{opacity:1}}>Заключения - отчет детальный</Typography>
+        <Card variant={"elevation"} sx={{width: '80%', margin: "16px auto 0", borderRadius: "16px"}}>
             <Table>
                 <TableHead>
                     <TableRow>
                       <TableCell><Typography fontWeight={'bold'}>В работе</Typography></TableCell>
+                        <TableCell><Typography fontWeight={'bold'}>Время выполнения заявки</Typography></TableCell>
                         <TableCell><Typography fontWeight={'bold'}>Завершенные</Typography></TableCell>
                         <TableCell><Typography fontWeight={'bold'}>Период</Typography></TableCell>
                         <TableCell><Typography fontWeight={'bold'}>Время выполнения заявки</Typography></TableCell>
@@ -74,6 +81,11 @@ const AnalyticsItem: FC = () => {
                             <TableCell>
                                 <Typography>
                                     {unfinished && unfinished[index] ? unfinished[index].name:""}
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography>
+                                    {unfinished && unfinished[index] ? makeDuration(unfinished[index].duration):""}
                                 </Typography>
                             </TableCell>
                             <TableCell>
