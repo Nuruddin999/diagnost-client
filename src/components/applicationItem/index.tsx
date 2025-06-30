@@ -30,6 +30,8 @@ const ApplicationItem = (): React.ReactElement => {
     const dispatch = useDispatch()
     const visibilityRef = React.useRef<string | null>(null);
     const timeEndRef = React.useRef<Date | null>(null);
+    const isReadyRef = React.useRef(false);
+    const applIdRef = React.useRef<number | null>(0);
     const isError = errorMessage || userItemStatus === 'no'
     const isReadyForDiffSave = timeEndRef.current && !passToCoordinatorTime && managerId === userId
     /**
@@ -56,10 +58,10 @@ const ApplicationItem = (): React.ReactElement => {
             return
         }
 
-        if (document.visibilityState === 'hidden' && isReadyForDiffSave) {
+        if (document.visibilityState === 'hidden' && isReadyRef.current) {
             const diff = new Date().getTime() - timeEndRef.current!.getTime();
             const token = localStorage.getItem('refreshToken') // или откуда ты его берешь
-            const data = JSON.stringify({duration:diff, id:ApplId, token:`Bearer ${token}`});
+            const data = JSON.stringify({duration:diff, id:applIdRef.current, token:`Bearer ${token}`});
             const blob = new Blob([data], {type: 'application/json;charset=UTF-8'});
             navigator.sendBeacon(`${process.env.REACT_APP_BASIC_URL}/upddur`, blob);
         }
@@ -86,6 +88,18 @@ const ApplicationItem = (): React.ReactElement => {
             window.removeEventListener('beforeunload', handlePageHide);
         }
     }, [])
+
+    useEffect(() => {
+        if  (isReadyForDiffSave) {
+            isReadyRef.current = isReadyForDiffSave
+        }
+    }, [isReadyForDiffSave]);
+
+    useEffect(() => {
+        if  (ApplId > 0) {
+            applIdRef.current = ApplId
+        }
+    }, [ApplId]);
 
 
 

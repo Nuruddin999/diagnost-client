@@ -329,7 +329,6 @@ function MyDocContent({applItem, isDeletedPlace, status}) {
         }
         return prev
     },[]).length === 0
-    console.log('isCommentsEmpty', isCommentsEmpty)
     return (
         <PDFViewer>
             <Document>
