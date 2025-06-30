@@ -61,7 +61,8 @@ const ApplicationItem = (): React.ReactElement => {
 
         if (document.visibilityState === 'hidden' && isReadyRef.current) {
             const token = localStorage.getItem('refreshToken') // или откуда ты его берешь
-            const data = JSON.stringify({duration:diff, id:applIdRef.current, token:`Bearer ${token}`});
+            const currentDiff = timeEndRef.current ?  new Date().getTime() - timeEndRef.current.getTime() : 0;
+            const data = JSON.stringify({duration:currentDiff, id:applIdRef.current, token:`Bearer ${token}`});
             const blob = new Blob([data], {type: 'application/json;charset=UTF-8'});
             navigator.sendBeacon(`${process.env.REACT_APP_BASIC_URL}/upddur`, blob);
         }
