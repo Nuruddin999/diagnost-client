@@ -34,6 +34,7 @@ const ApplicationItem = (): React.ReactElement => {
     const applIdRef = React.useRef<number | null>(0);
     const isError = errorMessage || userItemStatus === 'no'
     const isReadyForDiffSave = timeEndRef.current && !passToCoordinatorTime && managerId === userId
+    const diff = timeEndRef.current ?  new Date().getTime() - timeEndRef.current.getTime() : 0;
     /**
      * Обновляем заключение.
      */
@@ -48,7 +49,7 @@ const ApplicationItem = (): React.ReactElement => {
             dispatch(setError(''))
         }
         dispatch(setUserItemStatus('pending'))
-        const response = await makeSmetaReadyForCoordApi(id)
+        const response = await makeSmetaReadyForCoordApi(id, diff)
         dispatch(setUserItemStatus(response.success ? 'movedCoord' : 'no'))
     }
     const handlePageHide = () => {
@@ -59,7 +60,6 @@ const ApplicationItem = (): React.ReactElement => {
         }
 
         if (document.visibilityState === 'hidden' && isReadyRef.current) {
-            const diff = new Date().getTime() - timeEndRef.current!.getTime();
             const token = localStorage.getItem('refreshToken') // или откуда ты его берешь
             const data = JSON.stringify({duration:diff, id:applIdRef.current, token:`Bearer ${token}`});
             const blob = new Blob([data], {type: 'application/json;charset=UTF-8'});
