@@ -7,6 +7,7 @@ import {UserItemRecapType} from "../../common/types";
 import {
     Button,
     Card,
+    CircularProgress,
     Table,
     TableBody,
     TableCell,
@@ -26,7 +27,7 @@ const AnalyticsItem: FC = () => {
     const {id} = useParams<{ id: string }>(); // из :id
     const query = new URLSearchParams(useLocation().search);
     const period = query.get('period');
-    const {loading, data} = useQuery<UserItemRecapType>(() => getUserItemRecapApi(period || '', id, ))
+    const {loading, data} = useQuery<UserItemRecapType>(() => getUserItemRecapApi(period || '', id,))
     const [filteredData, setFilteredData] = useState<UserItemRecapType | null>();
     const [itemLoading, setItemLoading] = useState<boolean>(false);
     const [filerDate, setFilerDate] = useState<{ fromDate: string, fromTime: string, toDate: string, toTime: string }>({
@@ -47,8 +48,8 @@ const AnalyticsItem: FC = () => {
     const unfinished = data?.user.applications.filter(el => el.passToCoordinatorTime === null)
     const finished = data?.user.applications.filter(el => el.passToCoordinatorTime !== null)
 
-    const handleFilter=async ()=>{
-       const h = new Date(filerDate.fromTime).getHours()
+    const handleFilter = async () => {
+        const h = new Date(filerDate.fromTime).getHours()
         const m = new Date(filerDate.fromTime).getMinutes()
         const th = new Date(filerDate.toTime).getHours()
         const tm = new Date(filerDate.toTime).getMinutes()
@@ -64,10 +65,9 @@ const AnalyticsItem: FC = () => {
         toData.setSeconds(0)
         toData.setMilliseconds(0)
         try {
-           const resp = await getUserItemRecapApi('',id,fromData.toISOString(), toData.toISOString())
+            const resp = await getUserItemRecapApi('', id, fromData.toISOString(), toData.toISOString())
             setFilteredData(resp)
-        }
-        catch (e) {
+        } catch (e) {
 
         }
     }
@@ -75,6 +75,9 @@ const AnalyticsItem: FC = () => {
     }, []);
 
 
+    if (loading || itemLoading) {
+        return <CircularProgress/>
+    }
     return <Box sx={{
         marginTop: '40px',
         width: '100%',
@@ -83,6 +86,7 @@ const AnalyticsItem: FC = () => {
         overflow: 'hidden'
     }}
                 display="flex">
+
         <Box sx={{
             width: "80%"
         }}>
@@ -163,56 +167,56 @@ const AnalyticsItem: FC = () => {
                 </Table>
             </Card>
         </Box>
-            <Box marginY={2} display='flex' alignItems='center' gap={2} flexDirection={'column'}>
-                <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
-                    <div>
-                        <DatePicker
-                            value={filerDate.fromDate}
-                            mask='__.__.____'
-                            toolbarPlaceholder='01.01.2025'
-                            label='Начало дата'
-                            onChange={(e) => setFilerDate({...filerDate, fromDate: e || ''})}
-                            renderInput={(params: any) => <TextField {...params} size='small'/>}
-                            inputFormat="dd-MM-yyyy"
-                        />
-                    </div>
-                </LocalizationProvider>
-                <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
-                    <div>
-                        <TimePicker
-                            value={filerDate.fromTime}
-                            onChange={(e) => setFilerDate({...filerDate, fromTime: e || ''})}
-                            label='Начало время'
-                            renderInput={(params: any) => <TextField {...params} size='small'/>}
-                        />
-                    </div>
-                </LocalizationProvider>
-                <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
-                    <div>
-                        <DatePicker
-                            value={filerDate.toDate}
-                            mask='__.__.____'
-                            toolbarPlaceholder='01.01.2025'
-                            onChange={(e) => setFilerDate({...filerDate, toDate: e || ''})}
-                            label='Начало время'
-                            renderInput={(params: any) => <TextField {...params} size='small'/>}
-                            inputFormat="dd-MM-yyyy"
-                        />
-                    </div>
-                </LocalizationProvider>
-                <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
-                    <div>
-                        <TimePicker
-                            value={filerDate.toTime}
-                            onChange={(e) => setFilerDate({...filerDate, toTime: e || ''})}
-                            label='Начало время'
-                            renderInput={(params: any) => <TextField {...params} size='small'/>}
-                        />
-                    </div>
-                </LocalizationProvider>
-                <Button onClick={handleFilter}>Применить</Button>
-                <Button>Сбросить</Button>
-            </Box>
+        <Box marginY={2} display='flex' alignItems='center' gap={2} flexDirection={'column'}>
+            <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
+                <div>
+                    <DatePicker
+                        value={filerDate.fromDate}
+                        mask='__.__.____'
+                        toolbarPlaceholder='01.01.2025'
+                        label='Начало дата'
+                        onChange={(e) => setFilerDate({...filerDate, fromDate: e || ''})}
+                        renderInput={(params: any) => <TextField {...params} size='small'/>}
+                        inputFormat="dd-MM-yyyy"
+                    />
+                </div>
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
+                <div>
+                    <TimePicker
+                        value={filerDate.fromTime}
+                        onChange={(e) => setFilerDate({...filerDate, fromTime: e || ''})}
+                        label='Начало время'
+                        renderInput={(params: any) => <TextField {...params} size='small'/>}
+                    />
+                </div>
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
+                <div>
+                    <DatePicker
+                        value={filerDate.toDate}
+                        mask='__.__.____'
+                        toolbarPlaceholder='01.01.2025'
+                        onChange={(e) => setFilerDate({...filerDate, toDate: e || ''})}
+                        label='Начало время'
+                        renderInput={(params: any) => <TextField {...params} size='small'/>}
+                        inputFormat="dd-MM-yyyy"
+                    />
+                </div>
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
+                <div>
+                    <TimePicker
+                        value={filerDate.toTime}
+                        onChange={(e) => setFilerDate({...filerDate, toTime: e || ''})}
+                        label='Начало время'
+                        renderInput={(params: any) => <TextField {...params} size='small'/>}
+                    />
+                </div>
+            </LocalizationProvider>
+            <Button onClick={handleFilter}>Применить</Button>
+            <Button>Сбросить</Button>
+        </Box>
     </Box>
 }
 
