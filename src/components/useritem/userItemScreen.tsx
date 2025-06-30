@@ -37,7 +37,7 @@ type userItem = {
     onClose: Dispatch<SetStateAction<string>>
 }
 
-const UserItemScreen = ({isProfile, id, onClose}: userItem): React.ReactElement => {
+const UserItemScreen = ({isProfile}: userItem): React.ReactElement => {
     const {fileUploadStatus, userItemStatus, errorMessage} = useSelector((state: RootState) => state.ui)
     const {id: userId} = useParams<{ id: string }>()
     const {
@@ -75,13 +75,8 @@ const UserItemScreen = ({isProfile, id, onClose}: userItem): React.ReactElement 
             return
         }
 
-        console.log('continue')
-        const fromYear = searchPeriod.from.toString().split("-")[2];
-        const fromMonth = searchPeriod.from.toString().split("-")[1];
-        const fromDay = searchPeriod.from.toString().split("-")[0];
 
     }
-    console.log('searcg', searchPeriod.from);
     useEffect(() => {
         if (idUrl) {
             dispatch(getListItemAction(idUrl, 'users', saveUserItem))
@@ -139,7 +134,7 @@ const UserItemScreen = ({isProfile, id, onClose}: userItem): React.ReactElement 
                 </div>
                 <Typography margin={2} variant='h6'>Фото подписи</Typography>
                 {urlSignPath && <div className='sign-img'>
-                    <img src={urlSignPath} width='200px' height='100px'/>
+                    <img src={urlSignPath} width='200px' height='100px' alt={'Подпись'}/>
                     <Typography>{signFileName}</Typography>
                 </div>}
                 {users?.update && <div className={'upload-section'}>

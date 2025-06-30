@@ -12,11 +12,21 @@ export const getUsersRecapApi = async (period: string
     return response.data
 }
 
-export const getUserItemRecapApi = async (period: string, id:string
+export const getUserItemRecapApi = async (period: string, id:string, fromD?: string, toD?:string
 ): Promise<UserItemRecapType> => {
     const response = await diagnostApi.get('/gutrec', {
         headers: {'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`},
-        params: {period, id},
+        params: {period, id, fromD,toD,},
+    })
+    return response.data
+}
+
+
+export const getUserItemRecapApiByPeriod = async (fromD: string, toD:string,id:string
+): Promise<UserItemRecapType> => {
+    const response = await diagnostApi.get('/gutrecbpr', {
+        headers: {'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`},
+        params: {fromD,toD, id},
     })
     return response.data
 }

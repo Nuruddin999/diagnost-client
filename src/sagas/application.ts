@@ -1,10 +1,8 @@
 import {getListItemById} from '../common/api/api';
 import {
     changeIsDeletedPlace,
-    changeManagerApi,
     updateOneApplicationApi
 } from '../api/application';
-import {getApplication} from '../actions/application';
 import {call, put, select} from "redux-saga/effects"
 import {
     applicationInitialState,
@@ -13,7 +11,7 @@ import {
     successUpdate
 } from '../reducers/applicationItemSlice';
 import {RootState} from '../app/store';
-import {openManagerChangeModal, setCircular, setError, setUserItemStatus} from '../reducers/ui';
+import {setCircular, setError, setUserItemStatus} from '../reducers/ui';
 import {CheckupPlanItem} from "../common/types";
 
 type applicationAddResponse = {
@@ -54,6 +52,7 @@ type applicationItemFields = {
     managerSignUrlPath: string,
     diagnosticData: string,
     patientBirthDate: string,
+    passToCoordinatorTime:string,
     CheckupPlans: Array<CheckupPlanItem>
     Comments: Array<{
         title?: string,

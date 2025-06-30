@@ -12,10 +12,12 @@ export type applicationInitialState = {
     patientPromoter: string,
     fundName: string,
     manager: string,
+    managerId: string,
     managerSpeciality: string,
     managerSignUrlPath: string,
     creationDate: string,
     execDate: string,
+    passToCoordinatorTime:string,
     checkUpPlaceIsDeleted: boolean,
     consiliumDoctors: Array<consiliumDoctor>,
     diagnostic: Array<{
@@ -41,6 +43,7 @@ export type applicationInitialState = {
 export const initialState: applicationInitialState = {
     id: 0,
     name: '',
+    managerId:'',
     patientRequest: '',
     patientPromoter: '',
     fundName: '',
@@ -54,6 +57,7 @@ export const initialState: applicationInitialState = {
     patientBirthDate: '',
     patientName: '',
     diagnosticData: '',
+    passToCoordinatorTime:'',
     checkUpPlaceIsDeleted: false,
     consiliumDoctors: [],
     diagnostic: [],
@@ -72,6 +76,7 @@ export const applicationItemSlice = createSlice({
     reducers: {
         saveApplicationItem: (state, action: PayloadAction<applicationItemResponse>) => {
             state.id = action.payload.id
+            state.managerId=action.payload.managerId
             state.consiliumDoctors = action.payload.ConsiliumDoctors
             state.diagnostic = action.payload.Diagnostics
             state.mostProblDiagnosis = action.payload.mostProblDiagnosis
@@ -91,6 +96,7 @@ export const applicationItemSlice = createSlice({
             state.checkUpPlaceIsDeleted = action.payload.checkUpPlaceIsDeleted
             state.fundName = action.payload.fundName
             state.reworkComments = action.payload.ReworkComments
+            state.passToCoordinatorTime=action.payload.passToCoordinatorTime
         },
         saveConsiliumDoctors: (state, action: PayloadAction<consiliumDoctor>) => {
             state.consiliumDoctors = [...state.consiliumDoctors, {

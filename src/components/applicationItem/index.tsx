@@ -25,9 +25,13 @@ import ReworkBlock from "../../common/components/rework_block";
 const ApplicationItem = (): React.ReactElement => {
     const {id} = useParams<{ id: string }>()
     const {userItemStatus, errorMessage} = useSelector((state: RootState) => state.ui)
-    const reworkComments = useSelector((state: RootState) => state.applicationItem.reworkComments)
+    const {id:userId} = useSelector((state: RootState) => state.user.user)
+    const {reworkComments, id:ApplId, passToCoordinatorTime, managerId} = useSelector((state: RootState) => state.applicationItem)
     const dispatch = useDispatch()
+    const visibilityRef = React.useRef<string | null>(null);
+    const timeEndRef = React.useRef<Date | null>(null);
     const isError = errorMessage || userItemStatus === 'no'
+    const isReadyForDiffSave = timeEndRef.current && !passToCoordinatorTime && managerId === userId
     /**
      * Обновляем заключение.
      */
@@ -45,8 +49,26 @@ const ApplicationItem = (): React.ReactElement => {
         const response = await makeSmetaReadyForCoordApi(id)
         dispatch(setUserItemStatus(response.success ? 'movedCoord' : 'no'))
     }
+    const handlePageHide = () => {
+
+        if (!visibilityRef.current) {
+            visibilityRef.current = document.visibilityState
+            return
+        }
+
+        if (document.visibilityState === 'hidden' && isReadyForDiffSave) {
+            const diff = new Date().getTime() - timeEndRef.current!.getTime();
+            const token = localStorage.getItem('refreshToken') // или откуда ты его берешь
+            const data = JSON.stringify({duration:diff, id:ApplId, token:`Bearer ${token}`});
+            const blob = new Blob([data], {type: 'application/json;charset=UTF-8'});
+            navigator.sendBeacon(`${process.env.REACT_APP_BASIC_URL}/upddur`, blob);
+        }
+    };
     useEffect(() => {
         dispatch(getListItemAction(id, 'applications', saveApplicationItem))
+        timeEndRef.current = new Date()
+        window.addEventListener('visibilitychange', handlePageHide);
+        window.addEventListener('beforeunload', handlePageHide);
         return () => {
             dispatch(saveApplicationItem({
                 ...initialState,
@@ -60,8 +82,12 @@ const ApplicationItem = (): React.ReactElement => {
                 CheckupPlans: [],
                 ReworkComments: []
             }))
+            window.removeEventListener('visibilitychange', handlePageHide);
+            window.removeEventListener('beforeunload', handlePageHide);
         }
     }, [])
+
+
 
     return userItemStatus === 'pending' ? <RoundLoader/> : <div className="application-item">
         <h2>РЕКОМЕНДАЦИИ ВРАЧА</h2>
