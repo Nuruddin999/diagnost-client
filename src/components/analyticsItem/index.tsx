@@ -121,7 +121,7 @@ const AnalyticsItem: FC = () => {
                         <TableRow>
                             <TableCell>
                                 <Typography>
-                                    {filteredData?.count}
+                                    {filteredData?.user.applications.filter(el => !el.passToCoordinatorTime).length || 0}
                                 </Typography>
                             </TableCell>
                             <TableCell>
