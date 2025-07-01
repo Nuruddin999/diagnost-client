@@ -26,21 +26,26 @@ const UserItem = ({ isProfile }: userItem): React.ReactElement => {
   const { users } = applUserRights.processedRights
   const [files, setFiles] = useState<Array<File>>([])
   const dispatch = useDispatch()
+
   const handleChange = (entity: string, field: string, value: any) => {
     dispatch(updateRightsAction(entity, field, value, id))
   }
+
   const updateFile = () => {
     dispatch(userSignFileUpdate(idUrl, files))
   }
+
   useEffect(() => {
     dispatch(getListItemAction(idUrl, 'users', saveUserItem))
   }, [])
+
   useEffect(() => {
     if (fileUploadStatus === 'success' || 'error') {
       setFiles([])
       setTimeout(() => dispatch(setFileUploadStatus('no')), 1500)
     }
   }, [fileUploadStatus])
+
   useEffect(() => {
     if (errorMessage) {
       setTimeout(() => dispatch(setError('')), 1500)

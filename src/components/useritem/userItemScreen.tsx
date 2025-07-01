@@ -77,17 +77,20 @@ const UserItemScreen = ({isProfile}: userItem): React.ReactElement => {
 
 
     }
+
     useEffect(() => {
         if (idUrl) {
             dispatch(getListItemAction(idUrl, 'users', saveUserItem))
         }
     }, [idUrl])
+
     useEffect(() => {
         if (fileUploadStatus === 'success' || 'error') {
             setFiles([])
             setTimeout(() => dispatch(setFileUploadStatus('no')), 1500)
         }
     }, [fileUploadStatus])
+
     useEffect(() => {
         if (errorMessage) {
             setTimeout(() => dispatch(setError('')), 1500)

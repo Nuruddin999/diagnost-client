@@ -1,13 +1,13 @@
 import {diagnostApi} from "./index";
-import {UserItemRecapType, UsersRecapType} from "../common/types";
+import {UserItemRecapType} from "../common/types";
 
 
 
-export const getUsersRecapApi = async (period: string
-): Promise<{users:Array<UsersRecapType>, count:number}> => {
+export const getUsersRecapApi = async (period: string, id:string,  fromD:string,toD:string
+): Promise<{users:Array<UserItemRecapType>, count:number}> => {
     const response = await diagnostApi.get('/gurec', {
         headers: {'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`},
-        params: {period},
+        params: {period, fromD, toD},
     })
     return response.data
 }

@@ -74,14 +74,11 @@ export type ReworkCommentType = Array<{
     createdAt: string,
 }>
 
-export type UsersRecapType = {
-    id: number, name: string, speciality: string, applications: number
-}
-
 export type UserItemRecapType = {
     count: number,
     period:Array<Date>,
-    user: {
+    users: Array<{
+        id: 0,
         name: string,
         speciality: string,
         applications: Array<{
@@ -91,5 +88,5 @@ export type UserItemRecapType = {
             passToCoordinatorTime: Date | null,
             duration:number,
         }>
-    }
+    }>
 }
