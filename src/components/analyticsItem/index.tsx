@@ -16,7 +16,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import {makeDuration} from "../../common/utils";
+import {makeDuration, makeTime} from "../../common/utils";
 import {DatePicker, LocalizationProvider, TimePicker} from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import ruLocale from "date-fns/locale/ru";
@@ -30,6 +30,10 @@ const AnalyticsItem: FC = () => {
     const {loading, data} = useQuery<UserItemRecapType>(() => getUserItemRecapApi(period || '', id,))
     const [filteredData, setFilteredData] = useState<UserItemRecapType | null>();
     const [itemLoading, setItemLoading] = useState<boolean>(false);
+    const fromPeriod = new Date(filteredData?.period[0] || '').toLocaleDateString()
+    const fromPeriodTime = makeTime(filteredData?.period[0])
+    const toPeriod = new Date(filteredData?.period[1] || '').toLocaleDateString()
+    const toPeriodTime = makeTime(filteredData?.period[1])
     const [filerDate, setFilerDate] = useState<{ fromDate: string, fromTime: string, toDate: string, toTime: string }>({
         fromDate: '',
         fromTime: '',
@@ -37,16 +41,18 @@ const AnalyticsItem: FC = () => {
         toTime: '',
     });
 
-    const makeTime = (period: Date | undefined) => {
-        return `${new Date(period || '').getHours().toString().padStart(2, '0')}:${new Date(period || '').getMinutes().toString().padStart(2, '0')}:${new Date(period || '').getSeconds().toString().padStart(2, '0')}`;
-    }
-    const fromPeriod = new Date(data?.period[0] || '').toLocaleDateString()
-    const fromPeriodTime = makeTime(data?.period[0])
-    const toPeriod = new Date(data?.period[1] || '').toLocaleDateString()
-    const toPeriodTime = makeTime(data?.period[1])
 
-    const unfinished = data?.user.applications.filter(el => el.passToCoordinatorTime === null)
-    const finished = data?.user.applications.filter(el => el.passToCoordinatorTime !== null)
+    const unfinished = filteredData?.user.applications.filter(el => el.passToCoordinatorTime === null)
+    const finished = filteredData?.user.applications.filter(el => el.passToCoordinatorTime !== null)
+
+    const fetchData=async (period:string,from:string='',to:string='')=>{
+        try {
+            const resp = await getUserItemRecapApi(period, id, from, to)
+            setFilteredData(resp)
+        } catch (e) {
+
+        }
+    }
 
     const handleFilter = async () => {
         const h = new Date(filerDate.fromTime).getHours()
@@ -64,16 +70,27 @@ const AnalyticsItem: FC = () => {
         toData.setMinutes(tm)
         toData.setSeconds(0)
         toData.setMilliseconds(0)
-        try {
-            const resp = await getUserItemRecapApi('', id, fromData.toISOString(), toData.toISOString())
-            setFilteredData(resp)
-        } catch (e) {
-
-        }
+        await fetchData('',fromData.toISOString(), toData.toISOString())
     }
+
+
     useEffect(() => {
+         fetchData(period || '')
     }, []);
 
+    useEffect(() => {
+        if (filteredData?.period) {
+            setFilerDate({...filerDate,
+                fromDate: new Date(filteredData.period[0]).toString(),
+                fromTime: new Date(filteredData.period[0]).toString(),
+                toDate: new Date(filteredData.period[1]).toString(),
+                toTime: new Date(filteredData.period[1]).toString(),
+
+            }
+            )
+        }
+
+    }, [filteredData?.period]);
 
     if (loading || itemLoading) {
         return <CircularProgress/>
@@ -81,19 +98,20 @@ const AnalyticsItem: FC = () => {
     return <Box sx={{
         marginTop: '40px',
         width: '100%',
-        height: '100%',
+        height: 'calc(100% - 40px)',
         backgroundColor: "rgba(211, 211, 211, 0.6)",
         overflow: 'hidden'
     }}
-                display="flex">
+                display="flex"
+    justifyContent={"space-around"}>
 
         <Box sx={{
-            width: "80%"
+            width: "85%"
         }}>
             <Typography variant={'h6'} fontWeight={'bold'} color={"primary"} sx={{opacity: '1', marginTop: "8px"}}>Заключения
                 общий отчет</Typography>
             <Card sx={{width: '800px', margin: "8px auto 0", borderRadius: "16px"}}>
-                <Table>
+                <Table size={"small"}>
                     <TableHead>
                         <TableRow>
                             {tableHeaders.map(header => <TableCell><Typography fontWeight={'bold'}>{header}</Typography></TableCell>)}
@@ -103,12 +121,12 @@ const AnalyticsItem: FC = () => {
                         <TableRow>
                             <TableCell>
                                 <Typography>
-                                    {data?.count}
+                                    {filteredData?.count}
                                 </Typography>
                             </TableCell>
                             <TableCell>
                                 <Typography>
-                                    {data?.user.applications.filter(el => el.passToCoordinatorTime).length || 0}
+                                    {filteredData?.user.applications.filter(el => el.passToCoordinatorTime).length || 0}
                                 </Typography>
                             </TableCell>
                             <TableCell>
@@ -122,8 +140,8 @@ const AnalyticsItem: FC = () => {
             </Card>
             <Typography variant={'h6'} fontWeight={'bold'} color={"primary"} marginTop={2} sx={{opacity: 1}}>Заключения
                 - отчет детальный</Typography>
-            <Card variant={"elevation"} sx={{width: '80%', margin: "16px auto 0", borderRadius: "16px"}}>
-                <Table>
+            <Card variant={"elevation"} sx={{width: 'calc(100% - 0px)', margin: "16px auto 0", borderRadius: "16px", maxHeight: "65vh",overflowY:"scroll"}}>
+                <Table stickyHeader size={'small'}>
                     <TableHead>
                         <TableRow>
                             <TableCell><Typography fontWeight={'bold'}>В работе</Typography></TableCell>
@@ -134,7 +152,7 @@ const AnalyticsItem: FC = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data?.user.applications.map((el, index) => (
+                        {filteredData?.user.applications.map((el, index) => (
                             <TableRow key={index}>
                                 <TableCell>
                                     <Typography>
@@ -215,7 +233,7 @@ const AnalyticsItem: FC = () => {
                 </div>
             </LocalizationProvider>
             <Button onClick={handleFilter}>Применить</Button>
-            <Button>Сбросить</Button>
+            <Button onClick={()=>fetchData(period || '')}>Сбросить</Button>
         </Box>
     </Box>
 }

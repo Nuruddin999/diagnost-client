@@ -54,4 +54,8 @@ export function formatDuration(startDate:string, endDate:string) {
 
 }
 
+export const makeTime = (period: Date | undefined) => {
+    return `${new Date(period || '').getHours().toString().padStart(2, '0')}:${new Date(period || '').getMinutes().toString().padStart(2, '0')}:${new Date(period || '').getSeconds().toString().padStart(2, '0')}`;
+}
+
 
