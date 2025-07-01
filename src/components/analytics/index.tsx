@@ -86,7 +86,8 @@ const UsersRecap: FC = () => {
                             display={'flex'}
                             justifyContent={'start'}
                             marginTop={index > 0 ? 2 : 0}
-                            sx={{borderBottom: "1px solid darkgray", paddingBottom: '8px', cursor: 'pointer'}}
+                            sx={{borderBottom: "1px solid darkgray", paddingBottom: '8px', cursor: 'pointer', maxHeight: "75vh",
+                                overflowY: "scroll"}}
                             key={user.name}
                             onClick={() => goToItem(user.id.toString())}
                         >
