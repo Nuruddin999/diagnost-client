@@ -140,7 +140,7 @@ const AnalyticsItem: FC = () => {
             </Card>
             <Typography variant={'h6'} fontWeight={'bold'} color={"primary"} marginTop={2} sx={{opacity: 1}}>Заключения
                 - отчет детальный</Typography>
-            <Card variant={"elevation"} sx={{width: 'calc(100% - 0px)', margin: "16px auto 0", borderRadius: "16px", maxHeight: "65vh",overflowY:"scroll"}}>
+            <Card variant={"elevation"} sx={{width: 'calc(100% - 0px)', margin: "16px auto 0", borderRadius: "16px", maxHeight: "75vh",overflowY:"scroll"}}>
                 <Table stickyHeader size={'small'}>
                     <TableHead>
                         <TableRow>
