@@ -55,7 +55,7 @@ const AnalyticsItem: FC = () => {
                 width: 'calc(100% - 0px)',
                 margin: "16px auto 0",
                 borderRadius: "16px",
-                maxHeight: "75vh",
+                maxHeight: "65vh",
                 overflowY: "scroll"
             }}>
                 <Table stickyHeader size={'small'}>
