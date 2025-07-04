@@ -1,0 +1,7 @@
+.item {
+  background: initial;
+  cursor: pointer;
+  &:hover {
+    background-color: lightgray;
+  }
+}

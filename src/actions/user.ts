@@ -20,6 +20,7 @@ export type registeredUser = {
   phone: string,
   speciality: string,
   role: string,
+    fundName?: string,
   files:any[] | null
 }
 

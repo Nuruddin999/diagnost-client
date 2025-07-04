@@ -16,11 +16,13 @@ export const useFetchAnalyticsUserData =(fetchDataCallback:any, period:string, i
 
     let inWork=0;
     let completed = 0
+    let completedTotalDuration = 0
 
     for (const user of filteredData.users) {
         for (const applel of user.applications) {
             if (applel.passToCoordinatorTime) {
                 completed+=1
+                completedTotalDuration += applel.duration
             } else {
                 inWork+=1
             }
@@ -60,6 +62,7 @@ export const useFetchAnalyticsUserData =(fetchDataCallback:any, period:string, i
         fetchData,
         inWork,
         completed,
+        completedTotalDuration,
     }
 
 }

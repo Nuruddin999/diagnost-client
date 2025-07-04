@@ -13,6 +13,7 @@ import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import GradingIcon from '@mui/icons-material/Grading';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import KeyboardArrowDownSharpIcon from '@mui/icons-material/KeyboardArrowDownSharp';
 import ApplicationItem from "../applicationItem";
 import {Registration} from "../../common/components/registration/registration";
 import UsersList from "../userslist/userslist";
@@ -28,6 +29,8 @@ import UserItemScreen from "../useritem/userItemScreen";
 import {Analytics} from "@mui/icons-material";
 import UsersRecap from "../analytics";
 import AnalyticsItem from "../analyticsItem";
+import Box from "@mui/material/Box";
+import FundWorkerList from "../fundWorkerList";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -38,6 +41,7 @@ const Dashboard = (): React.ReactElement => {
     const isCircular = useSelector((state: RootState) => state.ui.isCircular)
     const [isWarning, setIsWarning] = React.useState('');
     const [sessionId, setSessionId] = React.useState('');
+    const [openDropDown, setOpenDropDown] = React.useState<{ users: boolean }>({users: false});
     const visibilityRef = React.useRef<string | null>(null);
     const dispatch = useDispatch()
 
@@ -66,7 +70,7 @@ const Dashboard = (): React.ReactElement => {
         }
         if (document.visibilityState === 'hidden' && sessionId.toString().trim()) {
             const token = localStorage.getItem('refreshToken') // или откуда ты его берешь
-            const data = JSON.stringify({sessionId, token:`Bearer ${token}`});
+            const data = JSON.stringify({sessionId, token: `Bearer ${token}`});
             const blob = new Blob([data], {type: 'application/json;charset=UTF-8'});
             navigator.sendBeacon(`${process.env.REACT_APP_BASIC_URL}/suet`, blob);
         }
@@ -156,18 +160,31 @@ const Dashboard = (): React.ReactElement => {
                             </ListItemText>
                         </Link>
                     </div>}
-                    {rights.isUsersOneRight && <div className='list-item'>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/users')}>
-                            <ListItemIcon>
-                                <PeopleAltIcon/>
-                            </ListItemIcon>
-                        </Link>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/users')}>
-                            <ListItemText>
-                                Пользователи
-                            </ListItemText>
-                        </Link>
+                    {rights.isUsersOneRight && <div className='list-item' onClick={(e) => setOpenDropDown({...openDropDown, users: !openDropDown.users})}>
+                            <Box >
+                                <ListItemIcon>
+                                    <PeopleAltIcon/>
+                                </ListItemIcon>
+                            </Box>
+                            <Box>
+                                <Box display="flex" justifyContent="space-between">
+                                    <Typography>Пользователи</Typography>
+                                    <KeyboardArrowDownSharpIcon/>
+                                </Box>
+                            </Box>
                     </div>}
+                    {openDropDown.users && <Box display="flex" flexDirection="column" sx={{width:'95%', marginTop:"8px"}} gap={1}>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/users')} className={'drop-item'}>
+                            <Box marginLeft={'auto'}>
+                                <Typography align={'right'}>Врачи Надежды</Typography>
+                            </Box>
+                        </Link>
+                        <Link to='' onClick={(e) => goToTab(e, '/main/fundworkers')} className={'drop-item'}>
+                            <Box marginLeft={'auto'}>
+                                <Typography align={'right'} >Благотворительные фонды</Typography>
+                            </Box>
+                        </Link>
+                    </Box>}
                     <div className='list-item'>
                         <Link to='' onClick={(e) => goToTab(e, '/main/speciality')}>
                             <ListItemIcon>
@@ -232,7 +249,7 @@ const Dashboard = (): React.ReactElement => {
                                 </Link>
                                 <Link to='' onClick={(e) => goToTab(e, '/main/analytics')}>
                                     <ListItemText>
-                                       Аналитика
+                                        Аналитика
                                     </ListItemText>
                                 </Link>
                             </div>
@@ -260,6 +277,10 @@ const Dashboard = (): React.ReactElement => {
                         </Route>
                         <Route path='/main/users'>
                             {rights.processedRights.users?.read ? <UsersList/> :
+                                <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
+                        </Route>
+                        <Route path='/main/fundworkers'>
+                            {rights.processedRights.users?.read ? <FundWorkerList/> :
                                 <Typography className="no-rights" align='center'>Недостаточно прав</Typography>}
                         </Route>
                         <Route path='/main/speciality'>
@@ -291,12 +312,12 @@ const Dashboard = (): React.ReactElement => {
                                 </div>}
                         </Route>
                         <Route path='/main/analytics'>
-                            {isAdmin ? <UsersRecap /> :
+                            {isAdmin ? <UsersRecap/> :
                                 <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
                                 </div>}
                         </Route>
                         <Route path='/main/analytics-item/:id'>
-                            {isAdmin ? <AnalyticsItem /> :
+                            {isAdmin ? <AnalyticsItem/> :
                                 <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
                                 </div>}
                         </Route>

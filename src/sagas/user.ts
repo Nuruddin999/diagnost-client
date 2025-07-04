@@ -30,7 +30,7 @@ type allUsersResponse = {
 }
 /**
  * Вход в систему.
- * @param login .
+ * @param login
  */
 export function* loginUser(login: { type: 'user/login', payload: { email: string, password: string } }) {
   try {
@@ -62,7 +62,15 @@ export function* registerUser(body: { type: 'user/register', payload: { email: s
   try {
     yield put(setAddUserStatus('pending'))
     const response: { user: string } = yield call(registerApi, { ...body.payload, files: null })
-    if (response) {
+    if (response && body.payload.role === 'fundWorker')   {
+        yield put(setAddUserStatus('ok'))
+        const hasSuperUser: boolean = yield select((state: RootState) => state.user.hasSuperUser)
+        if (!hasSuperUser) {
+            yield put(saveSuperUser(true))
+        }
+        yield put(getUserByLetter(1, 10, '', '', '', ''))
+    }
+    else if (response && body.payload.role !== 'fundWorker')   {
       const fileUploadResponse: string = yield call(upLoadFileApi, body.payload.files, response.user)
       if (fileUploadResponse) {
         yield call(getFilesList, response.user)

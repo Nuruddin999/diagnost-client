@@ -21,7 +21,8 @@ const AnalyticsItem: FC = () => {
         unfinished,
         itemLoading,
         toPeriodTime,
-        toPeriod
+        toPeriod,
+        completedTotalDuration
     } = useFetchAnalyticsUserData(getUserItemRecapApi, period || '', id)
 
     if (itemLoading || filteredData === null) {
@@ -40,6 +41,8 @@ const AnalyticsItem: FC = () => {
         <Box sx={{
             width: "85%"
         }}>
+            <Typography  align={'left'} variant={'h6'} fontWeight={'bold'} color={"primary"} sx={{opacity: '1', marginTop: "8px"}}>{filteredData.users[0].speciality} {filteredData.users[0].name}
+            </Typography>
             <Typography variant={'h6'} fontWeight={'bold'} color={"primary"} sx={{opacity: '1', marginTop: "8px"}}>Заключения
                 общий отчет</Typography>
             <AnalyticsRecapTable
@@ -95,6 +98,32 @@ const AnalyticsItem: FC = () => {
                                 </TableCell>
                             </TableRow>
                         ))}
+                        <TableRow>
+                            <TableCell>
+                                <Typography>
+
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography>
+
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography>
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography>
+                                    ИТОГО:
+                                </Typography>
+                            </TableCell>
+                            <TableCell>
+                                <Typography>
+                                    {makeDuration(completedTotalDuration)}
+                                </Typography>
+                            </TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
             </Card>

@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {Card, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
-const tableHeaders = ['В работе', 'Завершенные', 'Период']
+const tableHeaders = ['Всего','В работе', 'Завершенные', 'Период']
 const AnalyticsRecapTable: FC<{inWork:number,completed:number, periodTtitle:string}> = ({inWork,completed, periodTtitle}) => {
     return <Card sx={{width: '800px', margin: "8px auto 0", borderRadius: "16px"}}>
         <Table size={"small"}>
@@ -12,6 +12,11 @@ const AnalyticsRecapTable: FC<{inWork:number,completed:number, periodTtitle:stri
             </TableHead>
             <TableBody>
                 <TableRow>
+                    <TableCell>
+                        <Typography>
+                            {inWork + completed}
+                        </Typography>
+                    </TableCell>
                     <TableCell>
                         <Typography>
                             {inWork}
