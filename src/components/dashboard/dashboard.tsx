@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect} from "react";
-import {Link, Redirect, Route, Switch, useHistory, useLocation,} from "react-router-dom";
+import {Link, Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
 import ReportList from "../reportlist/reportlist";
 import {Backdrop, Button, CircularProgress, IconButton, ListItemIcon, ListItemText, Typography} from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -31,11 +31,13 @@ import UsersRecap from "../analytics";
 import AnalyticsItem from "../analyticsItem";
 import Box from "@mui/material/Box";
 import FundWorkerList from "../fundWorkerList";
+import {calculateDiff} from "../../api/analytics";
 
 
 const Dashboard = (): React.ReactElement => {
     const {user, hasSuperUser} = useSelector((state: RootState) => state.user)
     const {name, id} = user
+
     const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
     const isAdmin = user.role === 'admin' || user.role === 'superadmin'
     const isCircular = useSelector((state: RootState) => state.ui.isCircular)
@@ -43,6 +45,9 @@ const Dashboard = (): React.ReactElement => {
     const [sessionId, setSessionId] = React.useState('');
     const [openDropDown, setOpenDropDown] = React.useState<{ users: boolean }>({users: false});
     const visibilityRef = React.useRef<string | null>(null);
+    const timeStartRef = React.useRef<number | null>(null);
+    const passToCoordRef = React.useRef<string | null>(null);
+    const applIdRef = React.useRef<number | null>(0);
     const dispatch = useDispatch()
 
     const logOut = async () => {
@@ -62,6 +67,7 @@ const Dashboard = (): React.ReactElement => {
         setSessionId(result.id)
     }
 
+
     const handlePageHide = () => {
 
         if (!visibilityRef.current) {
@@ -70,11 +76,17 @@ const Dashboard = (): React.ReactElement => {
         }
         if (document.visibilityState === 'hidden' && sessionId.toString().trim()) {
             const token = localStorage.getItem('refreshToken') // или откуда ты его берешь
-            const data = JSON.stringify({sessionId, token: `Bearer ${token}`});
-            const blob = new Blob([data], {type: 'application/json;charset=UTF-8'});
+            const data:{sessionId:string,token:string, duration?:number, id?:number} = {sessionId, token: `Bearer ${token}`}
+            if (!passToCoordRef.current && timeStartRef.current) {
+                data.duration= Date.now() - timeStartRef.current;
+                data.id=applIdRef.current!;
+            }
+            const blob = new Blob([JSON.stringify(data)], {type: 'application/json;charset=UTF-8'});
             navigator.sendBeacon(`${process.env.REACT_APP_BASIC_URL}/suet`, blob);
         }
     };
+
+
 
     useEffect(() => {
         let socket: WebSocket;
@@ -103,8 +115,6 @@ const Dashboard = (): React.ReactElement => {
             window.addEventListener('visibilitychange', handlePageHide);
             window.addEventListener('beforeunload', handlePageHide);
         }
-
-
         return () => {
             window.removeEventListener('visibilitychange', handlePageHide);
             window.removeEventListener('beforeunload', handlePageHide);
@@ -160,31 +170,35 @@ const Dashboard = (): React.ReactElement => {
                             </ListItemText>
                         </Link>
                     </div>}
-                    {rights.isUsersOneRight && <div className='list-item' onClick={(e) => setOpenDropDown({...openDropDown, users: !openDropDown.users})}>
-                            <Box >
-                                <ListItemIcon>
-                                    <PeopleAltIcon/>
-                                </ListItemIcon>
+                    {rights.isUsersOneRight && <div className='list-item' onClick={(e) => setOpenDropDown({
+                        ...openDropDown,
+                        users: !openDropDown.users
+                    })}>
+                        <Box>
+                            <ListItemIcon>
+                                <PeopleAltIcon/>
+                            </ListItemIcon>
+                        </Box>
+                        <Box>
+                            <Box display="flex" justifyContent="space-between">
+                                <Typography>Пользователи</Typography>
+                                <KeyboardArrowDownSharpIcon/>
                             </Box>
-                            <Box>
-                                <Box display="flex" justifyContent="space-between">
-                                    <Typography>Пользователи</Typography>
-                                    <KeyboardArrowDownSharpIcon/>
-                                </Box>
-                            </Box>
+                        </Box>
                     </div>}
-                    {openDropDown.users && <Box display="flex" flexDirection="column" sx={{width:'95%', marginTop:"8px"}} gap={1}>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/users')} className={'drop-item'}>
-                            <Box marginLeft={'auto'}>
-                                <Typography align={'right'}>Врачи Надежды</Typography>
-                            </Box>
-                        </Link>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/fundworkers')} className={'drop-item'}>
-                            <Box marginLeft={'auto'}>
-                                <Typography align={'right'} >Благотворительные фонды</Typography>
-                            </Box>
-                        </Link>
-                    </Box>}
+                    {openDropDown.users &&
+                        <Box display="flex" flexDirection="column" sx={{width: '95%', marginTop: "8px"}} gap={1}>
+                            <Link to='' onClick={(e) => goToTab(e, '/main/users')} className={'drop-item'}>
+                                <Box marginLeft={'auto'}>
+                                    <Typography align={'right'}>Врачи Надежды</Typography>
+                                </Box>
+                            </Link>
+                            <Link to='' onClick={(e) => goToTab(e, '/main/fundworkers')} className={'drop-item'}>
+                                <Box marginLeft={'auto'}>
+                                    <Typography align={'right'}>Благотворительные фонды</Typography>
+                                </Box>
+                            </Link>
+                        </Box>}
                     <div className='list-item'>
                         <Link to='' onClick={(e) => goToTab(e, '/main/speciality')}>
                             <ListItemIcon>
@@ -262,7 +276,12 @@ const Dashboard = (): React.ReactElement => {
                             <ReportList/>
                         </Route>}
                         <Route path='/main/application/:id'>
-                            {rights.processedRights.applications?.read ? <ApplicationItem/> :
+                            {rights.processedRights.applications?.read ?
+                                <ApplicationItem
+                                    passToCoordRef={passToCoordRef}
+                                    timeStartRef={timeStartRef}
+                                    applIdRef={applIdRef}
+                                /> :
                                 <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
                                 </div>}
                         </Route>

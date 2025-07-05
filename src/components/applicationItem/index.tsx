@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {MutableRefObject, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {updateApplication} from "../../actions/application";
@@ -21,20 +21,16 @@ import BasicModal from "../../common/components/modal/ConsiliumModal";
 import {PDFButton} from "../../common/components/pdf_icon_button";
 import {initComments} from "../../common/constants";
 import ReworkBlock from "../../common/components/rework_block";
+import {calculateDiff} from "../../api/analytics";
 
-const ApplicationItem = (): React.ReactElement => {
+const ApplicationItem = ({passToCoordRef,timeStartRef, applIdRef}:{passToCoordRef:MutableRefObject<string | null> ,timeStartRef:MutableRefObject<number | null> , applIdRef:MutableRefObject<number | null> },): React.ReactElement => {
     const {id} = useParams<{ id: string }>()
     const {userItemStatus, errorMessage} = useSelector((state: RootState) => state.ui)
     const {id:userId} = useSelector((state: RootState) => state.user.user)
     const {reworkComments, id:ApplId, passToCoordinatorTime, managerId} = useSelector((state: RootState) => state.applicationItem)
     const dispatch = useDispatch()
-    const visibilityRef = React.useRef<string | null>(null);
-    const timeEndRef = React.useRef<Date | null>(null);
-    const isReadyRef = React.useRef(false);
-    const applIdRef = React.useRef<number | null>(0);
+    passToCoordRef.current = passToCoordinatorTime;
     const isError = errorMessage || userItemStatus === 'no'
-    const isReadyForDiffSave = timeEndRef.current && !passToCoordinatorTime && managerId === userId
-    const diff = timeEndRef.current ?  new Date().getTime() - timeEndRef.current.getTime() : 0;
     /**
      * Обновляем заключение.
      */
@@ -48,30 +44,19 @@ const ApplicationItem = (): React.ReactElement => {
         if (errorMessage) {
             dispatch(setError(''))
         }
+        if (timeStartRef.current) {
+            calculateDiff(timeStartRef.current, applIdRef.current!)
+            timeStartRef.current = null;
+        }
+
         dispatch(setUserItemStatus('pending'))
-        const response = await makeSmetaReadyForCoordApi(id, diff)
+        const response = await makeSmetaReadyForCoordApi(id)
         dispatch(setUserItemStatus(response.success ? 'movedCoord' : 'no'))
     }
-    const handlePageHide = () => {
 
-        if (!visibilityRef.current) {
-            visibilityRef.current = document.visibilityState
-            return
-        }
-
-        if (document.visibilityState === 'hidden' && isReadyRef.current) {
-            const token = localStorage.getItem('refreshToken') // или откуда ты его берешь
-            const currentDiff = timeEndRef.current ?  new Date().getTime() - timeEndRef.current.getTime() : 0;
-            const data = JSON.stringify({duration:currentDiff, id:applIdRef.current, token:`Bearer ${token}`});
-            const blob = new Blob([data], {type: 'application/json;charset=UTF-8'});
-            navigator.sendBeacon(`${process.env.REACT_APP_BASIC_URL}/upddur`, blob);
-        }
-    };
     useEffect(() => {
         dispatch(getListItemAction(id, 'applications', saveApplicationItem))
-        timeEndRef.current = new Date()
-        window.addEventListener('visibilitychange', handlePageHide);
-        window.addEventListener('beforeunload', handlePageHide);
+        timeStartRef.current = Date.now();
         return () => {
             dispatch(saveApplicationItem({
                 ...initialState,
@@ -85,16 +70,15 @@ const ApplicationItem = (): React.ReactElement => {
                 CheckupPlans: [],
                 ReworkComments: []
             }))
-            window.removeEventListener('visibilitychange', handlePageHide);
-            window.removeEventListener('beforeunload', handlePageHide);
+
+            if (timeStartRef.current && !passToCoordRef.current) {
+                calculateDiff(timeStartRef.current!,applIdRef.current!)
+                timeStartRef.current = null;
+            }
         }
     }, [])
 
-    useEffect(() => {
-        if  (isReadyForDiffSave) {
-            isReadyRef.current = isReadyForDiffSave
-        }
-    }, [isReadyForDiffSave]);
+
 
     useEffect(() => {
         if  (ApplId > 0) {

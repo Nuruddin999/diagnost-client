@@ -22,11 +22,10 @@ export const getUserItemRecapApi = async (period: string, id:string, fromD?: str
 }
 
 
-export const getUserItemRecapApiByPeriod = async (fromD: string, toD:string,id:string
-): Promise<UserItemRecapType> => {
-    const response = await diagnostApi.get('/gutrecbpr', {
-        headers: {'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`},
-        params: {fromD,toD, id},
-    })
-    return response.data
+export const calculateDiff=(timeCurrent:number, applId:number)=>{
+    const duration = Date.now() - timeCurrent;
+    const token = localStorage.getItem('refreshToken');
+    const data = JSON.stringify({ duration, id: applId, token: `Bearer ${token}` });
+    const blob = new Blob([data], { type: 'application/json;charset=UTF-8' });
+    navigator.sendBeacon(`${process.env.REACT_APP_BASIC_URL}/upddur`, blob);
 }

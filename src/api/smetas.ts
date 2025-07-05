@@ -23,9 +23,9 @@ export const getSmetasApi = async (page: number,
     })
     return response.data
 }
-export const makeSmetaReadyForCoordApi = async (id: string, diff:number): Promise<{ success: boolean, message?: string }> => {
+export const makeSmetaReadyForCoordApi = async (id: string): Promise<{ success: boolean, message?: string }> => {
     const response = await diagnostApi.post('/smetas-mkrd', {
-        id, diff
+        id
     }, {headers: {'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`},})
     return response.data
 }
