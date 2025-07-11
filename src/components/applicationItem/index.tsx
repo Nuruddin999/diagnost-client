@@ -21,14 +21,24 @@ import BasicModal from "../../common/components/modal/ConsiliumModal";
 import {PDFButton} from "../../common/components/pdf_icon_button";
 import {initComments} from "../../common/constants";
 import ReworkBlock from "../../common/components/rework_block";
-import {calculateDiff} from "../../api/analytics";
+import {sessionHeartBit} from "../../common/api/api";
 
-const ApplicationItem = ({passToCoordRef,timeStartRef, applIdRef}:{passToCoordRef:MutableRefObject<string | null> ,timeStartRef:MutableRefObject<number | null> , applIdRef:MutableRefObject<number | null> },): React.ReactElement => {
+const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
+    passToCoordRef: MutableRefObject<string | null>,
+    timeStartRef: MutableRefObject<number | null>,
+    applIdRef: MutableRefObject<number | null>
+},): React.ReactElement => {
     const {id} = useParams<{ id: string }>()
     const {userItemStatus, errorMessage} = useSelector((state: RootState) => state.ui)
-    const {id:userId} = useSelector((state: RootState) => state.user.user)
-    const {reworkComments, id:ApplId, passToCoordinatorTime, managerId} = useSelector((state: RootState) => state.applicationItem)
+    const {id: userId} = useSelector((state: RootState) => state.user.user)
+    const {
+        reworkComments,
+        id: ApplId,
+        passToCoordinatorTime,
+        managerId
+    } = useSelector((state: RootState) => state.applicationItem)
     const dispatch = useDispatch()
+    const heartBitTimerRef = React.useRef<any | null>(null);
     passToCoordRef.current = passToCoordinatorTime;
     const isError = errorMessage || userItemStatus === 'no'
     /**
@@ -44,19 +54,19 @@ const ApplicationItem = ({passToCoordRef,timeStartRef, applIdRef}:{passToCoordRe
         if (errorMessage) {
             dispatch(setError(''))
         }
-        if (timeStartRef.current) {
-            calculateDiff(timeStartRef.current, applIdRef.current!)
-            timeStartRef.current = null;
-        }
 
         dispatch(setUserItemStatus('pending'))
         const response = await makeSmetaReadyForCoordApi(id)
+        if (response.success) {
+            clearInterval(heartBitTimerRef.current)
+            heartBitTimerRef.current = null;
+        }
+
         dispatch(setUserItemStatus(response.success ? 'movedCoord' : 'no'))
     }
 
     useEffect(() => {
         dispatch(getListItemAction(id, 'applications', saveApplicationItem))
-        timeStartRef.current = Date.now();
         return () => {
             dispatch(saveApplicationItem({
                 ...initialState,
@@ -71,21 +81,25 @@ const ApplicationItem = ({passToCoordRef,timeStartRef, applIdRef}:{passToCoordRe
                 ReworkComments: []
             }))
 
-            if (timeStartRef.current && !passToCoordRef.current) {
-                calculateDiff(timeStartRef.current!,applIdRef.current!)
-                timeStartRef.current = null;
-            }
         }
     }, [])
 
-
-
     useEffect(() => {
-        if  (ApplId > 0) {
-            applIdRef.current = ApplId
-        }
-    }, [ApplId]);
+        const allReady = managerId && userId;
 
+        const shouldStart = !passToCoordinatorTime && allReady && managerId === userId;
+        if (shouldStart) {
+            heartBitTimerRef.current = setInterval(() => {
+                sessionHeartBit(`/upddur`, id, 30000)
+            }, 30000)
+        }
+        return () => {
+            if (heartBitTimerRef.current) {
+                clearInterval(heartBitTimerRef.current)
+                heartBitTimerRef.current = null;
+            }
+        };
+    }, [passToCoordinatorTime, managerId, userId])
 
 
     return userItemStatus === 'pending' ? <RoundLoader/> : <div className="application-item">

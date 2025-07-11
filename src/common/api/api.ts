@@ -11,3 +11,11 @@ export const getListItemById = async (id: string, url: string) => {
     })
     return response.data
 }
+export const sessionHeartBit = async (url:string, id: number | string, duration:number) => {
+    const response = await diagnostApi.post(url, {id, duration}, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`,
+        },
+    })
+    return response.data
+}

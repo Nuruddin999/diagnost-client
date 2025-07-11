@@ -58,7 +58,7 @@ export function* loginUser(login: { type: 'user/login', payload: { email: string
  * Регистрация нов пользователя.
  * @param body .
  */
-export function* registerUser(body: { type: 'user/register', payload: { email: string, password: string, name: string, speciality: string, phone: string, role: string, files: Array<any> } }) {
+export function* registerUser(body: { type: 'user/register', payload: { email: string, password: string, name: string, speciality: string, phone: string, role: string, files: Array<any>, extra?:Record<string, any> } }) {
   try {
     yield put(setAddUserStatus('pending'))
     const response: { user: string } = yield call(registerApi, { ...body.payload, files: null })
@@ -68,7 +68,7 @@ export function* registerUser(body: { type: 'user/register', payload: { email: s
         if (!hasSuperUser) {
             yield put(saveSuperUser(true))
         }
-        yield put(getUserByLetter(1, 10, '', '', '', ''))
+        yield put(getUserByLetter(1, 10, '', '', '', '',''))
     }
     else if (response && body.payload.role !== 'fundWorker')   {
       const fileUploadResponse: string = yield call(upLoadFileApi, body.payload.files, response.user)
@@ -79,7 +79,7 @@ export function* registerUser(body: { type: 'user/register', payload: { email: s
         if (!hasSuperUser) {
           yield put(saveSuperUser(true))
         }
-        yield put(getUserByLetter(1, 10, '', '', '', ''))
+        yield put(getUserByLetter(1, 10, '', '', '', '',''))
       }
     }
   } catch (e: any) {
@@ -157,11 +157,11 @@ export function* changeIsDeletedPlace(body: { type: 'user/changeIsDeletedPlaceTy
  * Сага получения списка пользователей.
  * @param addApplication
  */
-export function* fetchUser(getUser: { type: 'user/getByLetter', payload: { page: number, limit: number, email: string, name: string, speciality: string, phone: string } }) {
+export function* fetchUser(getUser: { type: 'user/getByLetter', payload: { page: number, limit: number, email: string, name: string, speciality: string, phone: string, role: string, fundName?: string } }) {
   try {
     yield put(setStatus('pending'))
-    const { page, limit, email, name, speciality, phone } = getUser.payload
-    const response: allUsersResponse = yield call(getAllUsersApi, page, limit, email, name, speciality, phone)
+    const { page, limit, email, name, speciality, phone, role, fundName } = getUser.payload
+    const response: allUsersResponse = yield call(getAllUsersApi, page, limit, email, name, speciality, phone, role, fundName)
     if (response) {
       const { rows, count } = response
       yield all([put(setStatus('ok')), put(saveUsers({ users: rows, count }))])
@@ -208,7 +208,7 @@ export function* updateUserRights(updateRight: { type: 'user/updateRights', payl
     const response: allUsersResponse = yield call(updatePrimaryApi, email, speciality, phone,name)
     if (response) {
       yield put(setUserItemStatus('ok'))
-      yield put(getUserByLetter(1, 10, '', '', '', ''))
+      yield put(getUserByLetter(1, 10, '', '', '', '',''))
     }
   } catch (e: any) {
     yield put(setUserItemStatus('Произошла ошибка, попробуйте позже'))
@@ -224,7 +224,7 @@ export function* removeUser(delUser: { type: 'user/deleteone', payload: { id: st
     const response: {} = yield call(deleteUserApi, id)
     if (response) {
       yield put(changeReqStatus('success'))
-      yield put(getUserByLetter(1, 10, '', '', '', ''))
+      yield put(getUserByLetter(1, 10, '', '', '', '',''))
     }
   } catch (e: any) {
     if (e.response) {
@@ -239,6 +239,7 @@ export function* removeUser(delUser: { type: 'user/deleteone', payload: { id: st
 /*обноаление картинки подписини у пользователя *
 * @param {Object} delUser .
 */
+
 export function* updateUserSignFile(updateUserSignFile: { type: 'user/signupdate', payload: { id: string, files: Array<File> } }) {
   try {
     yield put(setFileUploadStatus('pending'))

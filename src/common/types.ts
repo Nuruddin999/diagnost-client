@@ -90,3 +90,11 @@ export type UserItemRecapType = {
         }>
     }>
 }
+
+export type  FundWorkerType = {
+    name: string,
+    email: string,
+    phone: string,
+    fundName: string,
+    speciality: string,
+}

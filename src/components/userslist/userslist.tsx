@@ -18,10 +18,11 @@ import {updateManagerAction} from "../../actions/application";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
 import {useHistory} from "react-router-dom";
 
-const UsersList = ({updateManager}: {
+const UsersList = ({updateManager, isFundWorkers}: {
     isChangeManager?: boolean,
     applIdForChangeManager?: number,
     updateManager?: (userId: string) => void;
+    isFundWorkers?:boolean;
 }): React.ReactElement => {
     const dispatch = useDispatch()
     const {users, user} = useSelector((state: RootState) => state.user)
@@ -87,7 +88,7 @@ const UsersList = ({updateManager}: {
         }
     }
 
-    useUsers(page, email, name, speciality, phone)
+    useUsers(page, email, name, speciality, phone, isFundWorkers ? 'fundWorker' :'')
 
 
     return <div className='add-appl-container'>

@@ -31,7 +31,8 @@ import UsersRecap from "../analytics";
 import AnalyticsItem from "../analyticsItem";
 import Box from "@mui/material/Box";
 import FundWorkerList from "../fundWorkerList";
-import {calculateDiff} from "../../api/analytics";
+import FundTasks from "../FundTasks";
+import {sessionHeartBit} from "../../common/api/api";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -44,14 +45,13 @@ const Dashboard = (): React.ReactElement => {
     const [isWarning, setIsWarning] = React.useState('');
     const [sessionId, setSessionId] = React.useState('');
     const [openDropDown, setOpenDropDown] = React.useState<{ users: boolean }>({users: false});
-    const visibilityRef = React.useRef<string | null>(null);
     const timeStartRef = React.useRef<number | null>(null);
     const passToCoordRef = React.useRef<string | null>(null);
     const applIdRef = React.useRef<number | null>(0);
+    const heartBitTimerRef = React.useRef<any | null>(null);
     const dispatch = useDispatch()
 
     const logOut = async () => {
-        await saveEndTime(sessionId);
         dispatch(logOutUser())
     }
 
@@ -66,27 +66,6 @@ const Dashboard = (): React.ReactElement => {
         const result = await saveStartTime()
         setSessionId(result.id)
     }
-
-
-    const handlePageHide = () => {
-
-        if (!visibilityRef.current) {
-            visibilityRef.current = document.visibilityState
-            return
-        }
-        if (document.visibilityState === 'hidden' && sessionId.toString().trim()) {
-            const token = localStorage.getItem('refreshToken') // или откуда ты его берешь
-            const data:{sessionId:string,token:string, duration?:number, id?:number} = {sessionId, token: `Bearer ${token}`}
-            if (!passToCoordRef.current && timeStartRef.current) {
-                data.duration= Date.now() - timeStartRef.current;
-                data.id=applIdRef.current!;
-            }
-            const blob = new Blob([JSON.stringify(data)], {type: 'application/json;charset=UTF-8'});
-            navigator.sendBeacon(`${process.env.REACT_APP_BASIC_URL}/suet`, blob);
-        }
-    };
-
-
 
     useEffect(() => {
         let socket: WebSocket;
@@ -112,12 +91,15 @@ const Dashboard = (): React.ReactElement => {
 
     useEffect(() => {
         if (sessionId) {
-            window.addEventListener('visibilitychange', handlePageHide);
-            window.addEventListener('beforeunload', handlePageHide);
+            heartBitTimerRef.current = setInterval(() => {
+                sessionHeartBit(`/usdurhrtbt`,sessionId, 30000)
+            }, 30000)
         }
         return () => {
-            window.removeEventListener('visibilitychange', handlePageHide);
-            window.removeEventListener('beforeunload', handlePageHide);
+            if (heartBitTimerRef.current) {
+                clearInterval(heartBitTimerRef.current)
+                heartBitTimerRef.current = null;
+            }
         };
     }, [sessionId]);
 
@@ -267,6 +249,18 @@ const Dashboard = (): React.ReactElement => {
                                     </ListItemText>
                                 </Link>
                             </div>
+                            <div className='list-item'>
+                                <Link to='' onClick={(e) => goToTab(e, '/main/fundTasks')}>
+                                    <ListItemIcon>
+                                        <Analytics/>
+                                    </ListItemIcon>
+                                </Link>
+                                <Link to='' onClick={(e) => goToTab(e, '/main/fundTasks')}>
+                                    <ListItemText>
+                                        Куратор
+                                    </ListItemText>
+                                </Link>
+                            </div>
                         </Fragment>}
 
                 </div>
@@ -337,6 +331,11 @@ const Dashboard = (): React.ReactElement => {
                         </Route>
                         <Route path='/main/analytics-item/:id'>
                             {isAdmin ? <AnalyticsItem/> :
+                                <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
+                                </div>}
+                        </Route>
+                        <Route path='/main/fundTasks/'>
+                            {isAdmin ? <FundTasks/> :
                                 <div className="no-rights"><Typography align='center'>Недостаточно прав</Typography>
                                 </div>}
                         </Route>

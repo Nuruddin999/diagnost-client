@@ -25,7 +25,7 @@ import {setError, setFileUploadStatus} from "../../reducers/ui";
 import {CommonButton} from "../../common/components/button";
 import Specialities from "../../common/components/specialities/specialities";
 import {useParams} from "react-router-dom";
-import {formatDuration} from "../../common/utils";
+import {makeDuration} from "../../common/utils";
 import Box from "@mui/material/Box";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -253,7 +253,7 @@ const UserItemScreen = ({isProfile}: userItem): React.ReactElement => {
                                     {disconnnectedAt}
                                 </TableCell>
                                 <TableCell>
-                                    {formatDuration(session.connectedAt, session.disconnectedAt)}
+                                    {makeDuration(session.durationSeconds)}
                                 </TableCell>
                             </TableRow>
                         })}

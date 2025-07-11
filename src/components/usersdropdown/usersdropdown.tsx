@@ -22,7 +22,7 @@ const UsersDropDown = ({ setManager, setSpeciality, onClose }: UsersDropDownProp
   };
 
 
-  useUsers(page, '', '', '', '')
+  useUsers(page, '', '', '', '', '')
 
   /**
    * Переход на отдельное заключение

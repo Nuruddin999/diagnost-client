@@ -69,10 +69,10 @@ export const getUserByLetter = createAction(TYPES.getByLetter, function prepare(
   email: string,
   name: string,
   speciality: string,
-  phone: string) {
+  phone: string, role:string, fundName?: string) {
   return {
     payload: {
-      page, limit, email, name, speciality, phone
+      page, limit, email, name, speciality, phone, role,fundName,
     },
   }
 })

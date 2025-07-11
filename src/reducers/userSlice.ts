@@ -19,6 +19,7 @@ export interface User {
   isDeletedPlace?: boolean,
   urlSignPath?: string,
   signFileName?: string,
+    fundName?: string,
   rights?: Array<Right>,
     UserSessions: Array<any>
 }
@@ -68,9 +69,9 @@ export const userSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    saveUser: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string, urlSignPath?: string, signFileName?: string,UserSessions:Array<any> }>) => {
-      const { name, phone, role, email, speciality, id, isDeletedPlace, rights, signFileName, urlSignPath, UserSessions } = action.payload
-      state.user = { id: String(id), phone, role, name, speciality, email, isDeletedPlace, signFileName, urlSignPath, UserSessions }
+    saveUser: (state, action: PayloadAction<{ id: string, email: string, phone: string, role: string, name: string, speciality: string, rights: Array<Right>, isDeletedPlace: boolean, isLoading: boolean, reqStatus: string, urlSignPath?: string, signFileName?: string,UserSessions:Array<any>, fundName?:string }>) => {
+      const { name, phone, role, email, speciality, id, isDeletedPlace, rights, signFileName, urlSignPath, UserSessions, fundName } = action.payload
+      state.user = { id: String(id), phone, role, name, speciality, email, isDeletedPlace, signFileName, urlSignPath, UserSessions, fundName }
       state.user.rights = [...rights]
       state.isLoading = action.payload.isLoading
       state.reqStatus = action.payload.reqStatus
