@@ -1,5 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {CircularProgress, IconButton, Typography} from "@mui/material";
+import {
+    CircularProgress,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Typography
+} from "@mui/material";
 import React, {useEffect} from "react";
 import './style.reportlist.scss'
 import {useDispatch, useSelector} from "react-redux";
@@ -12,13 +21,14 @@ import {isEmpty} from "lodash";
 import {selectApplicationUserRights} from "../../common/selectors/user";
 import BlockIcon from '@mui/icons-material/Block';
 import EditIcon from '@mui/icons-material/Edit';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ManagerChangeModal from "./manager_change_modal";
 import {useFetchApplications} from "../../common/hooks/useFetchApplications";
-import TableHeader from "../../common/components/tableheader/tableHeader";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
-import {CommonButton} from "../../common/components/button";
-import PaginationComponent from "../../common/components/pagination";
 import DeleteModalBody from "../../common/components/delete_modal_body/DeleteModalBody";
+import isObject from "lodash/isObject";
+import Box from "@mui/material/Box";
 
 const ReportList = (): React.ReactElement => {
     const dispatch = useDispatch()
@@ -35,6 +45,7 @@ const ReportList = (): React.ReactElement => {
     const [fundRequest, setFundRequest] = React.useState('');
     const [fundName, setFundName] = React.useState('');
     const [manager, setManager] = React.useState('');
+    const [pagesRange, setPagesRange] = React.useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]);
     const [deleteModalId, setDeleteModal] = React.useState<boolean | number>(false);
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -86,50 +97,58 @@ const ReportList = (): React.ReactElement => {
     }
     return <div className='add-appl-container'>
         {isModalOpened && <AddModal fetchApp={fetchApp}/>}
-        {isManagerChangeModalOpened && <ManagerChangeModal isLoading={isLoading} updateManager={updateApplicationManager} appls={appls.rows}/>}
-        <div className='add-button-wrapper'>
-            {isManagerChangeModalOpened === undefined && rights.processedRights.applications?.create &&
-                <CommonButton
-                    onClick={() => dispatch(openModal(true))}
-                    title={'Новое заключение'}/>}
-
-        </div>
-        <div className="appl-table">
-            <table>
-                <thead>
-                <TableHeader tableData={tableData} role={role}
-                             isDeleteRights={rights.processedRights.applications?.delete}
-                             isManagerChange={role !== 'doctor'}/>
-                </thead>
-                <tbody>
-                {!isLoading && appls.rows.length > 0 && appls.rows.map((appl: any, index: number) => <tr
-                    onClick={() => goToApplItem(appl.id)} key={appl.patientName}>
-                    <td>{(page * 10 - 10) + 1 + index}</td>
-                    <td>{appl.patientName}</td>
-                    <td>{new Date(appl.patientBirthDate).toLocaleString()}</td>
-                    <td>{appl.patientRequest}</td>
-                    <td>{appl.fundName}</td>
-                    <td>{appl.fundRequest}</td>
-                    {role !== 'doctor' && <td>{appl.manager}</td>}
-                    <td>{new Date(appl.creationDate).toLocaleString()}</td>
-                    <td>{appl.execDate && new Date(appl.execDate).toLocaleString()}</td>
-                    {(rights.processedRights.applications?.delete) &&
-                        <td><IconButton className='delete-button' onClick={(e: any) => {
-                            e.stopPropagation()
-                            appl.id && setDeleteModal(appl.id)
-                        }}>
-                            <DeleteOutlineIcon/>
-                        </IconButton></td>}
-                    {role !== 'doctor' && <td><IconButton>
-                        <EditIcon onClick={(e: any) => {
-                            e.stopPropagation();
-                            dispatch(openManagerChangeModal(appl.id))
-                        }}/></IconButton>
-                    </td>}
-                </tr>)}
-                </tbody>
-            </table>
-        </div>
+        {isManagerChangeModalOpened &&
+            <ManagerChangeModal isLoading={isLoading} updateManager={updateApplicationManager} appls={appls.rows}/>}
+        <Box sx={{width: '100%', overflow: "scroll"}}>
+            <Box sx={{background: 'white', maxHeight: 'calc(90vh - 48px)', minWidth: "1980px", margin: "8px 16px 0"}}>
+                <Table sx={{background: 'white'}} stickyHeader>
+                    <TableHead>
+                        <TableRow>
+                            {tableData.map((row) => <TableCell sx={{color: '#707a8a'}}>
+                                {isObject(row) && role !== 'doctor' &&
+                                    <Box sx={{backgroundColor: '#f9fafc', borderRadius: '12px'}}>
+                                        <input
+                                        value={row.field}
+                                        placeholder={'Поиск'}
+                                        className={'search-input'}
+                                        onChange={(e:any)=>row.onChange(e.target.value)}
+                                        />
+                                    </Box>}
+                                {isObject(row) ? row.title : row}
+                            </TableCell>)}
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {!isLoading && appls.rows.length > 0 && appls.rows.map((appl: any, index: number) => <TableRow
+                            onClick={() => goToApplItem(appl.id)} key={appl.patientName}>
+                            <TableCell>{(page * 10 - 10) + 1 + index}</TableCell>
+                            <TableCell>{appl.patientName}</TableCell>
+                            <TableCell>{new Date(appl.patientBirthDate).toLocaleString()}</TableCell>
+                            <TableCell>{appl.patientRequest}</TableCell>
+                            <TableCell>{appl.fundName}</TableCell>
+                            <TableCell>{appl.fundRequest}</TableCell>
+                            {role !== 'doctor' && <TableCell>{appl.manager}</TableCell>}
+                            <TableCell>{new Date(appl.creationDate).toLocaleString()}</TableCell>
+                            <TableCell>{appl.execDate && new Date(appl.execDate).toLocaleString()}</TableCell>
+                            {(rights.processedRights.applications?.delete) &&
+                                <TableCell><IconButton className='delete-button' onClick={(e: any) => {
+                                    e.stopPropagation()
+                                    appl.id && setDeleteModal(appl.id)
+                                }}>
+                                    <DeleteOutlineIcon/>
+                                </IconButton></TableCell>}
+                            {role !== 'doctor' && <TableCell><IconButton>
+                                <EditIcon onClick={(e: any) => {
+                                    e.stopPropagation();
+                                    dispatch(openManagerChangeModal(appl.id))
+                                }}/></IconButton>
+                            </TableCell>}
+                        </TableRow>)}
+                    </TableBody>
+                </Table>
+            </Box>
+        </Box>
         {!isLoading && isEmpty(appls) && <div><BlockIcon sx={{fontSize: '40px', marginTop: '20px'}}/></div>}
         {isLoading && <div><CircularProgress/></div>}
         {!isLoading && error && <Typography sx={{color: 'red'}}>{errorMessage}</Typography>}
@@ -145,12 +164,40 @@ const ReportList = (): React.ReactElement => {
                 />
             }
         />
-        {appls.count > 10 && <div className="pagination">
-            <PaginationComponent
-                count={appls.count}
-                handleChange={handleChange}
-            />
-        </div>}
+        <Box display='flex' flexDirection='row' alignItems='center' gap={2} justifyContent='center' height={48}>
+            <Box
+                width={30}
+                height={30}
+                sx={{cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center"}}
+                onClick={() => {
+                    if (pagesRange[0] > 0) {
+                        setPagesRange(pagesRange.map(el => el - 20))
+                    }
+                }}>
+                <ArrowBackIosIcon/>
+            </Box>
+            {appls.count > 10 && pagesRange.map(el => <Box width={30} height={30} sx={{
+                cursor: "pointer",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+            }}
+                                                           onClick={(e: any) => handleChange(e, el + 1)}
+            >{el + 1}</Box>)}
+            <Box
+                width={30}
+                height={30}
+                sx={{cursor: "pointer", display: "flex", justifyContent: "center", alignItems: "center"}}
+                onClick={() => {
+                    if (pagesRange[pagesRange.length - 1] < appls.count) {
+                        setPagesRange(pagesRange.map(el => el + 20))
+                    }
+                }}>
+                <ArrowForwardIosIcon/>
+            </Box>
+        </Box>
+        <div className={'add-appl-button'} onClick={() => dispatch(openModal(true))}><Typography
+            variant={'h3'} sx={{marginBottom:"calc(50% - 22px)"}}>+</Typography></div>
     </div>
 
 }

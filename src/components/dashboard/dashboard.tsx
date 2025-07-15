@@ -1,15 +1,12 @@
 import React, {Fragment, useEffect} from "react";
 import {Link, Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
 import ReportList from "../reportlist/reportlist";
-import {Backdrop, Button, CircularProgress, IconButton, ListItemIcon, ListItemText, Typography} from "@mui/material";
-import LogoutIcon from '@mui/icons-material/Logout';
+import {Button, IconButton, Typography} from "@mui/material";
 import './style.dash.scss'
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 import {checkUser, logOutUser} from "../../actions/user";
-import SummarizeIcon from '@mui/icons-material/Summarize';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import LogoutIcon from '@mui/icons-material/Logout';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import GradingIcon from '@mui/icons-material/Grading';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -24,15 +21,18 @@ import Smetalist from "../smetalist/smetalist";
 import SmetaItem from "../smetaItem";
 import HopedocLogo from "../../hopedoc.png"
 import BasicModal from "../../common/components/modal/ConsiliumModal";
-import {saveEndTime, saveStartTime} from "../../api/user";
+import {saveStartTime} from "../../api/user";
 import UserItemScreen from "../useritem/userItemScreen";
 import {Analytics} from "@mui/icons-material";
 import UsersRecap from "../analytics";
 import AnalyticsItem from "../analyticsItem";
-import Box from "@mui/material/Box";
 import FundWorkerList from "../fundWorkerList";
 import FundTasks from "../FundTasks";
 import {sessionHeartBit} from "../../common/api/api";
+import MenuItem from "../menuItem";
+import SummarizeIcon from "@mui/icons-material/Summarize";
+import {PeopleAlt} from "@mui/icons-material";
+import {setExpanded} from "../../reducers/ui";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -41,7 +41,7 @@ const Dashboard = (): React.ReactElement => {
 
     const rights = useSelector((state: RootState) => selectApplicationUserRights(state))
     const isAdmin = user.role === 'admin' || user.role === 'superadmin'
-    const isCircular = useSelector((state: RootState) => state.ui.isCircular)
+    const {isExpanded} = useSelector((state: RootState) => state.ui)
     const [isWarning, setIsWarning] = React.useState('');
     const [sessionId, setSessionId] = React.useState('');
     const [openDropDown, setOpenDropDown] = React.useState<{ users: boolean }>({users: false});
@@ -92,7 +92,7 @@ const Dashboard = (): React.ReactElement => {
     useEffect(() => {
         if (sessionId) {
             heartBitTimerRef.current = setInterval(() => {
-                sessionHeartBit(`/usdurhrtbt`,sessionId, 30000)
+                sessionHeartBit(`/usdurhrtbt`, sessionId, 30000)
             }, 30000)
         }
         return () => {
@@ -118,153 +118,96 @@ const Dashboard = (): React.ReactElement => {
     return !hasSuperUser ? <Registration notHaveSuperUser/> : <div className="dashboard">
 
         {name === '' ? <RoundLoader/> : <div className="dashboard" data-testid='dashboard'>
+            <div className="dashboard-wrapper">
+                <header className="header">
+                    <div className="header__content-wrapper ">
+                        <div className="header__left">
+                            <div className="burger" onClick={() => dispatch(setExpanded(!isExpanded))}>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                            <Link to='' onClick={(e) => goToTab(e, '/main/table')}>
+                                <img src={HopedocLogo} height={40} alt="Hopedoc"/>
+                            </Link>
+                        </div>
+                        <div className="header__rigth">
+                            <Typography>{name}</Typography>
+                            <IconButton onClick={logOut}>
+                                <LogoutIcon/>
+                            </IconButton>
+                        </div>
+                    </div>
+                </header>
+                <div className={`left-menu ${isExpanded ? 'expanded' : ''}`}>
+                    <div>
+                        {rights.isApplicationOneRight &&
+                            <MenuItem label={<SummarizeIcon/>} title={'Заключения'}
+                                      onClick={(e: any) => goToTab(e, '/main/table')}/>}
+                        {rights.isUsersOneRight &&
+                            <Fragment>
+                                <MenuItem
+                                    label={<PeopleAlt/>}
+                                    title={'Пользователи'}
+                                    onClick={(e: any) => {
+                                        e.preventDefault();
+                                        setOpenDropDown({
+                                            ...openDropDown,
+                                            users: !openDropDown.users
+                                        })
+                                    }}
+                                    after={<KeyboardArrowDownSharpIcon sx={{width: 30, height: 30}}/>}
 
-            <Backdrop
-                sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
-                open={isCircular}
-            >
-                <CircularProgress color="inherit"/>
-            </Backdrop>
-            <div className="dasheader">
-                <img src={HopedocLogo} height={40} alt="Hopedoc"/>
-                <div className='user-block'>
-                    <Link to='/main/aboutme'>
-                        <Typography variant="body1">
-                            {name}
-                        </Typography>
-                    </Link>
-                    <IconButton onClick={logOut}>
-                        <LogoutIcon/>
-                    </IconButton>
+                                />
+                                {openDropDown.users &&
+                                    <Fragment>
+                                        <div className={'left-menu-sub-item'}><MenuItem
+                                            onClick={(e: any) => goToTab(e, '/main/users')}
+                                            title={'Консилиум'}/>
+                                        </div>
+                                        <div className={'left-menu-sub-item'}><MenuItem
+                                            onClick={(e: any) => goToTab(e, '/main/fundworkers')}
+                                            title={'Работники фондов'}/>
+                                        </div>
+                                    </Fragment>}
+                            </Fragment>}
+                        {rights.processedRights.smetas?.read && <MenuItem
+                            title={'Сметы'}
+                            label={<CalculateIcon/>}
+                            onClick={(e: any) => goToTab(e, '/main/smetas')}
+                        />
+                        }
+                        {isAdmin &&
+                            <Fragment>
+                                <MenuItem
+                                    title={<span>Сметы на<br/>проверку</span>}
+                                    label={<GradingIcon/>}
+                                    onClick={(e: any) => goToTab(e, '/main/smetasoncheck')}
+                                />
+                                <MenuItem
+                                    title={<span>Сметы на<br/>реализации</span>}
+                                    label={<CheckCircleOutlineIcon/>}
+                                    onClick={(e: any) => goToTab(e, '/main/smetasoncheck')}
+                                />
+                                <MenuItem
+                                    title={'Аналитика'}
+                                    label={<Analytics/>}
+                                    onClick={(e: any) => goToTab(e, '/main/analytics')}
+                                />
+                                <MenuItem
+                                    title={'Куратор'}
+                                    label={<Analytics/>}
+                                    onClick={(e: any) => goToTab(e, '/main/fundTasks')}
+                                />
+                            </Fragment>
+                        }
+
+                    </div>
+
                 </div>
             </div>
             <div className="main-wrapper">
-                <div className="sidebar">
-                    {rights.isApplicationOneRight && <div className='list-item'>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/table')}>
-                            <ListItemIcon>
-                                <SummarizeIcon/>
-                            </ListItemIcon>
-                        </Link>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/table')}>
-                            <ListItemText>
-                                Заключения
-                            </ListItemText>
-                        </Link>
-                    </div>}
-                    {rights.isUsersOneRight && <div className='list-item' onClick={(e) => setOpenDropDown({
-                        ...openDropDown,
-                        users: !openDropDown.users
-                    })}>
-                        <Box>
-                            <ListItemIcon>
-                                <PeopleAltIcon/>
-                            </ListItemIcon>
-                        </Box>
-                        <Box>
-                            <Box display="flex" justifyContent="space-between">
-                                <Typography>Пользователи</Typography>
-                                <KeyboardArrowDownSharpIcon/>
-                            </Box>
-                        </Box>
-                    </div>}
-                    {openDropDown.users &&
-                        <Box display="flex" flexDirection="column" sx={{width: '95%', marginTop: "8px"}} gap={1}>
-                            <Link to='' onClick={(e) => goToTab(e, '/main/users')} className={'drop-item'}>
-                                <Box marginLeft={'auto'}>
-                                    <Typography align={'right'}>Врачи Надежды</Typography>
-                                </Box>
-                            </Link>
-                            <Link to='' onClick={(e) => goToTab(e, '/main/fundworkers')} className={'drop-item'}>
-                                <Box marginLeft={'auto'}>
-                                    <Typography align={'right'}>Благотворительные фонды</Typography>
-                                </Box>
-                            </Link>
-                        </Box>}
-                    <div className='list-item'>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/speciality')}>
-                            <ListItemIcon>
-                                <BusinessCenterIcon/>
-                            </ListItemIcon>
-                        </Link>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/speciality')}>
-                            <ListItemText>
-                                Специальности
-                            </ListItemText>
-                        </Link>
-                    </div>
-                    {rights.processedRights.smetas?.read && <div className='list-item'>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/smetas')}>
-                            <ListItemIcon>
-                                <CalculateIcon/>
-                            </ListItemIcon>
-                        </Link>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/smetas')}>
-                            <ListItemText>
-                                Сметы
-                            </ListItemText>
-                        </Link>
-                    </div>}
-                    {isAdmin && <div className='list-item'>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/smetasoncheck')}>
-                            <ListItemIcon>
-                                <GradingIcon/>
-                            </ListItemIcon>
-                        </Link>
-                        <Link to='' onClick={(e) => goToTab(e, '/main/smetasoncheck')}>
-                            <ListItemText>
-                                Сметы на
-                            </ListItemText>
-                            <ListItemText>
-                                проверку
-                            </ListItemText>
-                        </Link>
-                    </div>}
-                    {isAdmin &&
-                        <Fragment>
-                            <div className='list-item'>
-                                <Link to='' onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
-                                    <ListItemIcon>
-                                        <CheckCircleOutlineIcon/>
-                                    </ListItemIcon>
-                                </Link>
-                                <Link to='' onClick={(e) => goToTab(e, '/main/smetasonrealization')}>
-                                    <ListItemText>
-                                        Сметы на
-                                    </ListItemText>
-                                    <ListItemText>
-                                        реализации
-                                    </ListItemText>
-                                </Link>
-                            </div>
-                            <div className='list-item'>
-                                <Link to='' onClick={(e) => goToTab(e, '/main/analytics')}>
-                                    <ListItemIcon>
-                                        <Analytics/>
-                                    </ListItemIcon>
-                                </Link>
-                                <Link to='' onClick={(e) => goToTab(e, '/main/analytics')}>
-                                    <ListItemText>
-                                        Аналитика
-                                    </ListItemText>
-                                </Link>
-                            </div>
-                            <div className='list-item'>
-                                <Link to='' onClick={(e) => goToTab(e, '/main/fundTasks')}>
-                                    <ListItemIcon>
-                                        <Analytics/>
-                                    </ListItemIcon>
-                                </Link>
-                                <Link to='' onClick={(e) => goToTab(e, '/main/fundTasks')}>
-                                    <ListItemText>
-                                        Куратор
-                                    </ListItemText>
-                                </Link>
-                            </div>
-                        </Fragment>}
-
-                </div>
-                <div className="main-content">
+                <div className={`main-content ${isExpanded ? 'expanded' : ''}`}>
                     <Switch>
                         {rights.processedRights.applications?.read && <Route exact path='/main/table'>
                             <ReportList/>

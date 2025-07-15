@@ -10,7 +10,7 @@ export const useFetchApplications = () => {
     const {id, role} = useSelector((state: RootState) => state.user.user)
 
     const fetchApplications = async (page: number, limit: number, manager: string, patientName: string, patientRequest: string, fundName: string, fundRequest: string) => {
-        const resp = await getApplicationApi(page, role === 'doctor' ? id : 'all', 10, manager, patientName, patientRequest, fundName, fundRequest)
+        const resp = await getApplicationApi(page, role === 'doctor' ? id : 'all', limit, manager, patientName, patientRequest, fundName, fundRequest)
         setAppls(resp)
     }
 

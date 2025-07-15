@@ -1,11 +1,12 @@
 .smetas-container {
-  height: calc(100% - 80px);
+  height: 100%;
   width: 100%;
 
   .smetas-table {
-      margin: 48px 10px 0 10px;
-      max-height: calc(100% - 142px);
+      margin: 0 10px 0 10px;
+      max-height: calc(100% - 88px);
       overflow: auto;
+    background: #FFFFFF;
       table {
         font-family: arial, sans-serif;
         width: 100%;

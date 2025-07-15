@@ -29,10 +29,7 @@ const AnalyticsItem: FC = () => {
         return <CircularProgress/>
     }
     return filteredData.users.length > 0 ? <Box sx={{
-        marginTop: '40px',
         width: '100%',
-        height: 'calc(100% - 40px)',
-        backgroundColor: "rgba(211, 211, 211, 0.6)",
         overflow: 'hidden'
     }}
                                                 display="flex"

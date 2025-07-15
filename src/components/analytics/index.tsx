@@ -14,13 +14,11 @@ const UsersRecap: FC = () => {
     const [period, setPeriod] = useState<string>('week');
     const history = useHistory();
 
-    const {
-        finished,
+    const {,
         fromPeriod,
         fromPeriodTime,
         fetchData,
-        filteredData,
-        unfinished,
+        filteredData,,
         itemLoading,
         toPeriodTime,
         toPeriod,
@@ -44,11 +42,7 @@ const UsersRecap: FC = () => {
     }
 
     return <Box sx={{
-        marginTop: '40px',
         width: '100%',
-        height: 'calc(100vh - 40px)',
-        background: 'lightgray',
-        opacity: '80%',
         overflow: 'hidden'
     }}>
         <Box display="flex" justifyContent="space-between" alignItems="start">
@@ -92,7 +86,7 @@ const UsersRecap: FC = () => {
                         </TableHead>
                     </Table>
                     <Box sx={{maxHeight:'60vh',overflowY:'scroll'}}>
-                        {filteredData?.users.length > 0 && filteredData.users.map((user, index) => (
+                        {filteredData?.users.length > 0 && filteredData.users.map((user) => (
                             <Box key={user.id} onClick={() => goToItem(user.id.toString())} className={styles.item}>
                                 <Table size={"small"}>
                                     <TableBody>
