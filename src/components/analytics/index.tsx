@@ -14,11 +14,11 @@ const UsersRecap: FC = () => {
     const [period, setPeriod] = useState<string>('week');
     const history = useHistory();
 
-    const {,
+    const {
         fromPeriod,
         fromPeriodTime,
         fetchData,
-        filteredData,,
+        filteredData,
         itemLoading,
         toPeriodTime,
         toPeriod,

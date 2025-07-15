@@ -43,7 +43,6 @@ const FundWorkerList: FC<{}> = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-       console.log(extraValues);
         const formData = new FormData(e.currentTarget);
 
         const data = {
@@ -59,7 +58,7 @@ const FundWorkerList: FC<{}> = () => {
         };
 
         dispatch(registerUser(data));
-      //  setAddModal(false);
+        setAddModal(false);
     }
 
     useUsers(1, email, name, speciality, phone, 'fundWorker', fundName)
