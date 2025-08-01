@@ -1,0 +1,17 @@
+.add-appl-button {
+  background-color: #3755fa;
+  border-radius: 12px;
+  color: #fff;
+  display: block;
+  display: flex;
+  filter: drop-shadow(rgba(51, 51, 51, .3) 0 4px 4px);
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 58px;
+  bottom: 44px;
+  right: 3%;
+  z-index: 1;
+  cursor: pointer;
+}

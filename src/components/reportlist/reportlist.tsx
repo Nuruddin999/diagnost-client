@@ -29,6 +29,7 @@ import BasicModal from "../../common/components/modal/ConsiliumModal";
 import DeleteModalBody from "../../common/components/delete_modal_body/DeleteModalBody";
 import isObject from "lodash/isObject";
 import Box from "@mui/material/Box";
+import RoundAddModal from "../../common/components/roundAddModal";
 
 const ReportList = (): React.ReactElement => {
     const dispatch = useDispatch()
@@ -196,8 +197,7 @@ const ReportList = (): React.ReactElement => {
                 <ArrowForwardIosIcon/>
             </Box>
         </Box>
-        <div className={'add-appl-button'} onClick={() => dispatch(openModal(true))}><Typography
-            variant={'h3'} sx={{marginBottom:"calc(50% - 22px)"}}>+</Typography></div>
+<RoundAddModal onClick={() => dispatch(openModal(true))} />
     </div>
 
 }

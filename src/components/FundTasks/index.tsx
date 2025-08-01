@@ -1,6 +1,8 @@
 import {FC, useState} from "react";
 import Box from "@mui/material/Box";
 import {Typography} from "@mui/material";
+import RoundAddModal from "../../common/components/roundAddModal";
+import NewTask from "./newTask";
 
 const FundTasks: FC = () => {
     const [state, setState] = useState<Array<{ title: string, tasks: Array<{ name: string, description: string }> }>>([
@@ -33,6 +35,7 @@ const FundTasks: FC = () => {
         task: { name: string; description: string };
     } | null>(null);
     const [dragTarget, setDragTarget] = useState<{ to: string; index: number } | null>(null);
+    const [openAddModal, setOpenAddModal] = useState<boolean>(false);
 
 
     const handleDrop = () => {
@@ -78,7 +81,6 @@ const FundTasks: FC = () => {
     };
 
     return (<Box sx={{marginTop: '50px'}}>
-        sfsdf
         <Box
             display="flex"
             alignItems="start"
@@ -132,6 +134,8 @@ const FundTasks: FC = () => {
                 </Box>
             })}
         </Box>
+        {openAddModal && <NewTask onClose={setOpenAddModal} />}
+        <RoundAddModal onClick={()=>setOpenAddModal(true)}  />
     </Box>)
 }
 
