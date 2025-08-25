@@ -14,6 +14,8 @@ import RegularMainContent from "../regularMainContent";
 import Box from "@mui/material/Box";
 import CuratorSideBar from "../fundCurator/curatorSideBar";
 import CuratorMainContent from "../fundCurator/curatorMainContent";
+import BasicModal from "../../common/components/modal/ConsiliumModal";
+import {Button, Typography} from "@mui/material";
 
 
 const Dashboard = (): React.ReactElement => {
@@ -106,15 +108,31 @@ const Dashboard = (): React.ReactElement => {
         return <Box sx={{height: "100%"}}>
             <MainLayout
                 leftBlock={<RegularSideBar setIsWarning={setIsWarning}/>}
-                mainContent={<RegularMainContent passToCoordRef={passToCoordRef} applIdRef={applIdRef}
-                                                 timeStartRef={timeStartRef}/>}
+                mainContent={<RegularMainContent
+                    passToCoordRef={passToCoordRef}
+                    applIdRef={applIdRef}
+
+                    timeStartRef={timeStartRef}/>}
             />
+            <BasicModal
+                open={isWarning.length > 0}
+                onClose={() => setIsWarning('')}
+                body={<div>
+                    <Typography color={'primary'}>Вы уверены, что хотите закрыть заключение/смету ?</Typography>
+                    <p>Если вы изменяли данные в заключении/смете и не нажали кнопку Сохранить - изменения не
+                        сохранятся</p>
+                    <Button onClick={() => {
+                        history.push(isWarning)
+                        setIsWarning('')
+                    }}>Да, уверен</Button>
+                    <Button color={'error'} onClick={() => setIsWarning('')}>Нет</Button>
+                </div>}/>
         </Box>
     } else {
         return <Box sx={{height: "100%"}}>
             <MainLayout
-                leftBlock={<CuratorSideBar /> }
-                mainContent={<CuratorMainContent />}
+                leftBlock={<CuratorSideBar/>}
+                mainContent={<CuratorMainContent/>}
             />
         </Box>
     }

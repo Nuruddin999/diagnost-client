@@ -8,11 +8,10 @@ export const loginApi = async (email: string, password: string) => {
     return response.data
 }
 export const registerApi = async (body: registeredUser) => {
-    console.log('body', body)
-    // const response = await diagnostApi.post('/registration', {
-    //     ...body
-    // })
-    // return response.data
+    const response = await diagnostApi.post('/registration', {
+        ...body
+    })
+    return response.data
 }
 export const checkAuth = async () => {
     const response = await diagnostApi.post('/refresh', {refreshToken: localStorage.getItem('refreshToken')})
