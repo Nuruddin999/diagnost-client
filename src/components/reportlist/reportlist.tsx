@@ -106,7 +106,7 @@ const ReportList = (): React.ReactElement => {
                     <TableHead>
                         <TableRow>
                             {tableData.map((row) => <TableCell sx={{color: '#707a8a'}}>
-                                {isObject(row) && role !== 'doctor' &&
+                                {isObject(row) &&
                                     <Box sx={{backgroundColor: '#f9fafc', borderRadius: '12px'}}>
                                         <input
                                         value={row.field}
@@ -122,7 +122,7 @@ const ReportList = (): React.ReactElement => {
                     </TableHead>
                     <TableBody>
                         {!isLoading && appls.rows.length > 0 && appls.rows.map((appl: any, index: number) => <TableRow
-                            onClick={() => goToApplItem(appl.id)} key={appl.patientName}>
+                            onClick={() => goToApplItem(appl.id)} key={appl.id}>
                             <TableCell>{(page * 10 - 10) + 1 + index}</TableCell>
                             <TableCell>{appl.patientName}</TableCell>
                             <TableCell>{new Date(appl.patientBirthDate).toLocaleString()}</TableCell>
