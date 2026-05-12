@@ -29,7 +29,7 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
     applIdRef: MutableRefObject<number | null>
 },): React.ReactElement => {
     const {id} = useParams<{ id: string }>()
-    const {userItemStatus, errorMessage} = useSelector((state: RootState) => state.ui)
+    const {userItemStatus, errorMessage, isCircular} = useSelector((state: RootState) => state.ui)
     const {id: userId} = useSelector((state: RootState) => state.user.user)
     const {
         reworkComments,
@@ -118,7 +118,7 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
         <CheckupPlanForm/>
         <Comments/>
         {reworkComments.length > 0 && <ReworkBlock reworkComments={reworkComments}/>}
-        <Button onClick={handleClick} size='medium' variant='contained' className='save-button'>
+        <Button onClick={handleClick} size='medium' variant='contained' className='save-button' disabled={isCircular}>
             Сохранить
         </Button>
         <Button onClick={makeReadyForCoordinator} size='medium' variant='contained' className='forCoordinate-button'>
