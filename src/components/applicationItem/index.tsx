@@ -126,7 +126,7 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
         </Button>
         <PDFButton url={`/flpdf/${id}`}/>
         <BasicModal
-            open={userItemStatus === 'updated' || userItemStatus === 'movedCoord' || userItemStatus === 'no'}
+            open={isCircular || userItemStatus === 'updated' || userItemStatus === 'movedCoord' || userItemStatus === 'no'}
             onClose={() => dispatch(setUserItemStatus(''))}
             body={<Box>
                 <Typography id="modal-modal-title" variant="h6" component="h3" color={isError ? 'error' : 'primary'}
@@ -134,6 +134,7 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
                     {userItemStatus === 'no' && (errorMessage || 'Смета не найдена')}
                     {userItemStatus === 'updated' && 'Сохранено'}
                     {userItemStatus === 'movedCoord' && 'Смета передана'}
+                    {isCircular && 'Подождите'}
                 </Typography>
                 {userItemStatus === 'no' && !errorMessage && <Typography id="modal-modal-description" sx={{mt: 2}}>
                     Сначала сохраните заключение

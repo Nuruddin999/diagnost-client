@@ -3,6 +3,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {CheckupPlanDetailType, CheckupPlanItem, ReworkCommentType} from "../common/types";
 import {formatPhone} from "../common/utils";
 import {initComments} from '../common/constants';
+import {mockCheckupPlans} from "../constants";
 
 
 export type applicationInitialState = {
@@ -63,7 +64,7 @@ export const initialState: applicationInitialState = {
     diagnostic: [],
     mostProblDiagnosis: '',
     secondaryDiagnosis: '',
-    checkupPlans: [],
+    checkupPlans: mockCheckupPlans,
     comments: initComments,
     status: 'no',
     reworkComments: []

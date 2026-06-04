@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import Dashboard from './components/dashboard/dashboard';
 import MyDoc from './components/applicationItem/pdfdoc/pdfdoc';
+import FileInbox from "./components/fileInbox";
 
 function App() {
 
@@ -27,6 +28,9 @@ function App() {
           </Route>
           <Route path='/flpdf/:id'>
             <MyDoc />
+          </Route>
+          <Route path='/fileinbox/:id'>
+            <FileInbox />
           </Route>
         </Switch>
       </div>
