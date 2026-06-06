@@ -14,6 +14,7 @@ import {CheckupPlanDetailType} from "../../../common/types";
 import {formatPhone, handleKeyDown} from "../../../common/utils";
 import {Controller, useFieldArray, useFormContext, useWatch} from "react-hook-form";
 import TotalPriceCell from "./checkupPlanRow/TotalPriceCell";
+import {testCheckupPlans} from "../../../constants";
 
 
 const CheckupPlanForm = (): React.ReactElement => {
@@ -33,7 +34,7 @@ const CheckupPlanForm = (): React.ReactElement => {
     // Из собранных данных формы достаем нашу группу полей addForm
     const { addForm } = data;
     
-    // Ваша валидация: проверяем, что все нужные поля заполнены
+    //Ваша валидация: проверяем, что все нужные поля заполнены
     if (
       !addForm?.kind?.trim() ||
       !addForm?.supplier?.trim() ||
@@ -87,7 +88,7 @@ const CheckupPlanForm = (): React.ReactElement => {
   }
   
   
-  const {fields, append, remove} = useFieldArray({
+  const {fields, append, remove, replace} = useFieldArray({
     control,
     name: "checkupPlans" // имя ключа в общем стейте формы
   });
@@ -135,31 +136,9 @@ const CheckupPlanForm = (): React.ReactElement => {
     };
   }, [bc]);
   
-  // const watchAllRows = useWatch({control, name: "checkupPlans"});
-  //
-  // useEffect(() => {
-  //   if (!watchAllRows) return;
-  //   watchAllRows.forEach((row: any, index: number) => {
-  //     const qty = parseInt(row?.qty) || 0;
-  //     const price = parseInt(row?.price) || 0;
-  //     const expectedTotal = qty && price ? (qty * price).toString() : "";
-  //     if (row?.totalPrice !== expectedTotal) {
-  //       setValue(`checkupPlans.${index}.totalPrice` as any, expectedTotal);
-  //     }
-  //   });
-  // }, [watchAllRows, setValue]);
-  
-  // useEffect(() => {
-  //     if (parseInt(placeQty) && parseInt(placePrice)) {
-  //         const total = parseInt(placeQty) * parseInt(placePrice)
-  //         setPlaceTotalPrice(total.toString())
-  //     } else {
-  //         setPlaceTotalPrice('')
-  //     }
-  // }, [placePrice, placeQty]);
-  
+
   return <div className="checkup-section">
-    {checkupPlans.length > 0 ? <table>
+    {fields.length > 0 ? <table>
       <tr>
         <th>
                     <span>
@@ -498,7 +477,7 @@ const CheckupPlanForm = (): React.ReactElement => {
           }
           setTarget(e.target.value)
         }}
-      /> <IconButton disabled={!applications?.update} onClick={addConsliliumDoctor}>
+      /> <IconButton disabled={!applications?.update} onClick={handleSubmit(addConsliliumDoctor)}>
       <AddCircleIcon className='add-in-table-svg '/>
     </IconButton>
     </div>

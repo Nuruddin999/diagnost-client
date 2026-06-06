@@ -1,4 +1,6 @@
 import {createAction} from "@reduxjs/toolkit";
+import checkupPlans from "../components/applicationItem/checkup_plans/checkupPlans";
+import {CheckupPlanItem} from "../common/types";
 
 export const Types = {
     applicationAdd: 'application/add',
@@ -51,7 +53,13 @@ export const changeDeleteOptionAction = createAction(Types.applicationChangeDele
 /**
  * экш обновления заключения
  */
-export const updateApplication = createAction(Types.applicationUpdate)
+export const updateApplication = createAction(Types.applicationUpdate, function prepare(checkupPlans: CheckupPlanItem[]) {
+  return {
+    payload: {
+      checkupPlans
+    },
+  }
+})
 
 export const updateManagerAction = createAction(Types.updateManager, function prepare(applId: number | string, userId: number | string) {
     return {

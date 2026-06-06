@@ -7,18 +7,14 @@ import {Box, Button, Typography} from "@mui/material";
 import {RootState} from "../../app/store";
 import './style.applicationitem.scss'
 import DiagnosticForm from "./diagnostic/consiliumDoctors";
-import {
-  initialState,
-  saveApplicationItem,
-  setCheckupPlansInRedux
-} from "../../reducers/applicationItemSlice";
+import {initialState, saveApplicationItem, setCheckupPlansInRedux} from "../../reducers/applicationItemSlice";
 import CheckupPlanForm from "./checkup_plans/checkupPlans";
 import Anamnesis from "./anamnesis";
 import PatientInfo from "./patientinfo";
 import MostProbDiagnosis from "./probable_diagnosis";
 import Comments from "./comments";
 import {getListItemAction} from "../../common/actions/common";
-import {setError, setUserItemStatus} from "../../reducers/ui";
+import {setCircular, setError, setUserItemStatus} from "../../reducers/ui";
 import {RoundLoader} from "../../common/components/roundloader";
 import {makeSmetaReadyForCoordApi} from "../../api/smetas";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
@@ -71,11 +67,12 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
    * Обновляем заключение.
    */
   const handleClick = () => {
+    // dispatch(setCircular(true))
     if (errorMessage) {
       dispatch(setError(''))
     }
-    dispatch(setCheckupPlansInRedux(methods.getValues().checkupPlans))
-    dispatch(updateApplication())
+    console.log('methods.getValues().checkupPlans',methods.getValues().checkupPlans.length)
+    dispatch(updateApplication(methods.getValues().checkupPlans))
   }
   const makeReadyForCoordinator = async () => {
     if (errorMessage) {
@@ -144,48 +141,55 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
   }, [checkupPlans, methods]);
   
   
-  return userItemStatus === 'pending' ? <RoundLoader/> :
-    <FormProvider {...methods}>
-      <div className="application-item">
-        <h2>РЕКОМЕНДАЦИИ ВРАЧА</h2>
-        <h4 className='only-for-inner-warning'>(ВНИМАНИЕ! ДОКУМЕНТ ИСКЛЮЧИТЕЛЬНО ДЛЯ ВНУТРЕННЕГО ПОЛЬЗОВАНИЯ
-          ОРГАНИЗАЦИИ)
-        </h4>
-        <PatientInfo/>
-        <h3>На основании: </h3>
-        <h5> (указать основания: жалобы, симптомы, синдромы подозрения врача и пр.) </h5>
-        <Anamnesis/>
-        <ConsiliumDoctorsForm/>
-        <DiagnosticForm/>
-        <MostProbDiagnosis/>
-        <h4>На основании проведенного консилиума рекомендован план обследования (ПО):</h4>
-        <CheckupPlanForm/>
-        <Comments/>
-        {reworkComments.length > 0 && <ReworkBlock reworkComments={reworkComments}/>}
-        <Button onClick={handleClick} size='medium' variant='contained' className='save-button' disabled={isCircular}>
-          Сохранить
-        </Button>
-        <Button onClick={makeReadyForCoordinator} size='medium' variant='contained' className='forCoordinate-button'>
-          Передать координатору
-        </Button>
-        <PDFButton url={`/flpdf/${id}`}/>
-        <BasicModal
-          open={isCircular || userItemStatus === 'updated' || userItemStatus === 'movedCoord' || userItemStatus === 'no'}
-          onClose={() => dispatch(setUserItemStatus(''))}
-          body={<Box>
-            <Typography id="modal-modal-title" variant="h6" component="h3" color={isError ? 'error' : 'primary'}
-                        align={isError ? 'left' : 'center'}>
-              {userItemStatus === 'no' && (errorMessage || 'Смета не найдена')}
-              {userItemStatus === 'updated' && 'Сохранено'}
-              {userItemStatus === 'movedCoord' && 'Смета передана'}
-              {isCircular && 'Подождите'}
-            </Typography>
-            {userItemStatus === 'no' && !errorMessage && <Typography id="modal-modal-description" sx={{mt: 2}}>
-                Сначала сохраните заключение
-            </Typography>}
-          </Box>}
-        />
-      </div>
-    </FormProvider>
+  return <FormProvider {...methods}>
+    {(userItemStatus === 'pending' || isCircular) && (
+        <RoundLoader/>
+    )}
+    <div className="application-item">
+      <h2>РЕКОМЕНДАЦИИ ВРАЧА</h2>
+      <h4 className='only-for-inner-warning'>(ВНИМАНИЕ! ДОКУМЕНТ ИСКЛЮЧИТЕЛЬНО ДЛЯ ВНУТРЕННЕГО ПОЛЬЗОВАНИЯ
+        ОРГАНИЗАЦИИ)
+      </h4>
+      <PatientInfo/>
+      <h3>На основании: </h3>
+      <h5> (указать основания: жалобы, симптомы, синдромы подозрения врача и пр.) </h5>
+      <Anamnesis/>
+      <ConsiliumDoctorsForm/>
+      <DiagnosticForm/>
+      <MostProbDiagnosis/>
+      <h4>На основании проведенного консилиума рекомендован план обследования (ПО):</h4>
+      <CheckupPlanForm/>
+      <Comments/>
+      {reworkComments.length > 0 && <ReworkBlock reworkComments={reworkComments}/>}
+      <Button
+        onClick={handleClick}
+        size='medium' variant='contained'
+        className='save-button'
+        disabled={isCircular}
+      >
+        Сохранить
+      </Button>
+      <Button onClick={makeReadyForCoordinator} size='medium' variant='contained' className='forCoordinate-button'>
+        Передать координатору
+      </Button>
+      <PDFButton url={`/flpdf/${id}`}/>
+      <BasicModal
+        open={isCircular || userItemStatus === 'updated' || userItemStatus === 'movedCoord' || userItemStatus === 'no'}
+        onClose={() => dispatch(setUserItemStatus(''))}
+        body={<Box>
+          <Typography id="modal-modal-title" variant="h6" component="h3" color={isError ? 'error' : 'primary'}
+                      align={isError ? 'left' : 'center'}>
+            {userItemStatus === 'no' && (errorMessage || 'Смета не найдена')}
+            {userItemStatus === 'updated' && 'Сохранено'}
+            {userItemStatus === 'movedCoord' && 'Смета передана'}
+            {isCircular && 'Подождите'}
+          </Typography>
+          {userItemStatus === 'no' && !errorMessage && <Typography id="modal-modal-description" sx={{mt: 2}}>
+              Сначала сохраните заключение
+          </Typography>}
+        </Box>}
+      />
+    </div>
+  </FormProvider>
 }
 export default ApplicationItem
