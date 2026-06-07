@@ -340,7 +340,7 @@ const SUPER_HEAVY_ADDRESS =
 Телефоны регистратуры: +7 (495) 777-22-33 (доб. 104 - КТ, доб. 105 - МРТ).
 E-mail для отправки снимков в формате DICOM: mri-support@interclinic.ru`;
 
-const generateTestData = (count = 20) => {
+const generateTestData = (count = 50) => {
   return Array.from({ length: count }, (_, index) => {
     const rowNumber = index + 1;
     const qtyValue = ((index * 3) % 7) + 1;        // Количество от 1 до 7

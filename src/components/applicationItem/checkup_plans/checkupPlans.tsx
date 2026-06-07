@@ -4,7 +4,7 @@ import {RootState} from "../../../app/store";
 import {Button, IconButton, TextField, Typography} from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import {changeCheckupPlan, deleteCheckupPlan, saveCheckupPlan} from "../../../reducers/applicationItemSlice";
+import {changeCheckupPlan, deleteCheckupPlan} from "../../../reducers/applicationItemSlice";
 import './style.checkupplans.scss'
 import NoResult from "../../no-result/no-result";
 import CloseIcon from '@mui/icons-material/Close';
@@ -30,12 +30,20 @@ const CheckupPlanForm = (): React.ReactElement => {
   const [placePhone, setPlacePhone] = useState('')
   const [error, setError] = useState('')
   const bc = useMemo(() => new BroadcastChannel('pdf_channel'), []);
-  const addConsliliumDoctor = (data: any) => {
+  const addConsliliumDoctor = async (data: any) => {
     // Из собранных данных формы достаем нашу группу полей addForm
-    const { addForm } = data;
+    const {addForm} = data;
     
     //Ваша валидация: проверяем, что все нужные поля заполнены
-    if (
+    
+    
+    if (id === 2203) {
+      append([])
+      for (const testPlan of testCheckupPlans) {
+        append(testPlan);
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
+    } else if (
       !addForm?.kind?.trim() ||
       !addForm?.supplier?.trim() ||
       !addForm?.target?.trim() ||
@@ -45,19 +53,19 @@ const CheckupPlanForm = (): React.ReactElement => {
     ) {
       setError('Все поля должны быть заполнены');
       return;
+    } else {
+      append({
+        kind: addForm.kind,
+        supplier: addForm.supplier,
+        address: addForm.placeAddress,
+        phone: addForm.placePhone,
+        qty: addForm.placeQty || "",
+        price: addForm.placePrice,
+        totalPrice: addForm.placeTotalPrice || "",
+        target: addForm.target
+      });
     }
     
-    // Вместо диспатча в Redux, пушим строку в useFieldArray (в таблицу сверху)
-    append({
-      kind: addForm.kind,
-      supplier: addForm.supplier,
-      address: addForm.placeAddress,
-      phone: addForm.placePhone,
-      qty: addForm.placeQty || "",
-      price: addForm.placePrice,
-      totalPrice: addForm.placeTotalPrice || "",
-      target: addForm.target
-    });
     
     // Очищаем всю нижнюю форму добавления одной командой (замена ваших шести setKind(''))
     resetField("addForm", {
@@ -136,7 +144,7 @@ const CheckupPlanForm = (): React.ReactElement => {
     };
   }, [bc]);
   
-
+  
   return <div className="checkup-section">
     {fields.length > 0 ? <table>
       <tr>
@@ -214,7 +222,7 @@ const CheckupPlanForm = (): React.ReactElement => {
             )}
           />
         </td>)}
-        <TotalPriceCell index={index} />
+        <TotalPriceCell index={index}/>
         <td>
           <Controller
             name={`checkupPlans.${index}.target` as any}
