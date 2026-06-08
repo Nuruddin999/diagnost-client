@@ -93,13 +93,16 @@ export function* fetchOneApplication(getApplication: { type: 'application/getone
  */
 export function* updateOneApplication(action: {
   type: 'application/update', payload: {
-    checkupPlans: CheckupPlanItem[]; // массив планов обследования прямо из React Hook Form
+    checkupPlans: CheckupPlanItem[];
+    comments:{
+      title?: string,
+      comment: string,
+    }[]// массив планов обследования прямо из React Hook Form
   }
 }) {
   
   try {
     yield put(setCircular(true))
-    console.log("payload", action.payload.checkupPlans)
     const application: applicationInitialState = yield select((state: RootState) => state.applicationItem)
     const consiliumDoctorsFiltered = application.consiliumDoctors.map(doctor => ({
       name: doctor.name,
@@ -108,6 +111,7 @@ export function* updateOneApplication(action: {
     const response: applicationItemResponse = yield call(updateOneApplicationApi, {
       ...application,
       checkupPlans: action.payload.checkupPlans,
+      comments: action.payload.comments,
       consiliumDoctors: consiliumDoctorsFiltered,
       execDate: new Date().toString()
     })

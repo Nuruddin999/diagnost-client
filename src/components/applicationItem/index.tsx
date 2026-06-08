@@ -7,14 +7,14 @@ import {Box, Button, Typography} from "@mui/material";
 import {RootState} from "../../app/store";
 import './style.applicationitem.scss'
 import DiagnosticForm from "./diagnostic/consiliumDoctors";
-import {initialState, saveApplicationItem, setCheckupPlansInRedux} from "../../reducers/applicationItemSlice";
+import {initialState, saveApplicationItem} from "../../reducers/applicationItemSlice";
 import CheckupPlanForm from "./checkup_plans/checkupPlans";
 import Anamnesis from "./anamnesis";
 import PatientInfo from "./patientinfo";
 import MostProbDiagnosis from "./probable_diagnosis";
 import Comments from "./comments";
 import {getListItemAction} from "../../common/actions/common";
-import {setCircular, setError, setUserItemStatus} from "../../reducers/ui";
+import {setError, setUserItemStatus} from "../../reducers/ui";
 import {RoundLoader} from "../../common/components/roundloader";
 import {makeSmetaReadyForCoordApi} from "../../api/smetas";
 import BasicModal from "../../common/components/modal/ConsiliumModal";
@@ -23,6 +23,7 @@ import {initComments} from "../../common/constants";
 import ReworkBlock from "../../common/components/rework_block";
 import {sessionHeartBit} from "../../common/api/api";
 import {FormProvider, useForm} from "react-hook-form";
+import {mockComments} from "../../constants";
 
 const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
   passToCoordRef: MutableRefObject<string | null>,
@@ -36,7 +37,7 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
     reworkComments,
     id: ApplId,
     passToCoordinatorTime,
-    managerId, checkupPlans
+    managerId, checkupPlans, comments
   } = useSelector((state: RootState) => state.applicationItem)
   const dispatch = useDispatch()
   const heartBitTimerRef = React.useRef<any | null>(null);
@@ -44,7 +45,12 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
   const isError = errorMessage || userItemStatus === 'no'
   
   interface IApplicationForm {
-    checkupPlans: any[]; // Сюда придут данные из Redux
+    checkupPlans: any[];
+    comments: Array<{
+      title?: string,
+      comment: string,
+    }>,
+    // Сюда придут данные из Redux
     addForm: {
       kind: string; supplier: string; placeAddress: string;
       placePhone: string; placeQty: string; placePrice: string;
@@ -54,6 +60,7 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
   
   const methods = useForm<IApplicationForm>({
     defaultValues: {
+      comments: initComments,
       checkupPlans: [], // Изначально пустой массив, пока бэк не ответил
       addForm: {
         kind: '', supplier: '', placeAddress: '',
@@ -71,8 +78,11 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
     if (errorMessage) {
       dispatch(setError(''))
     }
-    console.log('methods.getValues().checkupPlans',methods.getValues().checkupPlans.length)
-    dispatch(updateApplication(methods.getValues().checkupPlans))
+    
+    dispatch(updateApplication({
+      checkupPlans: methods.getValues().checkupPlans,
+      comments: methods.getValues().comments
+    }))
   }
   const makeReadyForCoordinator = async () => {
     if (errorMessage) {
@@ -130,7 +140,8 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
   useEffect(() => {
     if (checkupPlans && checkupPlans.length > 0) {
       methods.reset({
-        checkupPlans: checkupPlans, // Передаем загруженные данные в useFieldArray
+        checkupPlans: checkupPlans,
+        comments,// Передаем загруженные данные в useFieldArray
         addForm: {
           kind: '', supplier: '', placeAddress: '',
           placePhone: '', placeQty: '', placePrice: '',
@@ -138,12 +149,12 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
         }
       });
     }
-  }, [checkupPlans, methods]);
+  }, [checkupPlans, methods, comments]);
   
   
   return <FormProvider {...methods}>
     {(userItemStatus === 'pending' || isCircular) && (
-        <RoundLoader/>
+      <RoundLoader/>
     )}
     <div className="application-item">
       <h2>РЕКОМЕНДАЦИИ ВРАЧА</h2>
@@ -169,7 +180,13 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
       >
         Сохранить
       </Button>
-      <Button onClick={makeReadyForCoordinator} size='medium' variant='contained' className='forCoordinate-button'>
+      <Button
+        onClick={makeReadyForCoordinator}
+        size='medium'
+        variant='contained'
+        className='forCoordinate-button'
+        disabled={userItemStatus === 'pending'}
+      >
         Передать координатору
       </Button>
       <PDFButton url={`/flpdf/${id}`}/>
