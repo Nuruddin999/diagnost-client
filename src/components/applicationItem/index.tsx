@@ -23,7 +23,6 @@ import {initComments} from "../../common/constants";
 import ReworkBlock from "../../common/components/rework_block";
 import {sessionHeartBit} from "../../common/api/api";
 import {FormProvider, useForm} from "react-hook-form";
-import {mockComments} from "../../constants";
 
 const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
   passToCoordRef: MutableRefObject<string | null>,
@@ -37,7 +36,7 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
     reworkComments,
     id: ApplId,
     passToCoordinatorTime,
-    managerId, checkupPlans, comments
+    managerId, checkupPlans, comments, anamnesis
   } = useSelector((state: RootState) => state.applicationItem)
   const dispatch = useDispatch()
   const heartBitTimerRef = React.useRef<any | null>(null);
@@ -46,6 +45,7 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
   
   interface IApplicationForm {
     checkupPlans: any[];
+    anamnesis:string,
     comments: Array<{
       title?: string,
       comment: string,
@@ -60,6 +60,7 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
   
   const methods = useForm<IApplicationForm>({
     defaultValues: {
+      anamnesis:'',
       comments: initComments,
       checkupPlans: [], // Изначально пустой массив, пока бэк не ответил
       addForm: {
@@ -81,7 +82,8 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
     
     dispatch(updateApplication({
       checkupPlans: methods.getValues().checkupPlans,
-      comments: methods.getValues().comments
+      comments: methods.getValues().comments,
+      anamnesis:methods.getValues().anamnesis
     }))
   }
   const makeReadyForCoordinator = async () => {
@@ -138,9 +140,10 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
   
   
   useEffect(() => {
-    if (checkupPlans && checkupPlans.length > 0) {
+    if ((checkupPlans && checkupPlans.length > 0) || anamnesis || comments) {
       methods.reset({
         checkupPlans: checkupPlans,
+        anamnesis,
         comments,// Передаем загруженные данные в useFieldArray
         addForm: {
           kind: '', supplier: '', placeAddress: '',
@@ -149,7 +152,7 @@ const ApplicationItem = ({passToCoordRef, timeStartRef, applIdRef}: {
         }
       });
     }
-  }, [checkupPlans, methods, comments]);
+  }, [checkupPlans, methods, comments, anamnesis]);
   
   
   return <FormProvider {...methods}>

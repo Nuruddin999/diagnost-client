@@ -94,6 +94,7 @@ export function* fetchOneApplication(getApplication: { type: 'application/getone
 export function* updateOneApplication(action: {
   type: 'application/update', payload: {
     checkupPlans: CheckupPlanItem[];
+    anamnesis: string
     comments:{
       title?: string,
       comment: string,
@@ -112,6 +113,7 @@ export function* updateOneApplication(action: {
       ...application,
       checkupPlans: action.payload.checkupPlans,
       comments: action.payload.comments,
+      anamnesis: action.payload.anamnesis,
       consiliumDoctors: consiliumDoctorsFiltered,
       execDate: new Date().toString()
     })

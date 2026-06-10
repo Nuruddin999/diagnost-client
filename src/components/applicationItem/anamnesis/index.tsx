@@ -1,19 +1,20 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
-import { TextField, Typography } from "@mui/material";
-import { RootState } from "../../../app/store";
+import {TextField, Typography} from "@mui/material";
+import {RootState} from "../../../app/store";
 import './style.anamnesis.scss'
-import { changeComplaints, changeAnamnesis, changeDiagnosticData } from "../../../reducers/applicationItemSlice";
-import { selectApplicationUserRights } from "../../../common/selectors/user";
+import {changeAnamnesis, changeComplaints, changeDiagnosticData} from "../../../reducers/applicationItemSlice";
+import {selectApplicationUserRights} from "../../../common/selectors/user";
+import {Controller, useFormContext} from "react-hook-form";
 
 
 const Anamnesis = (): React.ReactElement => {
-
+  const {control, getValues} = useFormContext();
   const complaints = useSelector((state: RootState) => state.applicationItem.complaint)
   const anamnesis = useSelector((state: RootState) => state.applicationItem.anamnesis)
   const diagnosticData = useSelector((state: RootState) => state.applicationItem.diagnosticData)
-  const { applications } = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
+  const {applications} = useSelector((state: RootState) => selectApplicationUserRights(state)).processedRights
   const dispatch = useDispatch()
   return <div className="anamnesis">
     <div className='complaints'>
@@ -32,20 +33,26 @@ const Anamnesis = (): React.ReactElement => {
     </div>
     <div className='complaints'>
       <Typography fontWeight={700}>Анамнеза:</Typography>
-      <TextField
-        multiline
-        maxRows={8}
-        size='small'
-        placeholder='В августе 2012 года получил огнестрельное ранение в голову, сразу после травмы
+      <Controller
+        name={`anamnesis` as any}
+        control={control}
+        render={({field: inputProps}) => (
+          <TextField
+            {...inputProps}
+            variant='standard'
+            size='small'
+            className='text-section'
+            fullWidth
+            multiline
+            maxRows={8}
+            placeholder='В августе 2012 года получил огнестрельное ранение в голову, сразу после травмы
         был госпитализирован в Кизилюртовскую ГБ, там получал медикаментозное и оперативное
         лечение (трепанация черепа); с тех пор является инвалидом, получает периодическое
         амбулаторное лечение, стационарное лечения, реабилитационное лечение со слабым и
         непродолжительным положительным эффектом, отмечается постепенное прогрессирование
         симптоматики, является инвалидом 1й группы.'
-        variant='standard'
-        className='text-section'
-        value={anamnesis}
-        onChange={(e) => applications?.update &&  dispatch(changeAnamnesis(e.target.value))}
+          />
+        )}
       />
     </div>
     <div className='complaints'>
@@ -59,7 +66,7 @@ const Anamnesis = (): React.ReactElement => {
         variant='standard'
         className='text-section'
         value={diagnosticData}
-        onChange={(e) => applications?.update &&  dispatch(changeDiagnosticData(e.target.value))} />
+        onChange={(e) => applications?.update && dispatch(changeDiagnosticData(e.target.value))}/>
     </div>
   </div>
 }

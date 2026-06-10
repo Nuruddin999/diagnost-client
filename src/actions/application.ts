@@ -52,8 +52,9 @@ export const changeDeleteOptionAction = createAction(Types.applicationChangeDele
 /**
  * экш обновления заключения
  */
-export const updateApplication = createAction(Types.applicationUpdate, function prepare({checkupPlans, comments}: {
+export const updateApplication = createAction(Types.applicationUpdate, function prepare({checkupPlans, comments, anamnesis}: {
   checkupPlans: CheckupPlanItem[],
+  anamnesis:string
   comments: {
     title?: string,
     comment: string,
@@ -62,7 +63,8 @@ export const updateApplication = createAction(Types.applicationUpdate, function 
   return {
     payload: {
       checkupPlans,
-      comments
+      comments,
+      anamnesis
     },
   }
 })
